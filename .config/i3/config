@@ -1,0 +1,523 @@
+# i3 config file
+# by Jan Fecht
+
+set $TERMINAL terminator
+
+#exec --no-startup-id display-visor -f -l
+
+# general settings
+default_orientation auto
+font pango:System San Francisco Display 08
+no_focus [window_role="pop-up"]
+for_window [window_role="pop-up"] floating enable
+
+
+# for the ten finger tipping screen
+##for_window [instance="feh"] floating enable
+##for_window [instance="feh"] resize set 800 300
+##for_window [instance="feh"] move scratchpad
+##for_window [instance="feh"] border pixel 2
+##exec --no-startup-id feh ~/.config/i3/zehnfinger.png
+
+## quick terminal
+exec --no-startup-id mate-terminal
+for_window [instance="mate-terminal"] floating enable;
+for_window [instance="mate-terminal"] move scratchpad; [instance="metask"] scratchpad show; move position 0px 22px; resize shrink height 300px; resize grow width 683px; move scratchpad
+
+## for_window [instance="dropdown"] floating enable
+## for_window [instance="dropdown"] resize set 625 400
+## for_window [instance="dropdown"] move scratchpad
+## for_window [instance="dropdown"] border pixel 3
+#exec -a dropdown --no-startup-id $TERMINAL
+
+# gaps settings
+for_window [class="^.*"] border pixel 0
+gaps inner 0
+gaps outer 0
+
+
+exec_always --no-startup-id $HOME/.config/polybar/launch.sh
+exec_always --no-startup-id dunst
+
+# Variables 
+set $mod Mod4
+set $up k
+set $down j
+set $left h
+set $right l
+
+
+# startup apps
+## exec --no-startup-id compton
+exec --no-startup-id i3-msg 'workspace 2; exec firefox; workspace 1'
+exec --no-startup-id i3-msg 'workspace 1; exec lollypop; workspace 1'
+## exec --no-startup-id i3-msg 'workspace 8; exec $TERMINAL -e "vim /home/fecht/TODO.txt"; workspace 1'
+exec --no-startup-id nm-applet
+##exec --no-startup-id i3-msg 'workspace 8; exec gnome-pomodoro; workspace 1'
+
+# change caps to escape
+#exec "setxkbmap -option caps:escape"
+
+#set $xkbcomp "xkbcomp -w 0 ~/.config/xkb/xkbmap $DISPLAY -o ~/.config/xkb/xkbmap.xkm"
+set $xkbcomp "xkbcomp -w 0 ~/.config/xkb/xkbmap $DISPLAY"
+exec $xkbcomp
+
+# lock after 10 min
+exec --no-startup-id xautolock -locker "~/bin/lock.sh screenshot" -time 10 -detectsleep -notify 10
+
+# set background
+exec ~/.fehbg
+
+exec_always --no-startup-id "xinput set-prop 'SynPS/2 Synaptics TouchPad' 'libinput Natural Scrolling Enabled' 1"
+
+
+
+
+
+# last exec to lock screen
+exec ~/bin/lock.sh 
+
+
+#special launcher mode
+set $mode_launcher Launch: [f]irefox [t]hunderbird [k]eepassx [s]lack
+mode "$mode_launcher" {
+	bindsym f exec firefox; mode "default"
+	bindsym t exec thunderbird; mode "default"
+	bindsym k exec keepassx; mode "default"
+	bindsym s exec slack; mode "default"
+
+	bindsym Escape mode "default"
+	bindsym Return mode "default"
+}
+
+set $mode_language_key Keyboard: [c]ustom [e]spanol [g]erman [p]]olish
+mode "$mode_language_key" {
+
+	bindsym c exec $xkbcomp; exec "notify-send 'Keyboard layout: Custom'"; mode "default"
+	bindsym d exec $xkbcomp; exec "notify-send 'Keyboard layout: Custom'"; mode "default"
+
+	bindsym e exec "setxkbmap -layout es"; exec "notify-send 'Keyboard layout: Spanish'"; mode "default"
+	bindsym g exec "setxkbmap -layout de"; exec "notify-send 'Keyboard layout: German'"; mode "default"
+	bindsym p exec "setxkbmap -layout pl"; exec "notify-send 'Keyboard layout: Polish'"; mode "default"
+
+	bindsym Escape mode "default"
+	bindsym Return mode "default"
+}
+
+
+# Key Bindings
+
+
+# Basic Movement
+
+# change focus
+bindsym $mod+$left focus left
+bindsym $mod+$down focus down
+bindsym $mod+$up focus up
+bindsym $mod+$right focus right
+
+##bindsym $mod+Left focus left
+##bindsym $mod+Down focus down
+##bindsym $mod+Up focus up
+##bindsym $mod+Right focus right
+
+# move focused window
+bindsym $mod+Shift+$left move left
+bindsym $mod+Shift+$down move down
+bindsym $mod+Shift+$up move up
+bindsym $mod+Shift+$right move right
+
+##bindsym $mod+Shift+Left move left
+##bindsym $mod+Shift+Down move down
+##bindsym $mod+Shift+Up move up
+##bindsym $mod+Shift+Right move right
+
+# switch to workspace
+bindsym $mod+1 workspace 1
+bindsym $mod+2 workspace 2
+bindsym $mod+3 workspace 3
+bindsym $mod+4 workspace 4
+bindsym $mod+5 workspace 5
+bindsym $mod+6 workspace 6
+bindsym $mod+7 workspace 7
+bindsym $mod+8 workspace 8
+bindsym $mod+9 workspace 9
+bindsym $mod+0 workspace 10
+
+# move focused container to workspace
+bindsym $mod+Shift+1 move container to workspace 1
+bindsym $mod+Shift+2 move container to workspace 2
+bindsym $mod+Shift+3 move container to workspace 3
+bindsym $mod+Shift+4 move container to workspace 4
+bindsym $mod+Shift+5 move container to workspace 5
+bindsym $mod+Shift+6 move container to workspace 6
+bindsym $mod+Shift+7 move container to workspace 7
+bindsym $mod+Shift+8 move container to workspace 8
+bindsym $mod+Shift+9 move container to workspace 9
+bindsym $mod+Shift+0 move container to workspace 10
+
+
+
+
+
+bindsym $mod+q kill
+
+bindsym $mod+Shift+q kill
+
+
+##bindsym $mod+w
+##bindsym $mod+Shift+w
+
+
+## bindsym $mod+e exec --no-startup-id "emacs"
+bindsym $mod+e exec --no-startup-id ~/bin/emojichooser.sh
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
+
+
+bindsym $mod+r 			exec $TERMINAL -e ranger
+bindsym $mod+Shift+r exec $TERMINAL -e "sudo ranger" 
+
+
+## bindsym $mod+t [instance="mate-terminal"] scratchpad show
+bindsym $mod+Shift+t restart
+
+
+bindsym $mod+z			exec --no-startup-id "bash ~/bin/openvpn.sh"
+bindsym $mod+Shift+z		exec --no-startup-id "bash ~/.config/i3/i3resize left"
+
+
+##bindsym $mod+u [instance="dropdown"] scratchpad show; [instance="dropdown"] move position center
+bindsym $mod+u exec --no-startup-id "$TERMINAL -e 'utop'"
+bindsym $mod+Shift+u		exec --no-startup-id "bash ~/.config/i3/i3resize down"
+
+
+bindsym $mod+i			exec --no-startup-id "$TERMINAL -e htop"
+bindsym $mod+Shift+i		exec --no-startup-id "bash ~/.config/i3/i3resize up"
+
+
+bindsym $mod+o mode "$mode_launcher"
+bindsym $mod+Shift+o 		exec --no-startup-id "bash ~/.config/i3/i3resize right"
+
+
+bindsym $mod+p exec $TERMINAL -e python3.7
+##bindsym $mod+Shift+p
+
+
+##bindsym $mod+udiaeresis
+##bindsym $mod+Shift+0
+
+
+##bindsym $mod+a
+##bindsym $mod+Shift+a
+
+
+bindsym $mod+s			gaps inner current plus 5
+bindsym $mod+Shift+s		gaps inner current minus 5
+
+bindsym $mod+d exec dmenu_run
+## bindsym $mod+Shift+d exec --no-startup-id j4-dmenu-desktop --dmenu="dmenu -l 20"
+
+bindsym $mod+f fullscreen toggle
+##bindsym $mod+Shift+f
+
+
+bindsym $mod+g 			gaps inner current set 15; gaps outer current set 15
+bindsym $mod+Shift+g 		gaps inner current set 0; gaps outer current set 0
+
+
+bindsym $mod+odiaeresis [instance="mate-terminal"] scratchpad show
+##bindsym $mod+Shift+0
+
+
+## bindsym $mod+y exec $TERMINAL -e calcurse
+##bindsym $mod+Shift+y
+
+
+bindsym $mod+x mode "$mode_language_key"
+##bindsym $mod+Shift+x
+
+
+bindsym $mod+c exec $TERMINAL -e "vim -c ':Calendar'"
+bindsym $mod+Shift+c reload
+
+
+bindsym $mod+v exec "$TERMINAL -e vim"
+bindsym $mod+Shift+v split v
+
+
+bindsym $mod+b split h
+bindsym $mod+Shift+b split h
+
+
+## bindsym $mod+n exec --no-startup-id nm-connection-editor
+##bindsym $mod+Shift+n
+
+
+## bindsym $mod+m exec $TERMINAL -e qalc
+##bindsym $mod+Shift+m
+
+
+##bindsym $mod+0
+##bindsym $mod+Shift+0
+
+
+##bindsym $mod+0
+##bindsym $mod+Shift+0
+
+
+##bindsym $mod+0
+##bindsym $mod+Shift+0
+
+
+##bindsym $mod+0
+##bindsym $mod+Shift+0
+
+
+##bindsym $mod+0
+##bindsym $mod+Shift+0
+
+##bindsym $mod+period exec ~/.config/i3/lock.sh screenshot
+bindsym $mod+Shift+period exec ~/.config/i3/lock.sh screenshot
+
+bindsym $mod+Tab workspace next
+bindsym $mod+Shift+Tab workspace prev
+
+
+bindsym $mod+Return exec --no-startup-id $TERMINAL
+bindsym $mod+Shift+Return exec --no-startup-id ~/.config/i3/samedir
+
+
+#bindsym $mod+BackSpace exec killall -s SIGTERM firefox; exec sleep 1; exec reboot 
+bindsym $mod+BackSpace exec "~/bin/confirm.sh reboot"
+#bindsym $mod+Shift+BackSpace exec killall -s SIGTERM firefox; exec sleep 1; exec shutdown -h now
+bindsym $mod+Shift+BackSpace exec "~/bin/confirm.sh shutdown"
+
+
+##bindsym $mod+Shift+space 	floating toggle
+##bindsym $mod+space focus mode_toggle
+bindsym $mod+space move workspace to output right
+bindsym $mod+Shift+space move workspace to output left
+
+
+bindsym $mod+numbersign split vertical;;exec --no-startup-id $TERMINAL
+
+# Für alternativen Alt+F4 kill
+bindsym Mod1+F4 kill
+
+
+
+
+
+
+# Pulse Audio controls
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% #increase sound volume
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5% #decrease sound volume
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle # mute sound
+
+# Sreen brightness controls
+bindsym XF86MonBrightnessUp exec light -A 5
+bindsym XF86MonBrightnessDown exec light -U 5
+#bindsym XF86MonBrightnessUp exec xbacklight -inc 10 # increase screen brightness
+#bindsym XF86MonBrightnessDown exec xbacklight -dec 9.8 # decrease screen brightness
+
+
+# Media player controls
+bindsym XF86AudioPlay exec ~/bin/playpause.sh
+bindsym XF86AudioNext exec playerctl next
+bindsym XF86AudioPrev exec playerctl previous
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+################### DUAL SCREEN ######################
+
+
+# setting variables for later use
+# use xrandr to know the names of your monitors
+# use this line to tell which monitor is on the right
+# xrandr --output DVI-I-2 --right-of DVI-I-1 --auto
+
+# my current setup
+#set $firstMonitor DVI-I-1
+#set $secondMonitor DVI-I-2
+
+#set $firstMonitor DVI-I-2
+#set $secondMonitor VGA-0
+
+#set $firstMonitor DVI-I-2
+#set $secondMonitor DVI-I-3
+
+#set $firstMonitor DVI-0
+#set $secondMonitor DVI-1
+
+#workspace 1 output $firstMonitor
+#workspace 2 output $firstMonitor
+#workspace 3 output $firstMonitor
+#wworkspace 4 output $firstMonitor
+#wworkspace 5 output $firstMonitor
+#workspace 6 output $secondMonitor
+#workspace 7 output $secondMonitor
+#workspace 8 output $secondMonitor
+#workspace 9 output $secondMonitor
+#workspace 10 output $secondMonitor
+
+# switch to workspace
+#bindsym $mod+ampersand workspace 1
+#bindsym $mod+eacute workspace 2
+#bindsym $mod+quotedbl workspace 3
+#bindsym $mod+apostrophe workspace 4
+#bindsym $mod+parenleft workspace 5
+#bindsym $mod+section workspace 6
+#bindsym $mod+egrave workspace 7
+#bindsym $mod+exclam workspace 8
+#bindsym $mod+ccedilla workspace 9
+#bindsym $mod+agrave workspace 10
+
+# move focused container to workspace
+#bindsym $mod+Shift+ampersand move container to workspace 1
+#bindsym $mod+Shift+eacute move container to workspace 2
+#bindsym $mod+Shift+quotedbl move container to workspace 3
+#bindsym $mod+Shift+apostrophe move container to workspace 4
+#bindsym $mod+Shift+5 move container to workspace 5
+#bindsym $mod+Shift+section move container to workspace 6
+#bindsym $mod+Shift+egrave move container to workspace 7
+#bindsym $mod+Shift+exclam move container to workspace 8
+#bindsym $mod+Shift+ccedilla move container to workspace 9
+#bindsym $mod+Shift+agrave move container to workspace 10
+
+
+#ENDADDED
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# i3 config file (v4)
+#
+# Please see https://i3wm.org/docs/userguide.html for a complete reference!
+#
+# This config file uses keycodes (bindsym) and was written for the QWERTY
+# layout.
+
+# To get a config file with the same key positions, but for your current
+# layout, use the i3-config-wizard
+#
+
+# Font for window titles. Will also be used by the bar unless a different font
+# is used in the bar {} block below.
+
+# This font is widely installed, provides lots of unicode glyphs, right-to-left
+# text rendering and scalability on retina/hidpi displays (thanks to pango).
+#font pango:DejaVu Sans Mono 8
+
+# Before i3 v4.8, we used to recommend this one as the default:
+# font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
+# The font above is very space-efficient, that is, it looks good, sharp and
+# clear in small sizes. However, its unicode glyph coverage is limited, the old
+# X core fonts rendering does not support right-to-left and this being a bitmap
+# font, it doesn’t scale on retina/hidpi displays.
+
+
+# use Mouse+$mod to drag floating windows to their wanted position
+#floating_modifier $mod
+
+# start a terminal
+
+
+# There also is the (new) i3-dmenu-desktop which only displays applications
+# shipping a .desktop file. It is a wrapper around dmenu, so you need that
+# installed.
+# bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
+
+
+# enter fullscreen mode for the focused container
+
+# change container layout (stacked, tabbed, toggle split)
+#bindsym $mod+s layout stacking
+#bindsym $mod+w layout tabbed
+#bindsym $mod+e layout toggle split
+
+# toggle tiling / floating
+#bindsym $mod+Shift+space floating toggle
+
+# change focus between tiling / floating windows
+#bindsym $mod+space focus mode_toggle
+
+# focus the parent container
+#bindsym $mod+a focus parent
+
+# focus the child container
+#bindsym $mod+d focus child
+
+# move the currently focused window to the scratchpad
+#bindsym $mod+Shift+minus move scratchpad
+
+# Show the next scratchpad window or hide the focused scratchpad window.
+# If there are multiple scratchpad windows, this command cycles through them.
+#bindsym $mod+minus scratchpad show
+
+
+# resize window (you can also use the mouse for that)
+#mode "resize" {
+        # These bindings trigger as soon as you enter the resize mode
+
+        # Pressing left will shrink the window’s width.
+        # Pressing right will grow the window’s width.
+        # Pressing up will shrink the window’s height.
+        # Pressing down will grow the window’s height.
+#        bindsym $left       resize shrink width 10 px or 10 ppt
+#        bindsym $down       resize grow height 10 px or 10 ppt
+#        bindsym $up         resize shrink height 10 px or 10 ppt
+#        bindsym $right      resize grow width 10 px or 10 ppt
+
+        # same bindings, but for the arrow keys
+#        bindsym Left        resize shrink width 10 px or 10 ppt
+#        bindsym Down        resize grow height 10 px or 10 ppt
+#        bindsym Up          resize shrink height 10 px or 10 ppt
+#        bindsym Right       resize grow width 10 px or 10 ppt
+
+        # back to normal: Enter or Escape
+#        bindsym Return mode "default"
+#        bindsym Escape mode "default"
+#}
+#
+
+#bindsym $mod+r mode "resize"
+
+
+
+
+
+

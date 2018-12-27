@@ -1,0 +1,8 @@
+[user]
+	email = jan.fecht@tum.de
+	name = Jan Fecht
+[commit]
+	template = ~/.config/gitmessage
+[core]
+	excludesfile = /home/fecht/.config/gitignore
+	editor = vim
