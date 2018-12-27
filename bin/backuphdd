@@ -2,8 +2,8 @@
 HOME=/home/fecht
 echo "macking backupfile:/media/hdd/backup-$(date +%Y-%m-%d)-$(hostname).tar.gz" 
 
-ls $HOME/Programs > $HOME/programslist.txt
-ls $HOME/Music/* > $HOME/musiclist.txt
+find $HOME/Programs > $HOME/programslist.txt
+find $HOME/Music > $HOME/musiclist.txt
 
 tobackup=$(ls $HOME -1 -a | grep "Pictures\|Music\|.cache\|Programs\|.thunderbird\|.m2\|.opam\|^.$\|^..$" -v | awk '{print "/home/fecht/" $0}')
 
