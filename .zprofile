@@ -31,6 +31,18 @@ test -r /home/fecht/.opam/opam-init/init.zsh && . /home/fecht/.opam/opam-init/in
 
 eval $(ssh-agent)
 
+
+# setup i3 config
+
+#!/bin/sh
+if [ $(hostname | grep xps) ]
+then
+	cat $HOME/.config/i3/config_ $HOME/.config/i3/dell.config > $HOME/.config/i3/config
+else
+	cat $HOME/.config/i3/config_ $HOME/.config/i3/x220.config > $HOME/.config/i3/config
+fi
+
+
 # start x server
 if [[ ! $DISPLAY && $XDG_VTNR -eq 1 ]]; then
   exec startx
