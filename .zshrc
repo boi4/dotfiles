@@ -6,8 +6,8 @@ alias vim='vim -p'
 #alias vi='vim'
 alias objdump='objdump -M intel'
 alias mountandroid='jmtpfs /media/android'
+alias umountandroid='fusermount -u /media/android'
 alias sdrescan='echo 1 | sudo tee /sys/bus/pci/rescan'
-#alias umountandroid='sudo mtpfs -u /media/android'
 alias tmux="TERM=screen-256color-bce tmux"
 
 # for dotfiles, see https://news.ycombinator.com/item?id=11071754

@@ -7,7 +7,6 @@ set $TERMINAL terminator
 
 # general settings
 default_orientation auto
-font pango:System San Francisco Display 08
 no_focus [window_role="pop-up"]
 for_window [window_role="pop-up"] floating enable
 
@@ -36,7 +35,6 @@ gaps inner 0
 gaps outer 0
 
 
-exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 exec_always --no-startup-id dunst
 
 # Variables 
@@ -68,7 +66,6 @@ exec --no-startup-id xautolock -locker "~/bin/lock.sh screenshot" -time 10 -dete
 # set background
 exec ~/.fehbg
 
-exec_always --no-startup-id "xinput set-prop 'SynPS/2 Synaptics TouchPad' 'libinput Natural Scrolling Enabled' 1"
 
 
 
@@ -314,11 +311,6 @@ bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% #i
 bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5% #decrease sound volume
 bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle # mute sound
 
-# Sreen brightness controls
-bindsym XF86MonBrightnessUp exec light -A 5
-bindsym XF86MonBrightnessDown exec light -U 5
-#bindsym XF86MonBrightnessUp exec xbacklight -inc 10 # increase screen brightness
-#bindsym XF86MonBrightnessDown exec xbacklight -dec 9.8 # decrease screen brightness
 
 
 # Media player controls
@@ -327,197 +319,4 @@ bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-################### DUAL SCREEN ######################
-
-
-# setting variables for later use
-# use xrandr to know the names of your monitors
-# use this line to tell which monitor is on the right
-# xrandr --output DVI-I-2 --right-of DVI-I-1 --auto
-
-# my current setup
-#set $firstMonitor DVI-I-1
-#set $secondMonitor DVI-I-2
-
-#set $firstMonitor DVI-I-2
-#set $secondMonitor VGA-0
-
-#set $firstMonitor DVI-I-2
-#set $secondMonitor DVI-I-3
-
-#set $firstMonitor DVI-0
-#set $secondMonitor DVI-1
-
-#workspace 1 output $firstMonitor
-#workspace 2 output $firstMonitor
-#workspace 3 output $firstMonitor
-#wworkspace 4 output $firstMonitor
-#wworkspace 5 output $firstMonitor
-#workspace 6 output $secondMonitor
-#workspace 7 output $secondMonitor
-#workspace 8 output $secondMonitor
-#workspace 9 output $secondMonitor
-#workspace 10 output $secondMonitor
-
-# switch to workspace
-#bindsym $mod+ampersand workspace 1
-#bindsym $mod+eacute workspace 2
-#bindsym $mod+quotedbl workspace 3
-#bindsym $mod+apostrophe workspace 4
-#bindsym $mod+parenleft workspace 5
-#bindsym $mod+section workspace 6
-#bindsym $mod+egrave workspace 7
-#bindsym $mod+exclam workspace 8
-#bindsym $mod+ccedilla workspace 9
-#bindsym $mod+agrave workspace 10
-
-# move focused container to workspace
-#bindsym $mod+Shift+ampersand move container to workspace 1
-#bindsym $mod+Shift+eacute move container to workspace 2
-#bindsym $mod+Shift+quotedbl move container to workspace 3
-#bindsym $mod+Shift+apostrophe move container to workspace 4
-#bindsym $mod+Shift+5 move container to workspace 5
-#bindsym $mod+Shift+section move container to workspace 6
-#bindsym $mod+Shift+egrave move container to workspace 7
-#bindsym $mod+Shift+exclam move container to workspace 8
-#bindsym $mod+Shift+ccedilla move container to workspace 9
-#bindsym $mod+Shift+agrave move container to workspace 10
-
-
-#ENDADDED
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# i3 config file (v4)
-#
-# Please see https://i3wm.org/docs/userguide.html for a complete reference!
-#
-# This config file uses keycodes (bindsym) and was written for the QWERTY
-# layout.
-
-# To get a config file with the same key positions, but for your current
-# layout, use the i3-config-wizard
-#
-
-# Font for window titles. Will also be used by the bar unless a different font
-# is used in the bar {} block below.
-
-# This font is widely installed, provides lots of unicode glyphs, right-to-left
-# text rendering and scalability on retina/hidpi displays (thanks to pango).
-#font pango:DejaVu Sans Mono 8
-
-# Before i3 v4.8, we used to recommend this one as the default:
-# font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
-# The font above is very space-efficient, that is, it looks good, sharp and
-# clear in small sizes. However, its unicode glyph coverage is limited, the old
-# X core fonts rendering does not support right-to-left and this being a bitmap
-# font, it doesn’t scale on retina/hidpi displays.
-
-
-# use Mouse+$mod to drag floating windows to their wanted position
-#floating_modifier $mod
-
-# start a terminal
-
-
-# There also is the (new) i3-dmenu-desktop which only displays applications
-# shipping a .desktop file. It is a wrapper around dmenu, so you need that
-# installed.
-# bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
-
-
-# enter fullscreen mode for the focused container
-
-# change container layout (stacked, tabbed, toggle split)
-#bindsym $mod+s layout stacking
-#bindsym $mod+w layout tabbed
-#bindsym $mod+e layout toggle split
-
-# toggle tiling / floating
-#bindsym $mod+Shift+space floating toggle
-
-# change focus between tiling / floating windows
-#bindsym $mod+space focus mode_toggle
-
-# focus the parent container
-#bindsym $mod+a focus parent
-
-# focus the child container
-#bindsym $mod+d focus child
-
-# move the currently focused window to the scratchpad
-#bindsym $mod+Shift+minus move scratchpad
-
-# Show the next scratchpad window or hide the focused scratchpad window.
-# If there are multiple scratchpad windows, this command cycles through them.
-#bindsym $mod+minus scratchpad show
-
-
-# resize window (you can also use the mouse for that)
-#mode "resize" {
-        # These bindings trigger as soon as you enter the resize mode
-
-        # Pressing left will shrink the window’s width.
-        # Pressing right will grow the window’s width.
-        # Pressing up will shrink the window’s height.
-        # Pressing down will grow the window’s height.
-#        bindsym $left       resize shrink width 10 px or 10 ppt
-#        bindsym $down       resize grow height 10 px or 10 ppt
-#        bindsym $up         resize shrink height 10 px or 10 ppt
-#        bindsym $right      resize grow width 10 px or 10 ppt
-
-        # same bindings, but for the arrow keys
-#        bindsym Left        resize shrink width 10 px or 10 ppt
-#        bindsym Down        resize grow height 10 px or 10 ppt
-#        bindsym Up          resize shrink height 10 px or 10 ppt
-#        bindsym Right       resize grow width 10 px or 10 ppt
-
-        # back to normal: Enter or Escape
-#        bindsym Return mode "default"
-#        bindsym Escape mode "default"
-#}
-#
-
-#bindsym $mod+r mode "resize"
-
-
-
-
-
-
+#exec --no-startup-id display-visor -f -l
