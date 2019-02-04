@@ -1,33 +1,41 @@
 set encoding=utf-8
 scriptencoding utf-8
 
-" Enable Plugins
+" Disable Plugins
 let g:pathogen_disabled = []
-" call add(g:pathogen_disabled, 'nerdtree')
-" call add(g:pathogen_disabled, 'vim-fugitive')
-call add(g:pathogen_disabled, 'vim-colors-solarized')
-" call add(g:pathogen_disabled, 'syntastic')
-call add(g:pathogen_disabled, 'simplyfold')
+call add(g:pathogen_disabled, 'calendar.vim')
+call add(g:pathogen_disabled, 'ctrlp.vim')
 call add(g:pathogen_disabled, 'FastFold')
-call add(g:pathogen_disabled, 'oceanic-next')
-call add(g:pathogen_disabled, 'VimRegexTutor')
+call add(g:pathogen_disabled, 'nerdtree')
+"call add(g:pathogen_disabled, 'oceanic-next')
+call add(g:pathogen_disabled, 'rust')
+call add(g:pathogen_disabled, 'simplyfold')
+" call add(g:pathogen_disabled, 'surround')
+call add(g:pathogen_disabled, 'syntastic')
+call add(g:pathogen_disabled, 'tagbar')
+" call add(g:pathogen_disabled, 'vim-airline')
 call add(g:pathogen_disabled, 'vim-airline-themes')
-""call add(g:pathogen_disabled, 'vim-instant-markdown')
+call add(g:pathogen_disabled, 'vim-colors-solarized')
+call add(g:pathogen_disabled, 'vim-fugitive')
+call add(g:pathogen_disabled, 'vim-instant-markdown')
+call add(g:pathogen_disabled, 'VimRegexTutor')
+call add(g:pathogen_disabled, 'vimux')
+call add(g:pathogen_disabled, 'YouCompleteMe')
 
 execute pathogen#infect()
 
 " source specific settings
-source ~/.vim/rcsettings/search.vim
-source ~/.vim/rcsettings/navigation.vim
-source ~/.vim/rcsettings/appearance.vim
-source ~/.vim/rcsettings/python.vim
-source ~/.vim/rcsettings/c.vim
-source ~/.vim/rcsettings/cpp.vim
-source ~/.vim/rcsettings/tex.vim
-source ~/.vim/rcsettings/html.vim
-source ~/.vim/rcsettings/ocaml.vim
-source ~/.vim/rcsettings/rust.vim
-"  source ~/.vim/rcsettings/ranger.vim
+source rcsettings/search.vim
+source rcsettings/navigation.vim
+source rcsettings/appearance.vim
+
+source rcsettings/python.vim
+source rcsettings/c.vim
+source rcsettings/cpp.vim
+source rcsettings/tex.vim
+source rcsettings/html.vim
+source rcsettings/ocaml.vim
+source rcsettings/rust.vim
 
 
 set nocompatible
@@ -35,15 +43,11 @@ set encoding=utf-8
 set autowrite
 set undolevels=10000
 set clipboard=unnamed
-set cryptmethod=blowfish2
 
 " save swap files in different dirs
 set directory=~/.vim/tmp,/tmp
 
 filetype plugin indent on
-
-" extend %
-packadd! matchit
 
 "let mapleader = "+"
 "let localmapleader = ","
@@ -135,43 +139,6 @@ map <C-n> :NERDTreeToggle<CR>
 
 
 
-
-
-
-
-" ------- Trash ------
-
-" map <F12> :call ToggleList()<Cr>
-" set listchars=tab:>-,trail:-
-" function! ToggleList()
-" 	if &list
-" 		set nolist
-" 	else
-" 		set list
-" 	endif
-" endfunction
-
-
-" Syntatic related
-" set statusline+=%#warningmsg#
-" set statusline+=%{SyntasticStatuslineFlag()}
-" set statusline+=%*
-
-" let g:syntastic_always_populate_loc_list = 1
-" let g:syntastic_auto_loc_list = 1
-" let g:syntastic_check_on_open = 1
-" let g:syntastic_check_on_wq = 0
-
-
-
-
-
-
-
-" Allow backspacing over everything in insert mode.
-set backspace=indent,eol,start
-
-set history=10000		" keep 200 lines of command line history
 set wildmenu		" display completion matches in a status line
 
 set ttimeout		" time out for key codes
@@ -190,9 +157,6 @@ map Q gq
 " so that you can undo CTRL-U after inserting a line break.
 " Revert with ":iunmap <C-U>".
 inoremap <C-U> <C-G>u<C-U>
-
-
-
 
 " Put these in an autocmd group, so that you can revert them with:
 " ":augroup vimStartup | au! | augroup END"
@@ -219,62 +183,3 @@ if !exists(":DiffOrig")
   command DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis
 \ | wincmd p | diffthis
 endif
-
-if has('langmap') && exists('+langremap')
-  " Prevent that the langmap option applies to characters that result from a
-  " mapping.  If set (default), this may break plugins (but it's backward
-  " compatible).
-  set nolangremap
-endif
-
-if has("vms")
-  set nobackup		" do not keep a backup file, use versions instead
-else
-  set backup		" keep a backup file (restore to previous version)
-  set backupdir=/home/fecht/.vim/backupfiles
-  if has('persistent_undo')
-    set undofile	" keep an undo file (undo changes after closing)
-    set undodir=/home/fecht/.vim/undofiles
-  endif
-endif
-
-
-
-
-" ## added by OPAM user-setup for vim / base ## 93ee63e278bdfc07d1139a748ed3fff2 ## you can edit, but keep this line
-let s:opam_share_dir = system("opam config var share")
-let s:opam_share_dir = substitute(s:opam_share_dir, '[\r\n]*$', '', '')
-
-let s:opam_configuration = {}
-
-function! OpamConfOcpIndent()
-  execute "set rtp^=" . s:opam_share_dir . "/ocp-indent/vim"
-endfunction
-let s:opam_configuration['ocp-indent'] = function('OpamConfOcpIndent')
-
-function! OpamConfOcpIndex()
-  execute "set rtp+=" . s:opam_share_dir . "/ocp-index/vim"
-endfunction
-let s:opam_configuration['ocp-index'] = function('OpamConfOcpIndex')
-
-function! OpamConfMerlin()
-  let l:dir = s:opam_share_dir . "/merlin/vim"
-  execute "set rtp+=" . l:dir
-endfunction
-let s:opam_configuration['merlin'] = function('OpamConfMerlin')
-
-let s:opam_packages = ["ocp-indent", "ocp-index", "merlin"]
-let s:opam_check_cmdline = ["opam list --installed --short --safe --color=never"] + s:opam_packages
-let s:opam_available_tools = split(system(join(s:opam_check_cmdline)))
-for tool in s:opam_packages
-  " Respect package order (merlin should be after ocp-index)
-  if count(s:opam_available_tools, tool) > 0
-    call s:opam_configuration[tool]()
-  endif
-endfor
-" ## end of OPAM user-setup addition for vim / base ## keep this line
-" ## added by OPAM user-setup for vim / ocp-indent ## 7b29859686bb4f65b6631c3928115658 ## you can edit, but keep this line
-if count(s:opam_available_tools,"ocp-indent") == 0
-  source "/home/fecht/.opam/default/share/ocp-indent/vim/indent/ocaml.vim"
-endif
-" ## end of OPAM user-setup addition for vim / ocp-indent ## keep this line

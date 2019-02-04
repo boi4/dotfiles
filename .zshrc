@@ -1,8 +1,9 @@
 # --------- ALIASES ------------#
 
 alias gdb='gdb -q'
+alias icat="kitty +kitten icat"
 alias batstat='upower -i /org/freedesktop/UPower/devices/battery_BAT0'
-alias vim='vim -p'
+alias vim='nvim -p'
 #alias vi='vim'
 alias objdump='objdump -M intel'
 alias mountandroid='jmtpfs /media/android'
@@ -37,6 +38,7 @@ export ZSH="/home/fecht/.oh-my-zsh"
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 
+#ZSH_THEME="agnoster"
 ZSH_THEME="agnoster"
 
 # Set list of themes to pick from when loading at random
@@ -111,9 +113,9 @@ source $ZSH/oh-my-zsh.sh
 
 # Preferred editor for local and remote sessions
 if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR='vim'
+  export EDITOR='nvim -p'
 else
-  export EDITOR='vim'
+  export EDITOR='nvim -p'
 fi
 
 # Compilation flags
