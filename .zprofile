@@ -19,6 +19,8 @@ export VISUAL="vim -p "
 export EDITOR="$VISUAL"
 #echo "set up vim as standard editor"
 
+export XDG_DESKTOP_DIR="/home/fecht"
+
 
 # for german keys in terminal
 sudo loadkeys /home/fecht/.config/keystrings
@@ -33,14 +35,7 @@ eval $(ssh-agent)
 
 
 # setup i3 config
-
-#!/bin/sh
-if [ $(hostname | grep xps) ]
-then
-	cat $HOME/.config/i3/config_ $HOME/.config/i3/dell.config > $HOME/.config/i3/config
-else
-	cat $HOME/.config/i3/config_ $HOME/.config/i3/x220.config > $HOME/.config/i3/config
-fi
+geni3conf
 
 
 # start x server
