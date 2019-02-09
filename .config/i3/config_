@@ -1,9 +1,8 @@
 # i3 config file
 # by Jan Fecht
 
-set $TERMINAL terminator
-
-#exec --no-startup-id display-visor -f -l
+#set $TERMINAL alacritty
+set $TERMINAL kitty
 
 # general settings
 default_orientation auto
@@ -11,23 +10,10 @@ no_focus [window_role="pop-up"]
 for_window [window_role="pop-up"] floating enable
 
 
-# for the ten finger tipping screen
-##for_window [instance="feh"] floating enable
-##for_window [instance="feh"] resize set 800 300
-##for_window [instance="feh"] move scratchpad
-##for_window [instance="feh"] border pixel 2
-##exec --no-startup-id feh ~/.config/i3/zehnfinger.png
-
 ## quick terminal
-exec --no-startup-id mate-terminal
-for_window [instance="mate-terminal"] floating enable;
-for_window [instance="mate-terminal"] move scratchpad; [instance="metask"] scratchpad show; move position 0px 22px; resize shrink height 300px; resize grow width 683px; move scratchpad
-
-## for_window [instance="dropdown"] floating enable
-## for_window [instance="dropdown"] resize set 625 400
-## for_window [instance="dropdown"] move scratchpad
-## for_window [instance="dropdown"] border pixel 3
-#exec -a dropdown --no-startup-id $TERMINAL
+exec --no-startup-id $TERMINAL --class quick_term
+for_window [instance="quick_term"] floating enable;
+for_window [instance="quick_term"] move scratchpad; [instance="quick_term"] scratchpad show; move position 0px 22px; resize shrink height 300px; resize grow width 683px; move scratchpad
 
 # gaps settings
 for_window [class="^.*"] border pixel 0
@@ -46,12 +32,15 @@ set $right l
 
 
 # startup apps
-## exec --no-startup-id compton
+exec --no-startup-id mpd
+exec --no-startup-id i3-msg 'workspace 1; exec $TERMINAL -e ncmpcpp; workspace 1'
 exec --no-startup-id i3-msg 'workspace 2; exec firefox; workspace 1'
-exec --no-startup-id i3-msg 'workspace 1; exec lollypop; workspace 1'
-## exec --no-startup-id i3-msg 'workspace 8; exec $TERMINAL -e "vim /home/fecht/TODO.txt"; workspace 1'
 exec --no-startup-id nm-applet
-##exec --no-startup-id i3-msg 'workspace 8; exec gnome-pomodoro; workspace 1'
+
+## exec --no-startup-id compton
+## exec --no-startup-id i3-msg 'workspace 1; exec lollypop; workspace 1'
+## exec --no-startup-id i3-msg 'workspace 8; exec $TERMINAL -e "vim /home/fecht/TODO.txt"; workspace 1'
+## exec --no-startup-id i3-msg 'workspace 8; exec gnome-pomodoro; workspace 1'
 
 # change caps to escape
 #exec "setxkbmap -option caps:escape"
@@ -65,9 +54,6 @@ exec --no-startup-id xautolock -locker "~/bin/lock.sh screenshot" -time 10 -dete
 
 # set background
 exec ~/.fehbg
-
-
-
 
 
 
@@ -176,7 +162,7 @@ bindsym $mod+Shift+r exec $TERMINAL -e "sudo ranger"
 
 
 ## bindsym $mod+t [instance="mate-terminal"] scratchpad show
-bindsym $mod+Shift+t restart
+bindsym $mod+Shift+t exec --no-startup-id "geni3conf"; restart
 
 
 bindsym $mod+z			exec --no-startup-id "bash ~/bin/openvpn.sh"
@@ -204,7 +190,7 @@ bindsym $mod+p exec $TERMINAL -e python3.7
 ##bindsym $mod+Shift+0
 
 
-##bindsym $mod+a
+bindsym $mod+a exec --no-startup-id "$TERMINAL -e asciiquarium"
 ##bindsym $mod+Shift+a
 
 
@@ -215,15 +201,15 @@ bindsym $mod+d exec dmenu_run
 ## bindsym $mod+Shift+d exec --no-startup-id j4-dmenu-desktop --dmenu="dmenu -l 20"
 
 bindsym $mod+f fullscreen toggle
-##bindsym $mod+Shift+f
+bindsym $mod+Shift+f exec --no-startup-id display-setting-chooser.sh
 
 
 bindsym $mod+g 			gaps inner current set 15; gaps outer current set 15
 bindsym $mod+Shift+g 		gaps inner current set 0; gaps outer current set 0
 
 
-bindsym $mod+odiaeresis [instance="mate-terminal"] scratchpad show
-##bindsym $mod+Shift+0
+bindsym $mod+odiaeresis [instance="quick_term"] scratchpad show
+#bindsym $mod+Shift+0
 
 
 ## bindsym $mod+y exec $TERMINAL -e calcurse
@@ -231,7 +217,7 @@ bindsym $mod+odiaeresis [instance="mate-terminal"] scratchpad show
 
 
 bindsym $mod+x mode "$mode_language_key"
-##bindsym $mod+Shift+x
+bindsym $mod+Shift+x exec --no-startup-id "$TERMINAL -e asciiquarium"
 
 
 bindsym $mod+c exec $TERMINAL -e "vim -c ':Calendar'"
@@ -281,7 +267,7 @@ bindsym $mod+Shift+Tab workspace prev
 
 
 bindsym $mod+Return exec --no-startup-id $TERMINAL
-bindsym $mod+Shift+Return exec --no-startup-id ~/.config/i3/samedir
+bindsym $mod+Shift+Return exec $TERMINAL --directory `xcwd`
 
 
 #bindsym $mod+BackSpace exec killall -s SIGTERM firefox; exec sleep 1; exec reboot 

@@ -12,12 +12,14 @@ export LESSHISTFILE="~/.config/lesshst"
 #echo "Set less history file"
 export PYTHONSTARTUP="$HOME/.config/python/startup.py"
 #echo "Set pythonstartup"
-export PATH=/home/fecht/.vim/bundle/vim-live-latex-preview/bin:$PATH
+export PATH=/home/fecht/.config/nvim/bundle/vim-live-latex-preview/bin:$PATH
 #echo "included live-latex-preview to path"
 #export GIT_CONFIG="$HOME/.config/gitconfig" (does not work rn)
-export VISUAL="vim -p "
+export VISUAL="nvim -p "
 export EDITOR="$VISUAL"
-#echo "set up vim as standard editor"
+#echo "set up nvim as standard editor"
+
+export XDG_DESKTOP_DIR="/home/fecht"
 
 
 # for german keys in terminal
@@ -33,32 +35,10 @@ eval $(ssh-agent)
 
 
 # setup i3 config
-
-#!/bin/sh
-if [ $(hostname | grep xps) ]
-then
-	cat $HOME/.config/i3/config_ $HOME/.config/i3/dell.config > $HOME/.config/i3/config
-else
-	cat $HOME/.config/i3/config_ $HOME/.config/i3/x220.config > $HOME/.config/i3/config
-fi
+geni3conf
 
 
 # start x server
 if [[ ! $DISPLAY && $XDG_VTNR -eq 1 ]]; then
   exec startx
 fi
-
-
-# the following does not work in login shell
-#xkbcomp -w 0 ~/.config/xkb/xkbmap $DISPLAY
-#sleep 1
-#
-#if [ -f "/etc/hostname" ]
-#then
-#	xinput set-prop "SynPS/2 Synaptics TouchPad" "libinput Natural Scrolling Enabled" 1
-#	echo "hallo"
-#else
-#	xinput set-prop "DLL0704:01 06CB:76AE Touchpad" 287 1
-#	echo "hallo2"
-#fi
-#

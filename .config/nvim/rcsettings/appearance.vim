@@ -12,6 +12,8 @@ syntax on
 "set cursorline
 set showtabline=2
 
+" fixes black bar bug in tmux + kitty
+let &t_ut=''
 
 "set background=light
 set background=dark
@@ -23,11 +25,11 @@ set background=dark
 
 "colorscheme desert
 
-colorscheme onedark
-let g:airline_theme='onedark'
+"colorscheme onedark
+"let g:airline_theme='onedark'
 
-"colorscheme OceanicNext
-"let g:airline_theme='oceanicnext'
+colorscheme OceanicNext
+let g:airline_theme='oceanicnext'
 
 "colorscheme gruvbox
 "let g:airline_theme='gruvbox'
