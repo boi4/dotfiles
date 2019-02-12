@@ -1,6 +1,8 @@
 # --------- ALIASES ------------#
 
 alias gdb='gdb -q'
+alias python='python -q'
+
 alias icat="kitty +kitten icat"
 alias batstat='upower -i /org/freedesktop/UPower/devices/battery_BAT0'
 alias vim='nvim -p'

@@ -39,7 +39,7 @@ exec --no-startup-id nm-applet
 
 ## exec --no-startup-id compton
 ## exec --no-startup-id i3-msg 'workspace 1; exec lollypop; workspace 1'
-## exec --no-startup-id i3-msg 'workspace 8; exec $TERMINAL -e "vim /home/fecht/TODO.txt"; workspace 1'
+## exec --no-startup-id i3-msg 'workspace 8; exec $TERMINAL -e "nvim /home/fecht/TODO.txt"; workspace 1'
 ## exec --no-startup-id i3-msg 'workspace 8; exec gnome-pomodoro; workspace 1'
 
 # change caps to escape
@@ -182,7 +182,7 @@ bindsym $mod+o mode "$mode_launcher"
 bindsym $mod+Shift+o 		exec --no-startup-id "bash ~/.config/i3/i3resize right"
 
 
-bindsym $mod+p exec $TERMINAL -e python3.7
+bindsym $mod+p exec $TERMINAL -e python3.7 -q
 ##bindsym $mod+Shift+p
 
 
@@ -220,11 +220,11 @@ bindsym $mod+x mode "$mode_language_key"
 bindsym $mod+Shift+x exec --no-startup-id "$TERMINAL -e asciiquarium"
 
 
-bindsym $mod+c exec $TERMINAL -e "vim -c ':Calendar'"
+bindsym $mod+c exec $TERMINAL -e "nvim -c ':Calendar'"
 bindsym $mod+Shift+c reload
 
 
-bindsym $mod+v exec "$TERMINAL -e vim"
+bindsym $mod+v exec "$TERMINAL -e nvim"
 bindsym $mod+Shift+v split v
 
 
