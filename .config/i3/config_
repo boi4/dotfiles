@@ -1,4 +1,4 @@
-# i4 config file
+# i3 config file
 # by Jan Fecht
 
 #set $TERMINAL alacritty
@@ -33,7 +33,7 @@ set $right l
 
 # startup apps
 exec --no-startup-id mpd
-exec_always --no-startup-id i3-msg "workspace 1; exec kitty -e loadtmux.sh; workspace 1"
+exec --no-startup-id i3-msg "workspace 1; exec kitty -e loadtmux.sh; workspace 1"
 exec --no-startup-id i3-msg 'workspace 2; exec firefox; workspace 1'
 exec --no-startup-id redshift-gtk
 exec --no-startup-id nm-applet
@@ -100,6 +100,12 @@ bindsym $mod+Shift+$left move left
 bindsym $mod+Shift+$down move down
 bindsym $mod+Shift+$up move up
 bindsym $mod+Shift+$right move right
+
+
+#bindsym $mod+Shift+$left move left
+bindsym Mod1+Shift+$down workspace next
+bindsym Mod1+Shift+$up workspace prev
+#bindsym $mod+Shift+$right move right
 
 ##bindsym $mod+Shift+Left move left
 ##bindsym $mod+Shift+Down move down
