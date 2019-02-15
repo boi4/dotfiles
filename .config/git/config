@@ -1,8 +1,44 @@
+[advice]
+	statusHints = true
 [user]
 	email = jan.fecht@tum.de
 	name = Jan Fecht
-[commit]
-	template = ~/.config/git/commit_template
+	signingKey = 412165C851AB94C2
 [core]
 	editor = vim
 	pager = diff-so-fancy | less --tabs=4 -RFX
+[commit]
+	template = ~/.config/git/commit_template
+	gpgSign = true
+	verbose = true
+[push]
+	gpgSign = true
+[gpg]
+	program = gpg2
+[status]
+	short = true
+	branch = true
+[alias]
+	last = cat-file commit HEAD
+[web]
+	browser = firefox
+[blame]
+	date = format:'%d.%m.%Y %H:%M:%S'
+[log]
+	date = format:'%d.%m.%Y %H:%M:%S'
+[checkout]
+	defaultRemote = origin
+[color]
+	ui = true
+[color "diff-highlight"]
+	oldNormal = red bold
+	oldHighlight = red bold 52
+	newNormal = green bold
+	newHighlight = green bold 22
+[color "diff"]
+	meta = yellow
+	frag = magenta bold
+	commit = yellow bold
+	old = red bold
+	new = green bold
+	whitespace = red reverse
