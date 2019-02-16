@@ -1,11 +1,16 @@
 # --------- ALIASES ------------#
 
 alias gdb='gdb -q'
+alias python3='python3 -q'
+alias python='python -q'
+
 alias icat="kitty +kitten icat"
+alias kssh="kitty +kitten ssh"
 alias batstat='upower -i /org/freedesktop/UPower/devices/battery_BAT0'
 alias vim='nvim -p'
 #alias vi='vim'
 alias objdump='objdump -M intel'
+alias calcurse='calcurse -D ~/.config/calcurse'
 alias mountandroid='jmtpfs /media/android'
 alias umountandroid='fusermount -u /media/android'
 alias sdrescan='echo 1 | sudo tee /sys/bus/pci/rescan'
@@ -23,8 +28,8 @@ alias polnisch='trans -t pl'
 
 
 
-
 # ---------- OH-MY-ZSH -------------- #
+
 
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
@@ -32,6 +37,9 @@ alias polnisch='trans -t pl'
 # Path to your oh-my-zsh installation.
 
 export ZSH="/home/fecht/.oh-my-zsh"
+
+# do not create ugly zcompdump files in home dir
+export ZSH_COMPDUMP=$ZSH
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -99,7 +107,6 @@ plugins=(
   colored-man-pages
   extract
   autosuggestions
-  vi-mode
 )
 
 source $ZSH/oh-my-zsh.sh

@@ -33,19 +33,12 @@ set $right l
 
 # startup apps
 exec --no-startup-id mpd
-exec --no-startup-id i3-msg 'workspace 1; exec $TERMINAL -e ncmpcpp; workspace 1'
+exec --no-startup-id i3-msg "workspace 1; exec kitty -e loadtmux.sh; workspace 1"
 exec --no-startup-id i3-msg 'workspace 2; exec firefox; workspace 1'
+exec --no-startup-id redshift-gtk
 exec --no-startup-id nm-applet
 
-## exec --no-startup-id compton
-## exec --no-startup-id i3-msg 'workspace 1; exec lollypop; workspace 1'
-## exec --no-startup-id i3-msg 'workspace 8; exec $TERMINAL -e "vim /home/fecht/TODO.txt"; workspace 1'
-## exec --no-startup-id i3-msg 'workspace 8; exec gnome-pomodoro; workspace 1'
 
-# change caps to escape
-#exec "setxkbmap -option caps:escape"
-
-#set $xkbcomp "xkbcomp -w 0 ~/.config/xkb/xkbmap $DISPLAY -o ~/.config/xkb/xkbmap.xkm"
 set $xkbcomp "xkbcomp -w 0 ~/.config/xkb/xkbmap $DISPLAY"
 exec $xkbcomp
 
@@ -54,8 +47,6 @@ exec --no-startup-id xautolock -locker "~/bin/lock.sh screenshot" -time 10 -dete
 
 # set background
 exec ~/.fehbg
-
-
 
 # last exec to lock screen
 exec ~/bin/lock.sh 
@@ -110,6 +101,12 @@ bindsym $mod+Shift+$down move down
 bindsym $mod+Shift+$up move up
 bindsym $mod+Shift+$right move right
 
+
+#bindsym $mod+Shift+$left move left
+bindsym Mod1+Shift+$down workspace next
+bindsym Mod1+Shift+$up workspace prev
+#bindsym $mod+Shift+$right move right
+
 ##bindsym $mod+Shift+Left move left
 ##bindsym $mod+Shift+Down move down
 ##bindsym $mod+Shift+Up move up
@@ -144,7 +141,6 @@ bindsym $mod+Shift+0 move container to workspace 10
 
 
 bindsym $mod+q kill
-
 bindsym $mod+Shift+q kill
 
 
@@ -182,7 +178,7 @@ bindsym $mod+o mode "$mode_launcher"
 bindsym $mod+Shift+o 		exec --no-startup-id "bash ~/.config/i3/i3resize right"
 
 
-bindsym $mod+p exec $TERMINAL -e python3.7
+bindsym $mod+p exec $TERMINAL -e python3.7 -q
 ##bindsym $mod+Shift+p
 
 
@@ -220,11 +216,11 @@ bindsym $mod+x mode "$mode_language_key"
 bindsym $mod+Shift+x exec --no-startup-id "$TERMINAL -e asciiquarium"
 
 
-bindsym $mod+c exec $TERMINAL -e "vim -c ':Calendar'"
+bindsym $mod+c exec $TERMINAL -e "nvim -c ':Calendar'"
 bindsym $mod+Shift+c reload
 
 
-bindsym $mod+v exec "$TERMINAL -e vim"
+bindsym $mod+v exec "$TERMINAL -e nvim"
 bindsym $mod+Shift+v split v
 
 
@@ -288,21 +284,11 @@ bindsym $mod+numbersign split vertical;;exec --no-startup-id $TERMINAL
 bindsym Mod1+F4 kill
 
 
-
-
-
-
 # Pulse Audio controls
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% #increase sound volume
 bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5% #decrease sound volume
 bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle # mute sound
 
-
-
-# Media player controls
-bindsym XF86AudioPlay exec ~/bin/playpause.sh
-bindsym XF86AudioNext exec playerctl next
-bindsym XF86AudioPrev exec playerctl previous
 
 
 #exec --no-startup-id display-visor -f -l

@@ -25,27 +25,32 @@ call add(g:pathogen_disabled, 'YouCompleteMe')
 execute pathogen#infect()
 
 " source specific settings
-source rcsettings/search.vim
-source rcsettings/navigation.vim
-source rcsettings/appearance.vim
+source ~/.config/nvim/rcsettings/search.vim
+source ~/.config/nvim/rcsettings/navigation.vim
+source ~/.config/nvim/rcsettings/appearance.vim
 
-source rcsettings/python.vim
-source rcsettings/c.vim
-source rcsettings/cpp.vim
-source rcsettings/tex.vim
-source rcsettings/html.vim
-source rcsettings/ocaml.vim
-source rcsettings/rust.vim
+source ~/.config/nvim/rcsettings/python.vim
+source ~/.config/nvim/rcsettings/c.vim
+source ~/.config/nvim/rcsettings/cpp.vim
+source ~/.config/nvim/rcsettings/tex.vim
+source ~/.config/nvim/rcsettings/html.vim
+source ~/.config/nvim/rcsettings/ocaml.vim
+source ~/.config/nvim/rcsettings/rust.vim
 
 
 set nocompatible
 set encoding=utf-8
 set autowrite
+set backup
+set undofile
 set undolevels=10000
 set clipboard=unnamed
+set guicursor=
+set undodir=~/.config/nvim/undofiles
+set backupdir=~/.config/nvim/backupfiles
 
 " save swap files in different dirs
-set directory=~/.vim/tmp,/tmp
+set directory=/tmp
 
 filetype plugin indent on
 
