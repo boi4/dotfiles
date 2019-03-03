@@ -29,6 +29,7 @@ set $up k
 set $down j
 set $left h
 set $right l
+set $modr 135 # for the key next to alt gr
 
 
 # startup apps
@@ -43,7 +44,7 @@ set $xkbcomp "xkbcomp -w 0 ~/.config/xkb/xkbmap $DISPLAY"
 exec $xkbcomp
 
 # lock after 10 min
-exec --no-startup-id xautolock -locker "~/bin/lock.sh screenshot" -time 10 -detectsleep -notify 10
+#exec --no-startup-id xautolock -locker "~/bin/lock.sh screenshot" -time 60 -detectsleep -notify 60
 
 # set background
 exec ~/.fehbg
@@ -53,12 +54,14 @@ exec ~/bin/lock.sh
 
 
 #special launcher mode
-set $mode_launcher Launch: [f]irefox [t]hunderbird [k]eepassx [s]lack
+set $mode_launcher Launch: [f]irefox [t]hunderbird [k]eepassx [s]lack [v]irtualbox [r]iot
 mode "$mode_launcher" {
 	bindsym f exec firefox; mode "default"
 	bindsym t exec thunderbird; mode "default"
 	bindsym k exec keepassx; mode "default"
 	bindsym s exec slack; mode "default"
+	bindsym v exec sudo virtualbox; mode "default"
+	bindsym r exec riot-desktop; mode "default"
 
 	bindsym Escape mode "default"
 	bindsym Return mode "default"
@@ -205,6 +208,7 @@ bindsym $mod+Shift+g 		gaps inner current set 0; gaps outer current set 0
 
 
 bindsym $mod+odiaeresis [instance="quick_term"] scratchpad show
+bindsym $mod+Shift+odiaeresis exec --no-startup-id $TERMINAL --class quick_term
 #bindsym $mod+Shift+0
 
 
