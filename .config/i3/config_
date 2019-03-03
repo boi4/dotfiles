@@ -181,7 +181,7 @@ bindsym $mod+o mode "$mode_launcher"
 bindsym $mod+Shift+o 		exec --no-startup-id "bash ~/.config/i3/i3resize right"
 
 
-bindsym $mod+p exec $TERMINAL -e python3.7 -q
+bindsym $mod+p exec $TERMINAL -e ipython
 ##bindsym $mod+Shift+p
 
 
