@@ -1,0 +1,30 @@
+#!/bin/bash
+
+VIEWER="zathura"
+PDF_LOC="$HOME/.config/i3/openpdfs"
+
+
+getpdfs="
+import sys
+for line in sys.stdin:
+    splitted = line.split(' ')
+    for token in splitted:
+        if 'pdf' in token:
+            print(token.replace('\n',''))
+"
+
+case "$1" in
+	restore_pdfs)
+		cat $PDF_LOC | while read -r line; do
+		$VIEWER -- $line &
+	done
+		;;
+	save_pdfs)
+		openpdfs=$(ps -C $VIEWER -o args | tail -n-2 | awk '/pdf/{print $0}' | python -c "$getpdfs")
+		echo "$openpdfs" > $PDF_LOC
+		;;
+esac
+
+# ideas:
+# also save workspaces of pdfs
+# hide workspaces

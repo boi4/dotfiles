@@ -53,7 +53,7 @@ exec ~/.fehbg
 exec ~/bin/lock.sh 
 
 
-#special launcher mode
+# ----- MODES -----
 set $mode_launcher Launch: [f]irefox [t]hunderbird [k]eepassx [s]lack [v]irtualbox [r]iot
 mode "$mode_launcher" {
 	bindsym f exec firefox; mode "default"
@@ -79,6 +79,16 @@ mode "$mode_language_key" {
 
 	bindsym Escape mode "default"
 	bindsym Return mode "default"
+}
+
+set $mode_ctrl [s]ave pdfs [r]estore pdfs
+mode "$mode_ctrl" {
+	bindsym s exec --no-startup-id i3ctl save_pdfs; mode "default"
+	bindsym r exec --no-startup-id i3ctl restore_pdfs; mode "default"
+
+	bindsym Escape mode "default"
+	bindsym Return mode "default"
+	bindsym Menu mode "default"
 }
 
 
@@ -283,6 +293,8 @@ bindsym $mod+Shift+space move workspace to output left
 
 
 bindsym $mod+numbersign split vertical;;exec --no-startup-id $TERMINAL
+
+bindsym Menu mode "$mode_ctrl"
 
 # Für alternativen Alt+F4 kill
 bindsym Mod1+F4 kill
