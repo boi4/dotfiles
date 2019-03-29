@@ -16,11 +16,11 @@ for line in sys.stdin:
 case "$1" in
 	restore_pdfs)
 		cat $PDF_LOC | while read -r line; do
-		$VIEWER -- $line &
-	done
+			$VIEWER -- $line &
+		done
 		;;
 	save_pdfs)
-		openpdfs=$(ps -C $VIEWER -o args | tail -n-2 | awk '/pdf/{print $0}' | python -c "$getpdfs")
+		openpdfs=$(ps -C $VIEWER -o args | sed '1d' | awk '/pdf/{print $0}' | python -c "$getpdfs")
 		echo "$openpdfs" > $PDF_LOC
 		;;
 esac
@@ -28,3 +28,5 @@ esac
 # ideas:
 # also save workspaces of pdfs
 # hide workspaces
+# use showkey
+# move applications from one scrren to other, not the workspace

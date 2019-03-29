@@ -1,7 +1,6 @@
 # i3 config file
 # by Jan Fecht
 
-#set $TERMINAL alacritty
 set $TERMINAL kitty
 
 # general settings
@@ -21,7 +20,6 @@ gaps inner 0
 gaps outer 0
 
 
-exec_always --no-startup-id dunst
 
 # Variables 
 set $mod Mod4
@@ -33,11 +31,20 @@ set $modr 135 # for the key next to alt gr
 
 
 # startup apps
-exec --no-startup-id mpd
 exec --no-startup-id i3-msg "workspace 1; exec kitty -e loadtmux.sh; workspace 1"
 exec --no-startup-id i3-msg 'workspace 2; exec firefox; workspace 1'
-exec --no-startup-id redshift-gtk
+
+exec --no-startup-id mpd
+exec --no-startup-id dunst
+exec --no-startup-id compton
+
 exec --no-startup-id nm-applet
+exec --no-startup-id owncloud
+exec --no-startup-id redshift-gtk
+
+exec --no-startup-id ~/.fehbg
+exec --no-startup-id ~/bin/lock.sh 
+
 
 
 set $xkbcomp "xkbcomp -w 0 ~/.config/xkb/xkbmap $DISPLAY"
@@ -45,12 +52,6 @@ exec $xkbcomp
 
 # lock after 10 min
 #exec --no-startup-id xautolock -locker "~/bin/lock.sh screenshot" -time 60 -detectsleep -notify 60
-
-# set background
-exec ~/.fehbg
-
-# last exec to lock screen
-exec ~/bin/lock.sh 
 
 
 # ----- MODES -----
@@ -167,7 +168,7 @@ bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcu
 
 
 bindsym $mod+r 			exec $TERMINAL -e ranger
-bindsym $mod+Shift+r exec $TERMINAL -e "sudo ranger" 
+## bindsym $mod+Shift+r exec $TERMINAL -e "sudo ranger" 
 
 
 ## bindsym $mod+t [instance="mate-terminal"] scratchpad show
@@ -222,8 +223,8 @@ bindsym $mod+Shift+odiaeresis exec --no-startup-id $TERMINAL --class quick_term
 #bindsym $mod+Shift+0
 
 
-## bindsym $mod+y exec $TERMINAL -e calcurse
-##bindsym $mod+Shift+y
+bindsym $mod+y exec --no-startup-id randbg
+bindsym $mod+Shift+y exec --no-startup-id "pkill --signal SIGUSR1 compton"
 
 
 bindsym $mod+x mode "$mode_language_key"
@@ -269,8 +270,8 @@ bindsym $mod+Shift+b split h
 ##bindsym $mod+0
 ##bindsym $mod+Shift+0
 
-##bindsym $mod+period exec ~/.config/i3/lock.sh screenshot
-bindsym $mod+Shift+period exec ~/.config/i3/lock.sh screenshot
+bindsym $mod++period exec ~/bin/lock.sh screenshot
+bindsym $mod+Shift+period exec ~/bin/lock.sh screenshot
 
 bindsym $mod+Tab workspace next
 bindsym $mod+Shift+Tab workspace prev
@@ -296,6 +297,9 @@ bindsym $mod+numbersign split vertical;;exec --no-startup-id $TERMINAL
 
 bindsym Menu mode "$mode_ctrl"
 
+bindsym $mod+F1 layout splith
+bindsym $mod+F2 layout tabbed
+
 # Für alternativen Alt+F4 kill
 bindsym Mod1+F4 kill
 
@@ -304,7 +308,5 @@ bindsym Mod1+F4 kill
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% #increase sound volume
 bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5% #decrease sound volume
 bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle # mute sound
-
-
 
 #exec --no-startup-id display-visor -f -l
