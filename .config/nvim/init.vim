@@ -3,13 +3,14 @@ scriptencoding utf-8
 
 " Disable Plugins
 let g:pathogen_disabled = []
-call add(g:pathogen_disabled, 'calendar.vim')
+call add(g:pathogen_disabled, 'vim-hardtime')
 call add(g:pathogen_disabled, 'ctrlp.vim')
 call add(g:pathogen_disabled, 'FastFold')
 call add(g:pathogen_disabled, 'nerdtree')
 "call add(g:pathogen_disabled, 'oceanic-next')
 call add(g:pathogen_disabled, 'rust')
 call add(g:pathogen_disabled, 'simplyfold')
+call add(g:pathogen_disabled, 'neomake')
 " call add(g:pathogen_disabled, 'surround')
 call add(g:pathogen_disabled, 'syntastic')
 call add(g:pathogen_disabled, 'tagbar')
@@ -21,8 +22,13 @@ call add(g:pathogen_disabled, 'vim-instant-markdown')
 call add(g:pathogen_disabled, 'VimRegexTutor')
 call add(g:pathogen_disabled, 'vimux')
 call add(g:pathogen_disabled, 'YouCompleteMe')
+"call add(g:pathogen_disabled, 'vlime')
+"call add(g:pathogen_disabled, 'vim-markdown-composer')
+
 
 execute pathogen#infect()
+
+let g:hardtime_default_on = 1
 
 " source specific settings
 source ~/.config/nvim/rcsettings/search.vim
@@ -83,8 +89,14 @@ noremap <space>gt :YcmCompleter GetType<CR>
 noremap <space>gd :YcmCompleter GetDoc<CR>
 noremap <space>gf :YcmCompleter FixIt<CR>
 
+" general
+cmap w!! w !sudo tee > /dev/null %
 noremap ö 0
 noremap ä $
+
+" stay in visual mode when indenting
+vnoremap < <gv
+vnoremap > >gv
 
 " Enable folding
 set foldmethod=indent
@@ -93,7 +105,7 @@ set foldlevel=99
 " nnoremap <space> za
 
 " Automatic load of .vimrc
-autocmd! bufwritepost .vimrc source %
+autocmd! bufwritepost init.vim source %
 
 
 " ------ FUNCTION KEYS -------
@@ -144,6 +156,17 @@ map <C-n> :NERDTreeToggle<CR>
 
 
 
+"When writing a buffer (no delay).
+"call neomake#configure#automake('w')
+" When writing a buffer (no delay), and on normal mode changes (after 750ms).
+"call neomake#configure#automake('nw', 750)
+" When reading a buffer (after 1s), and when writing (no delay).
+"call neomake#configure#automake('rw', 1000)
+" Full config: when writing or reading a buffer, and on changes in insert and
+" normal mode (after 1s; no delay when writing).
+"call neomake#configure#automake('nrwi', 500)
+
+
 set wildmenu		" display completion matches in a status line
 
 set ttimeout		" time out for key codes
@@ -157,6 +180,8 @@ set nrformats-=octal
 " Don't use Ex mode, use Q for formatting.
 " Revert with ":unmap Q".
 map Q gq
+
+":w !sudo tee %
 
 " CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
 " so that you can undo CTRL-U after inserting a line break.
