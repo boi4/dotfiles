@@ -1,31 +1,31 @@
-# set PATH so it includes user's private bin if it exists
 if [ -d "$HOME/bin" ] ; then
     PATH="$HOME/bin:$PATH"
 fi
 
-# set PATH so it includes user's private bin if it exists
 if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
 fi
 
-export LESSHISTFILE="~/.config/lesshst"
+export LESSHISTFILE="$HOME/.config/lesshst"
 #echo "Set less history file"
 #export PYTHONSTARTUP="$HOME/.config/python/startup.py"
 #echo "Set pythonstartup"
-export IPYTHONDIR="~/.config/ipython"
-export PATH=/home/fecht/.config/nvim/bundle/vim-live-latex-preview/bin:$PATH
+export IPYTHONDIR="$HOME/.config/ipython"
+export PATH="$HOME/.config/nvim/bundle/vim-live-latex-preview/bin:$PATH"
 #echo "included live-latex-preview to path"
 export VISUAL="nvim -p "
 export EDITOR="$VISUAL"
 #echo "set up nvim as standard editor"
+export GOPATH="$HOME/Programs/go"
+export PATH="$PATH:$GOPATH/bin"
 
 export XDG_DESKTOP_DIR="/home/fecht"
 
 
-# for german keys in terminal
+# for caps<->esc in terminal
 sudo loadkeys /home/fecht/.config/keystrings
 
-PKG_CONFIG_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig/:$PKG_CONFIG_PATH
+PKG_CONFIG_PATH="/usr/lib/x86_64-linux-gnu/pkgconfig/:$PKG_CONFIG_PATH"
 
 RANGER_LOAD_DEFAULT_RC=false
 

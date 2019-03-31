@@ -1,29 +1,37 @@
 # --------- ALIASES ------------#
+alias yl='youtube-dl'
 
 alias gdb='gdb -q'
 alias python3='python3 -q'
 alias python='python -q'
+alias xsel='xsel -b'
+alias wgetr='wget --recursive --no-parent --continue'
 
-alias icat="kitty +kitten icat"
-alias kssh="kitty +kitten ssh"
+alias icat='kitty +kitten icat'
+alias kssh='kitty +kitten ssh'
 alias batstat='upower -i /org/freedesktop/UPower/devices/battery_BAT0'
 alias vim='nvim -p'
 #alias vi='vim'
 alias objdump='objdump -M intel'
 alias calcurse='calcurse -D ~/.config/calcurse'
-alias mountandroid='jmtpfs /media/android'
-alias umountandroid='fusermount -u /media/android'
 alias sdrescan='echo 1 | sudo tee /sys/bus/pci/rescan'
-alias tmux="TERM=screen-256color-bce tmux"
-
+#alias tmux='TERM=screen-256color-bce tmux'
 # for dotfiles, see https://news.ycombinator.com/item?id=11071754
 alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 # to clone:  git clone --separate-git-dir=~/.myconf /path/to/repo ~
+
+
+alias fumount='fusermount -u'
+alias mountandroid='jmtpfs /media/android'
+alias umountandroid='fumount /media/android'
 
 alias spanisch='trans -t es'
 alias englisch='trans -t en'
 alias deutsch='trans -t de'
 alias polnisch='trans -t pl'
+
+alias vimr='fzf | xargs -r vim'
+alias xs='xsel -b'
 
 
 
@@ -36,7 +44,7 @@ alias polnisch='trans -t pl'
 
 # Path to your oh-my-zsh installation.
 
-export ZSH="/home/fecht/.oh-my-zsh"
+export ZSH="$HOME/.oh-my-zsh"
 
 # do not create ugly zcompdump files in home dir
 export ZSH_COMPDUMP=$ZSH
@@ -46,7 +54,6 @@ export ZSH_COMPDUMP=$ZSH
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 
-#ZSH_THEME="agnoster"
 ZSH_THEME="agnoster"
 
 # Set list of themes to pick from when loading at random
@@ -147,17 +154,18 @@ export ARCHFLAGS="-arch x86_64"
 # --------------- FZF --------------- #
 # Setup fzf
 # ---------
+FZF=$HOME/Programs/cli/fzf
 if [[ ! "$PATH" == */home/fecht/.fzf/bin* ]]; then
-  export PATH="$PATH:/home/fecht/Programs/fzf/bin"
+  export PATH="$PATH:$FZF/bin"
 fi
 
 # Auto-completion
 # ---------------
-[[ $- == *i* ]] && source "/home/fecht/Programs/fzf/shell/completion.zsh" 2> /dev/null
+[[ $- == *i* ]] && source "$FZF/shell/completion.zsh" 2> /dev/null
 
 # Key bindings
 # ------------
-source "/home/fecht/Programs/fzf/shell/key-bindings.zsh"
+source "$FZF/shell/key-bindings.zsh"
 
 
 # opam configuration
