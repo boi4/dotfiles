@@ -1,2 +1,2 @@
-sudo umount ~/private
+sudo umount /media/private
 sudo cryptsetup close private
