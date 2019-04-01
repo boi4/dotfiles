@@ -19,6 +19,9 @@ export VISUAL="nvim -p "
 export EDITOR="$VISUAL"
 #echo "set up nvim as standard editor"
 
+export GOPATH="$HOME/Programs/go"
+export PATH="$PATH:$GOPATH/bin"
+
 export XDG_DESKTOP_DIR="/home/fecht"
 
 

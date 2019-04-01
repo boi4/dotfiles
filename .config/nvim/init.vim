@@ -32,6 +32,7 @@ source ~/.config/nvim/rcsettings/appearance.vim
 source ~/.config/nvim/rcsettings/python.vim
 source ~/.config/nvim/rcsettings/c.vim
 source ~/.config/nvim/rcsettings/cpp.vim
+source ~/.config/nvim/rcsettings/go.vim
 source ~/.config/nvim/rcsettings/tex.vim
 source ~/.config/nvim/rcsettings/html.vim
 source ~/.config/nvim/rcsettings/ocaml.vim
@@ -62,7 +63,10 @@ set whichwrap=b,s
 
 runtime! ftplugin/man.vim
 
+
 " general
+let mapleader = ","
+
 noremap <space>q :nohl<CR>
 noremap <space>w :nopc<CR>
 noremap <space><C-]> <C-w><C-]><C-w>T
@@ -85,6 +89,7 @@ noremap <space>gf :YcmCompleter FixIt<CR>
 
 noremap ö 0
 noremap ä $
+noremap ü @:
 
 " Enable folding
 set foldmethod=indent
@@ -142,12 +147,20 @@ let g:syntastic_ocaml_checkers = ['merlin']
 " NERDTree
 map <C-n> :NERDTreeToggle<CR>
 
+" UltiSnips
+let g:UltiSnipsExpandTrigger="<tab>"
+
 
 
 set wildmenu		" display completion matches in a status line
 
 set ttimeout		" time out for key codes
 set ttimeoutlen=100	" wait up to 100ms after Esc for special key
+
+
+map <C-n> :cnext<CR>
+map <C-m> :cprevious<CR>
+nnoremap <leader>a :cclose<CR>
 
 
 " Do not recognize octal numbers for Ctrl-A and Ctrl-X, most users find it
