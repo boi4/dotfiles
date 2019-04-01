@@ -16,9 +16,9 @@ for_window [instance="quick_term"] floating enable;
 for_window [instance="quick_term"] move scratchpad; [instance="quick_term"] scratchpad show; move position 0px 22px; resize shrink height 300px; resize grow width 683px; move scratchpad
 
 # gaps settings
-for_window [class="^.*"] border pixel 0
-gaps inner 0
-gaps outer 0
+#for_window [class="^.*"] border pixel 0
+#gaps inner 0
+#gaps outer 0
 
 
 exec_always --no-startup-id dunst
