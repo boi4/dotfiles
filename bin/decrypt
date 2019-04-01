@@ -1,3 +1,3 @@
 sudo cryptsetup open /dev/sda4 private
-sudo mount -t ext4 /dev/mapper/private ~/private
+sudo mount -t ext4 /dev/mapper/private /media/private
 

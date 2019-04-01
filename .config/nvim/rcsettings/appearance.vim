@@ -16,7 +16,7 @@ set showtabline=2
 let &t_ut=''
 
 "set background=light
-set background=dark
+"set background=dark
 
 "colorscheme solarized
 "let g:solarized_termcolors=256
@@ -28,8 +28,9 @@ set background=dark
 "colorscheme onedark
 "let g:airline_theme='onedark'
 
-colorscheme OceanicNext
-let g:airline_theme='oceanicnext'
+"let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+"colorscheme OceanicNext
+"let g:airline_theme='oceanicnext'
 
 "colorscheme gruvbox
 "let g:airline_theme='gruvbox'

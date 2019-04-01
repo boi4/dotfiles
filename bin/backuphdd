@@ -1,16 +1,19 @@
 #!/bin/bash
-HOME=/home/fecht
-echo "macking backupfile:/media/hdd/backup-$(date +%Y-%m-%d)-$(hostname).tar.gz" 
+BACKUPNAME="backup-$(date +%Y-%m-%d)-$(hostname).tar.gz"
+MOUNTS=$(lsblk | awk '{print $7}' | sed -e "/^$/d" -e "1d" -e "/SWAP/d")
+OUT="$(echo -n "$MOUNTS" | fzf --layout=reverse)/$BACKUPNAME"
+
+echo "macking backupfile:$OUT" 
 
 find $HOME/Programs > $HOME/programslist.txt
 find $HOME/Music > $HOME/musiclist.txt
 
-tobackup=$(ls $HOME -1 -a | grep "Pictures\|Music\|.cache\|Programs\|.thunderbird\|.m2\|.opam\|^.$\|^..$" -v | awk '{print "/home/fecht/" $0}')
+tobackup=$(ls $HOME -1 -a | grep "Downloads\|Pictures\|Music\|.cache\|Programs\|.thunderbird\|.m2\|.opam\|^.$\|^..$\|^.ssh$\|.gnupg" -v | awk '{print "/home/fecht/" $0}')
 
 echo $tobackup
-tar -czf /media/hdd/backup-$(date +%Y-%m-%d)-$(hostname).tar.gz $tobackup
+
+tar -czf ~/$BACKUPNAME $tobackup
+mv ~/$BACKUPNAME $OUT
+
 rm $HOME/programslist.txt
 rm $HOME/musiclist.txt
-
-
-#check .vim

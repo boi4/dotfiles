@@ -7,12 +7,12 @@ SUFFIX=tcp
 
 #COUNTRY_CODES_PATH=$HOME/Documents/Other/tables/country_codes.txt
 
-CONFIG_FILES_PATH=$HOME/.config/nordvpn
+CONFIG_FILES_PATH=$HOME/.config/nordvpn/files
 
 #pwfile should have a line in the format: vpn.secrets.password:thepassword
 USE_PWFILE=yes
 PWFILE=$HOME/.config/nordvpn/pw
-USERNAME=nordvpn1234@gmx.de
+USERNAME=$(cat $HOME/.config/nordvpn/username)
 
 
 
