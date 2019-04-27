@@ -10,7 +10,9 @@ alias wgetr='wget --recursive --no-parent --continue'
 alias icat='kitty +kitten icat'
 alias kssh='kitty +kitten ssh'
 alias batstat='upower -i /org/freedesktop/UPower/devices/battery_BAT0'
-alias vim='nvim -p'
+#alias vim='nvim -p'
+alias vim='nvim'
+alias mvim='nvim -p'
 #alias vi='vim'
 alias objdump='objdump -M intel'
 alias calcurse='calcurse -D ~/.config/calcurse'
@@ -32,6 +34,7 @@ alias polnisch='trans -t pl'
 
 alias vimr='fzf | xargs -r vim'
 alias xs='xsel -b'
+alias pb='nc janfecht.xyz 20000'
 
 
 
@@ -113,7 +116,8 @@ plugins=(
   zsh-syntax-highlighting
   colored-man-pages
   extract
-  autosuggestions
+  zsh-autosuggestions
+  z
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -127,9 +131,9 @@ source $ZSH/oh-my-zsh.sh
 
 # Preferred editor for local and remote sessions
 if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR='nvim -p'
+  export EDITOR='nvim'
 else
-  export EDITOR='nvim -p'
+  export EDITOR='nvim'
 fi
 
 # Compilation flags
