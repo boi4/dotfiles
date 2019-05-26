@@ -1,0 +1,473 @@
+# completion system
+COMPDUMPFILE=${COMPDUMPFILE:-${ZDOTDIR:-${HOME}}/.zcompdump}
+if autoload -U compinit ; then
+    typeset -a tmp
+    zstyle -a ':grml:completion:compinit' arguments tmp
+    compinit -d ${COMPDUMPFILE} "${tmp[@]}" || print 'Notice: no compinit available :('
+    unset tmp
+else
+    print 'Notice: no compinit available :('
+    function compdef { }
+fi
+
+# Prompt setup for grml:
+
+# set colors for use in prompts (modern zshs allow for the use of %F{red}foo%f
+# in prompts to get a red "foo" embedded, but it's good to keep these for
+# backwards compatibility).
+if autoload -U colors && colors 2>/dev/null ; then
+    BLUE="%{${fg[blue]}%}"
+    RED="%{${fg_bold[red]}%}"
+    GREEN="%{${fg[green]}%}"
+    CYAN="%{${fg[cyan]}%}"
+    MAGENTA="%{${fg[magenta]}%}"
+    YELLOW="%{${fg[yellow]}%}"
+    WHITE="%{${fg[white]}%}"
+    NO_COLOR="%{${reset_color}%}"
+else
+    BLUE=$'%{\e[1;34m%}'
+    RED=$'%{\e[1;31m%}'
+    GREEN=$'%{\e[1;32m%}'
+    CYAN=$'%{\e[1;36m%}'
+    WHITE=$'%{\e[1;37m%}'
+    MAGENTA=$'%{\e[1;35m%}'
+    YELLOW=$'%{\e[1;33m%}'
+    NO_COLOR=$'%{\e[0m%}'
+fi
+
+# First, the easy ones: PS2..4:
+
+# secondary prompt, printed when the shell needs more information to complete a
+# command.
+PS2='\`%_> '
+# selection prompt used within a select loop.
+PS3='?# '
+# the execution trace prompt (setopt xtrace). default: '+%N:%i>'
+PS4='+%N:%i:%_> '
+
+# gather version control information for inclusion in a prompt
+
+if autoload -U vcs_info; then
+    # `vcs_info' in zsh versions 4.3.10 and below have a broken `_realpath'
+    # function, which can cause a lot of trouble with our directory-based
+    # profiles. So:
+    if [[ ${ZSH_VERSION} == 4.3.<-10> ]] ; then
+        function VCS_INFO_realpath () {
+            setopt localoptions NO_shwordsplit chaselinks
+            ( builtin cd -q $1 2> /dev/null && pwd; )
+        }
+    fi
+
+    zstyle ':vcs_info:*' max-exports 2
+
+    if [[ -o restricted ]]; then
+        zstyle ':vcs_info:*' enable NONE
+    fi
+fi
+
+typeset -A grml_vcs_coloured_formats
+typeset -A grml_vcs_plain_formats
+
+grml_vcs_plain_formats=(
+    format "(%s%)-[%b] "    "zsh: %r"
+    actionformat "(%s%)-[%b|%a] " "zsh: %r"
+    rev-branchformat "%b:%r"
+)
+
+grml_vcs_coloured_formats=(
+    format "${MAGENTA}(${NO_COLOR}%s${MAGENTA})${YELLOW}-${MAGENTA}[${GREEN}%b${MAGENTA}]${NO_COLOR} "
+    actionformat "${MAGENTA}(${NO_COLOR}%s${MAGENTA})${YELLOW}-${MAGENTA}[${GREEN}%b${YELLOW}|${RED}%a${MAGENTA}]${NO_COLOR} "
+    rev-branchformat "%b${RED}:${YELLOW}%r"
+)
+
+typeset GRML_VCS_COLOUR_MODE=xxx
+
+function grml_vcs_info_toggle_colour () {
+    emulate -L zsh
+    if [[ $GRML_VCS_COLOUR_MODE == plain ]]; then
+        grml_vcs_info_set_formats coloured
+    else
+        grml_vcs_info_set_formats plain
+    fi
+    return 0
+}
+
+function grml_vcs_info_set_formats () {
+    emulate -L zsh
+    #setopt localoptions xtrace
+    local mode=$1 AF F BF
+    if [[ $mode == coloured ]]; then
+        AF=${grml_vcs_coloured_formats[actionformat]}
+        F=${grml_vcs_coloured_formats[format]}
+        BF=${grml_vcs_coloured_formats[rev-branchformat]}
+        GRML_VCS_COLOUR_MODE=coloured
+    else
+        AF=${grml_vcs_plain_formats[actionformat]}
+        F=${grml_vcs_plain_formats[format]}
+        BF=${grml_vcs_plain_formats[rev-branchformat]}
+        GRML_VCS_COLOUR_MODE=plain
+    fi
+
+    zstyle ':vcs_info:*'              actionformats "$AF" "zsh: %r"
+    zstyle ':vcs_info:*'              formats       "$F"  "zsh: %r"
+    zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat  "$BF"
+    return 0
+}
+
+# Change vcs_info formats for the grml prompt. The 2nd format sets up
+# $vcs_info_msg_1_ to contain "zsh: repo-name" used to set our screen title.
+if [[ "$TERM" == dumb ]] ; then
+    grml_vcs_info_set_formats plain
+else
+    grml_vcs_info_set_formats coloured
+fi
+
+function grml_prompt_setup () {
+    emulate -L zsh
+    autoload -Uz vcs_info
+    # The following autoload is disabled for now, since this setup includes a
+    # static version of the ‘add-zsh-hook’ function above. It needs to be
+    # re-enabled as soon as that static definition is removed again.
+    #autoload -Uz add-zsh-hook
+    add-zsh-hook precmd prompt_$1_precmd
+}
+
+function prompt_grml_setup () {
+    grml_prompt_setup grml
+}
+
+function prompt_grml-chroot_setup () {
+    grml_prompt_setup grml-chroot
+}
+
+function prompt_grml-large_setup () {
+    grml_prompt_setup grml-large
+}
+
+# These maps define default tokens and pre-/post-decoration for items to be
+# used within the themes. All defaults may be customised in a context sensitive
+# matter by using zsh's `zstyle' mechanism.
+typeset -gA grml_prompt_pre_default \
+            grml_prompt_post_default \
+            grml_prompt_token_default \
+            grml_prompt_token_function
+
+grml_prompt_pre_default=(
+    at                ''
+    battery           ' '
+    change-root       ''
+    date              '%F{blue}'
+    grml-chroot       '%F{red}'
+    history           '%F{green}'
+    host              ''
+    jobs              '%F{cyan}'
+    newline           ''
+    path              '%B'
+    percent           ''
+    rc                '%B%F{red}'
+    rc-always         ''
+    sad-smiley        ''
+    shell-level       '%F{red}'
+    time              '%F{blue}'
+    user              '%B%F{blue}'
+    vcs               ''
+)
+
+grml_prompt_post_default=(
+    at                ''
+    battery           ''
+    change-root       ''
+    date              '%f'
+    grml-chroot       '%f '
+    history           '%f'
+    host              ''
+    jobs              '%f'
+    newline           ''
+    path              '%b'
+    percent           ''
+    rc                '%f%b'
+    rc-always         ''
+    sad-smiley        ''
+    shell-level       '%f'
+    time              '%f'
+    user              '%f%b'
+    vcs               ''
+)
+
+grml_prompt_token_default=(
+    at                '@'
+    battery           'GRML_BATTERY_LEVEL'
+    change-root       'debian_chroot'
+    date              '%D{%Y-%m-%d}'
+    grml-chroot       'GRML_CHROOT'
+    history           '{history#%!} '
+    host              '%m '
+    jobs              '[%j running job(s)] '
+    newline           $'\n'
+    path              '%40<..<%~%<< '
+    percent           '%# '
+    rc                '%(?..%? )'
+    rc-always         '%?'
+    sad-smiley        '%(?..:()'
+    shell-level       '%(3L.+ .)'
+    time              '%D{%H:%M:%S} '
+    user              '%n'
+    vcs               '0'
+)
+
+function grml_theme_has_token () {
+    if (( ARGC != 1 )); then
+        printf 'usage: grml_theme_has_token <name>\n'
+        return 1
+    fi
+    (( ${+grml_prompt_token_default[$1]} ))
+}
+
+function GRML_theme_add_token_usage () {
+    <<__EOF0__
+  Usage: grml_theme_add_token <name> [-f|-i] <token/function> [<pre> <post>]
+
+    <name> is the name for the newly added token. If the \`-f' or \`-i' options
+    are used, <token/function> is the name of the function (see below for
+    details). Otherwise it is the literal token string to be used. <pre> and
+    <post> are optional.
+
+  Options:
+
+    -f <function>   Use a function named \`<function>' each time the token
+                    is to be expanded.
+
+    -i <function>   Use a function named \`<function>' to initialise the
+                    value of the token _once_ at runtime.
+
+    The functions are called with one argument: the token's new name. The
+    return value is expected in the \$REPLY parameter. The use of these
+    options is mutually exclusive.
+
+    There is a utility function \`grml_theme_has_token', which you can use
+    to test if a token exists before trying to add it. This can be a guard
+    for situations in which a \`grml_theme_add_token' call may happen more
+    than once.
+
+  Example:
+
+    To add a new token \`day' that expands to the current weekday in the
+    current locale in green foreground colour, use this:
+
+      grml_theme_add_token day '%D{%A}' '%F{green}' '%f'
+
+    Another example would be support for \$VIRTUAL_ENV:
+
+      function virtual_env_prompt () {
+        REPLY=\${VIRTUAL_ENV+\${VIRTUAL_ENV:t} }
+      }
+      grml_theme_add_token virtual-env -f virtual_env_prompt
+
+    After that, you will be able to use a changed \`items' style to
+    assemble your prompt.
+__EOF0__
+}
+
+function grml_theme_add_token () {
+    emulate -L zsh
+    local name token pre post
+    local -i init funcall
+
+    if (( ARGC == 0 )); then
+        GRML_theme_add_token_usage
+        return 0
+    fi
+
+    init=0
+    funcall=0
+    pre=''
+    post=''
+    name=$1
+    shift
+    if [[ $1 == '-f' ]]; then
+        funcall=1
+        shift
+    elif [[ $1 == '-i' ]]; then
+        init=1
+        shift
+    fi
+
+    if (( ARGC == 0 )); then
+        printf '
+grml_theme_add_token: No token-string/function-name provided!\n\n'
+        GRML_theme_add_token_usage
+        return 1
+    fi
+    token=$1
+    shift
+    if (( ARGC != 0 && ARGC != 2 )); then
+        printf '
+grml_theme_add_token: <pre> and <post> need to by specified _both_!\n\n'
+        GRML_theme_add_token_usage
+        return 1
+    fi
+    if (( ARGC )); then
+        pre=$1
+        post=$2
+        shift 2
+    fi
+
+    if grml_theme_has_token $name; then
+        printf '
+grml_theme_add_token: Token `%s'\'' exists! Giving up!\n\n' $name
+        GRML_theme_add_token_usage
+        return 2
+    fi
+    if (( init )); then
+        $token $name
+        token=$REPLY
+    fi
+    grml_prompt_pre_default[$name]=$pre
+    grml_prompt_post_default[$name]=$post
+    if (( funcall )); then
+        grml_prompt_token_function[$name]=$token
+        grml_prompt_token_default[$name]=23
+    else
+        grml_prompt_token_default[$name]=$token
+    fi
+}
+
+function grml_wrap_reply () {
+    emulate -L zsh
+    local target="$1"
+    local new="$2"
+    local left="$3"
+    local right="$4"
+
+    if (( ${+parameters[$new]} )); then
+        REPLY="${left}${(P)new}${right}"
+    else
+        REPLY=''
+    fi
+}
+
+function grml_prompt_addto () {
+    emulate -L zsh
+    local target="$1"
+    local lr it apre apost new v REPLY
+    local -a items
+    shift
+
+    [[ $target == PS1 ]] && lr=left || lr=right
+    zstyle -a ":prompt:${grmltheme}:${lr}:setup" items items || items=( "$@" )
+    typeset -g "${target}="
+    for it in "${items[@]}"; do
+        zstyle -s ":prompt:${grmltheme}:${lr}:items:$it" pre apre \
+            || apre=${grml_prompt_pre_default[$it]}
+        zstyle -s ":prompt:${grmltheme}:${lr}:items:$it" post apost \
+            || apost=${grml_prompt_post_default[$it]}
+        zstyle -s ":prompt:${grmltheme}:${lr}:items:$it" token new \
+            || new=${grml_prompt_token_default[$it]}
+        if (( ${+grml_prompt_token_function[$it]} )); then
+            ${grml_prompt_token_function[$it]} $it
+        else
+            case $it in
+            battery)
+                grml_wrap_reply $target $new '' ''
+                ;;
+            change-root)
+                grml_wrap_reply $target $new '(' ')'
+                ;;
+            grml-chroot)
+                if [[ -n ${(P)new} ]]; then
+                    REPLY="$CHROOT"
+                else
+                    REPLY=''
+                fi
+                ;;
+            vcs)
+                v="vcs_info_msg_${new}_"
+                if (( ! vcscalled )); then
+                    vcs_info
+                    vcscalled=1
+                fi
+                if (( ${+parameters[$v]} )) && [[ -n "${(P)v}" ]]; then
+                    REPLY="${(P)v}"
+                else
+                    REPLY=''
+                fi
+                ;;
+            *) REPLY="$new" ;;
+            esac
+        fi
+        # Strip volatile characters per item. This is off by default. See the
+        # global stripping code a few lines below for details.
+        if [[ -o prompt_subst ]] && zstyle -t ":prompt:${grmltheme}:${lr}:items:$it" \
+                                           strip-sensitive-characters
+        then
+            REPLY="${REPLY//[$\`]/}"
+        fi
+        typeset -g "${target}=${(P)target}${apre}${REPLY}${apost}"
+    done
+
+    # Per default, strip volatile characters (in the prompt_subst case)
+    # globally. If the option is off, the style has no effect. For more
+    # control, this can be turned off and stripping can be configured on a
+    # per-item basis (see above).
+    if [[ -o prompt_subst ]] && zstyle -T ":prompt:${grmltheme}:${lr}:setup" \
+                                       strip-sensitive-characters
+    then
+        typeset -g "${target}=${${(P)target}//[$\`]/}"
+    fi
+}
+
+function prompt_grml_precmd () {
+    emulate -L zsh
+    local grmltheme=grml
+    local -a left_items right_items
+    left_items=(rc change-root user at host path vcs percent)
+    right_items=(sad-smiley)
+
+    prompt_grml_precmd_worker
+}
+
+function prompt_grml-chroot_precmd () {
+    emulate -L zsh
+    local grmltheme=grml-chroot
+    local -a left_items right_items
+    left_items=(grml-chroot user at host path percent)
+    right_items=()
+
+    prompt_grml_precmd_worker
+}
+
+function prompt_grml-large_precmd () {
+    emulate -L zsh
+    local grmltheme=grml-large
+    local -a left_items right_items
+    left_items=(rc jobs history shell-level change-root time date newline
+                user at host path vcs percent)
+    right_items=(sad-smiley)
+
+    prompt_grml_precmd_worker
+}
+
+function prompt_grml_precmd_worker () {
+    emulate -L zsh
+    local -i vcscalled=0
+
+    grml_prompt_addto PS1 "${left_items[@]}"
+    if zstyle -T ":prompt:${grmltheme}:right:setup" use-rprompt; then
+        grml_prompt_addto RPS1 "${right_items[@]}"
+    fi
+}
+
+
+if autoload -U promptinit && promptinit 2>/dev/null ; then
+    # Since we define the required functions in here and not in files in
+    # $fpath, we need to stick the theme's name into `$prompt_themes'
+    # ourselves, since promptinit does not pick them up otherwise.
+    prompt_themes+=( grml )
+    # Also, keep the array sorted...
+    prompt_themes=( "${(@on)prompt_themes}" )
+fi
+
+if (( EUID == 0 )); then
+    zstyle ':prompt:grml(|-large|-chroot):*:items:user' pre '%B%F{red}'
+fi
+prompt grml
