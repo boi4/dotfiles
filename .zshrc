@@ -1,176 +1,170 @@
-# --------- ALIASES ------------#
-alias yl='youtube-dl'
+##zmodload zsh/zprof
+source $HOME/Programs/zsh/prompt
+source $HOME/Programs/zsh/zle
 
-alias gdb='gdb -q'
-alias python3='python3 -q'
-alias python='python -q'
-alias xsel='xsel -b'
-alias wgetr='wget --recursive --no-parent --continue'
+typeset -U path PATH fpath FPATH
 
-alias icat='kitty +kitten icat'
-alias kssh='kitty +kitten ssh'
-alias batstat='upower -i /org/freedesktop/UPower/devices/battery_BAT0'
-#alias vim='nvim -p'
-alias vim='nvim'
-alias mvim='nvim -p'
-#alias vi='vim'
-alias objdump='objdump -M intel'
-alias calcurse='calcurse -D ~/.config/calcurse'
-alias sdrescan='echo 1 | sudo tee /sys/bus/pci/rescan'
-#alias tmux='TERM=screen-256color-bce tmux'
-# for dotfiles, see https://news.ycombinator.com/item?id=11071754
-alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
-# to clone:  git clone --separate-git-dir=~/.myconf /path/to/repo ~
+mods=(parameter complist deltochar mathfunc)
+
+for mod in $mods; do
+    zmodload -i zsh/${mod} 2>/dev/null
+done
 
 
-alias fumount='fusermount -u'
-alias mountandroid='jmtpfs /media/android'
-alias umountandroid='fumount /media/android'
+lazymods=(stat)
+for mod in $lazymods; do
+    zmodload -a zsh/${mod} 2>/dev/null
+done
 
-alias spanisch='trans -t es'
-alias englisch='trans -t en'
-alias deutsch='trans -t de'
-alias polnisch='trans -t pl'
-
-alias vimr='fzf | xargs -r vim'
-alias xs='xsel -b'
-alias pb='nc janfecht.xyz 20000'
+builtin unset mods lazymods mod
 
 
+fpath+=($HOME/Programs/zfns)
+
+# load aliases
+if [[ -r ~/.aliasrc ]]; then
+  . ~/.aliasrc
+fi
 
 
-# ---------- OH-MY-ZSH -------------- #
+# ----------- ZSH OPTIONS ------------
+#setopt sh_word_split # expand to several words except to one
+#setopt glob_subst # expand variable wildcards
+#setopt no_bg_nice # does not increase niceness of bg jobs
+#setopt no_notify # notifies if bg job is done
+#setopt no_hub # do not send signal to jobs, if shell quits
+#setopt prompt_substitution # PS1='${PWD}% ' is possible
+#setopt hist_verify # verfify !! substituions
+setopt noflowcontrol # crtl-s freezed nicht mehr
+setopt append_history
+setopt share_history
+setopt inc_append_history
+setopt extended_history
+setopt histignorealldups
+setopt hist_reduce_blanks
+setopt hist_ignore_space # dont add lines to hist that start with space
+setopt auto_cd
+setopt multios # mehrere > + trotzdem | in einem, schlecht für stderr trennung
+setopt correct_all # did you mean...?
+setopt extended_glob
+setopt longlistjobs # display PID when suspending processes as well
+setopt notify # report the status of backgrounds jobs immediately
+setopt hash_list_all
+setopt completeinword
+setopt nohup
+setopt auto_pushd
+setopt pushd_ignore_dups
+setopt nobeep
+setopt noglobdots
+setopt noshwordsplit
+setopt unset
+#setopt ignore_eof # ctrl+d macht kein exit
+#setopt no_chase_links # use new path as pwd after following symlinks
 
 
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
+HISTFILE="$HOME/.history"
+HISTSIZE=10000
+SAVEHIST=10000
 
-# Path to your oh-my-zsh installation.
+REPORTTIME=5
 
-export ZSH="$HOME/.oh-my-zsh"
+#PS1=' %1~ > '
+#RPS1='%~'
+#PS1='%30<...<%~ %# '
+#PS1='%(2L.+.)%# '
+#PS1="%{${fg[yellow]}${bg[black]}%}%# "
+#PS1=$'\e[0;31m %30<...<%~ %# \e[0m'
+
+autoload insert-numeric
+zle -N ins-num insert-numeric
+
+# !! for last command, !!n for nth word, !!m-n for m-n words, !!$ for last word !!* for all but command !!3:t gives tail, :h head of path
+# ${foo:h} # head von variable foo, :r removed suffix, :s/a/b substitutes, :u/:l upper/lowercase, ^a^b short for :s/a/b
+#bindkey -v' # vim mode
+# autoload fn -> search in $fpath for file fn and register it as a function
+# trap 'print I caught a SIGINT' INT
+# rehash um pfad neu zu durchsuchen
+# print -z ..., damit ... im zle erscheint
+# fn() {...;} funktion
+# cd - without args to ~, cd 0.8 1.1 -> search pwd for 0.8 and replace with 1.1, use cdpath for paths to check for folders for cd 
+# pushd, popd, dirs
+#ls() {
+#  command ls "$[@]"
+#}
+# difference where, whence, whereis, which, type, whence -w shows type
+# typeset var=val sets var only for the current scope
+# typeset -a var -> create empty array called var
+# typeset -i/ integer i -> create integer, ((i = 10 ** 2))
+# typeset -i 16 i -> base 16 if $i
+# typeset -E/-F -> floats
+# typeset -Fg -> global float
+# typeset -A assoc -> assoc=(k1 v1 k2 v2 ...)
+# print ${(k)assoc}
+# print ${(kv)assoc}
+# read var
+# set a b c -> set a b c as $1 $2 $3..
+# shift array/without array
+# stty susp '^]', stty for settings
+# trap "echo I\\'m trapped." INT
+# TRAPINT() {
+#   print I\'m trapped.
+#}
+#if [[ biryani = b* ]] is possible (pattern)
+# -eq -lt -le for numbers $? - retval, $# num args, #* args as array
+# zcompile
+# cat < <(echo moin), echo moin> >(cat) 
+# ./a.out 2> >(cat) | cat
+# diff =(./myscript1) =(./myscript2)
+# {first,second}'term' # kein leerzeichen
+# print {now,th{en,ere{,abouts}}}
+# print **/*.c
+#bindkey -me # m für meta (gibt probleme)
+bindkey -e # -v für vim
+bindkey '\e[3~' delete-char # del löscht unter cursor, alternativ ctrl+d
+bindkey '\e#' copy-prev-word
+bindkey '^[[H' beginning-of-line
+bindkey '^[[F' end-of-line
+bindkey '\eq' ins-num
+# keybindings:
+# c-u -> delete line
+# c-x-u -> undo
+# e-x -> execute command
+# c-spc -> set mark
+# e-p, e-n -> next history line match
+# c-x-c-x -> mark all between point and mark
+# c-o beim history scrollen -> ausführen, nächste hist line anzeigen
+# c-e -> setze letztes wort der history lines ein
+# e-a -> ausführen und zeile neu editieren
+# c-j oder c-m statt enter
+# c-enter -> nächste Zeile ohne enter
+# c-a/c-e -> start -> end of line
+# c-k -> del till end of line
+# e-p -> circle trhough history for curr command
+# bindkey zeigt alle keybindings
+# zle -N widget-name function-name um neues commando für bindkey zu erstellen
+# zle -l -> show widgets
+WORDCHARS='*?_-.[]~=/&;!#$%^(){}<>' # dinger die als wort erkannt werden
+#
+# command:
+
+
+
 
 # do not create ugly zcompdump files in home dir
-export ZSH_COMPDUMP=$ZSH
+#export ZSH_COMPDUMP=$ZSH
 
-# Set name of the theme to load --- if set to "random", it will
-# load a random theme each time oh-my-zsh is loaded, in which case,
-# to know which specific one was loaded, run: echo $RANDOM_THEME
-# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-
-ZSH_THEME="agnoster"
-
-# Set list of themes to pick from when loading at random
-# Setting this variable when ZSH_THEME=random will cause zsh to load
-# a theme from this variable instead of looking in ~/.oh-my-zsh/themes/
-# If set to an empty array, this variable will have no effect.
-# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
-
-# Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
-
-# Uncomment the following line to use hyphen-insensitive completion.
-# Case-sensitive completion must be off. _ and - will be interchangeable.
-# HYPHEN_INSENSITIVE="true"
-
-# Uncomment the following line to disable bi-weekly auto-update checks.
-# DISABLE_AUTO_UPDATE="true"
-
-# Uncomment the following line to change how often to auto-update (in days).
-# export UPDATE_ZSH_DAYS=13
-
-# Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
-
-# Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
-
-# Uncomment the following line to enable command auto-correction.
-# ENABLE_CORRECTION="true"
-
-# Uncomment the following line to display red dots whilst waiting for completion.
-# COMPLETION_WAITING_DOTS="true"
-
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
-
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# You can set one of the optional three formats:
-# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# or set a custom format using the strftime function format specifications,
-# see 'man strftime' for details.
-# HIST_STAMPS="mm/dd/yyyy"
-
-# Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
-
-# Which plugins would you like to load?
-# Standard plugins can be found in ~/.oh-my-zsh/plugins/*
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-plugins=(
-  git
-  zsh-syntax-highlighting
-  colored-man-pages
-  extract
-  zsh-autosuggestions
-  z
-)
-
-source $ZSH/oh-my-zsh.sh
-
-# User configuration
-
-# export MANPATH="/usr/local/man:$MANPATH"
-
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
-
-# Preferred editor for local and remote sessions
-if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR='nvim'
-else
-  export EDITOR='nvim'
-fi
-
-# Compilation flags
-export ARCHFLAGS="-arch x86_64"
-
-# ssh
-# export SSH_KEY_PATH="~/.ssh/rsa_id"
-
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
+#source ~/.antibody/zsh_plugins.sh
+#source ~/.antibody/zsh_themes.sh
+##source <(antibody init)
 #
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
-
-
-
-
-
-# --------------- FZF --------------- #
-# Setup fzf
-# ---------
+#
+## FZF
 FZF=$HOME/Programs/cli/fzf
-if [[ ! "$PATH" == */home/fecht/.fzf/bin* ]]; then
-  export PATH="$PATH:$FZF/bin"
-fi
-
-# Auto-completion
-# ---------------
-[[ $- == *i* ]] && source "$FZF/shell/completion.zsh" 2> /dev/null
-
-# Key bindings
-# ------------
+source "$FZF/shell/completion.zsh" 2
 source "$FZF/shell/key-bindings.zsh"
 
+## opam configuration
+##test -r /home/fecht/.opam/opam-init/init.zsh && . /home/fecht/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
+##zprof
 
-# opam configuration
-#test -r /home/fecht/.opam/opam-init/init.zsh && . /home/fecht/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
+eval $(dircolors -b)

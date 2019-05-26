@@ -1,0 +1,91 @@
+# --------- ALIASES ------------#
+alias yl='youtube-dl'
+alias za='zathura'
+
+alias gdb='gdb -q'
+alias python3='python3 -q'
+alias python='python -q'
+alias xsel='xsel -b'
+alias ip='ip --color'
+alias less='less -R'
+alias wgetr='wget --recursive --no-parent --continue'
+
+alias icat='kitty +kitten icat'
+alias kssh='kitty +kitten ssh'
+alias scb='kitty +kitten clipboard'
+alias gcb='kitty +kitten clipboard --get-clipboard'
+
+alias batstat='upower -i /org/freedesktop/UPower/devices/battery_BAT0'
+#alias vim='nvim -p'
+alias vim='nvim'
+alias mvim='nvim -p'
+#alias vi='vim'
+alias objdump='objdump -M intel'
+alias calcurse='calcurse -D ~/.config/calcurse'
+alias sdrescan='echo 1 | sudo tee /sys/bus/pci/rescan'
+#alias tmux='TERM=screen-256color-bce tmux'
+# for dotfiles, see https://news.ycombinator.com/item?id=11071754
+alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
+# to clone:  git clone --separate-git-dir=~/.myconf /path/to/repo ~
+alias zshup='antibody bundle < ~/.antibody/zsh_plugins.txt > ~/.antibody/zsh_plugins.sh && antibody bundle < ~/.antibody/zsh_themes.txt > ~/.antibody/zsh_themes.sh'
+
+alias fumount='fusermount -u'
+alias mountandroid='jmtpfs /media/android'
+alias umountandroid='fumount /media/android'
+
+alias spanisch='trans -t es'
+alias englisch='trans -t en'
+alias deutsch='trans -t de'
+alias polnisch='trans -t pl'
+
+alias vimr='fzf | xargs -r vim'
+alias xs='xsel -b'
+alias pb='nc janfecht.xyz 20000'
+alias zitat="printf 'http://zitate.net/zitat\?id\=%s' \$(shuf -i 0-10000 -n 1) | xargs curl --silent -r 0-10 | sed -e 's/</\n/g' | sed -n '/description/p' | sed 1q | cut -d '\"' -f 4 | head -c -20"
+
+alias grnvs='ssh grnvs@svm0000.net.in.tum.de && ssh root@svm0564.net.in.tum.de'
+
+
+
+alias grep='grep --color=auto'
+
+alias ls="ls -v --color=auto"
+alias la="ls -la"
+alias ll="ls -l"
+alias lh="ls -hAl"
+alias l="ls -l"
+
+# listing stuff
+#a2# Execute \kbd{ls -lSrah}
+alias dir="ls -lSrah"
+#a2# Only show dot-directories
+alias lad='ls -d .*(/)'
+#a2# Only show dot-files
+alias lsa='ls -a .*(.)'
+#a2# Only files with setgid/setuid/sticky flag
+alias lss='ls -l *(s,S,t)'
+#a2# Only show symlinks
+alias lsl='ls -l *(@)'
+#a2# Display only executables
+alias lsx='ls -l *(*)'
+#a2# Display world-{readable,writable,executable} files
+alias lsw='ls -ld *(R,W,X.^ND/)'
+#a2# Display the ten biggest files
+alias lsbig="ls -flh *(.OL[1,10])"
+#a2# Only show directories
+alias lsd='ls -d *(/)'
+#a2# Only show empty directories
+alias lse='ls -d *(/^F)'
+#a2# Display the ten newest files
+alias lsnew="ls -rtlh *(D.om[1,10])"
+#a2# Display the ten oldest files
+alias lsold="ls -rtlh *(D.Om[1,10])"
+#a2# Display the ten smallest files
+alias lssmall="ls -Srl *(.oL[1,10])"
+#a2# Display the ten newest directories and ten newest .directories
+alias lsnewdir="ls -rthdl *(/om[1,10]) .*(D/om[1,10])"
+#a2# Display the ten oldest directories and ten oldest .directories
+alias lsolddir="ls -rthdl *(/Om[1,10]) .*(D/Om[1,10])"
+
+alias rmcdir='cd ..; rmdir $OLDPWD || cd $OLDPWD'
+alias ...='cd ../../'
