@@ -9,10 +9,10 @@
 	pager = diff-so-fancy | less --tabs=4 -RFX
 [commit]
 	template = ~/.config/git/commit_template
-	gpgSign = true
+#	gpgSign = true
 	verbose = true
 [push]
-	gpgSign = true
+#	gpgSign = true
 [gpg]
 	program = gpg2
 [status]
