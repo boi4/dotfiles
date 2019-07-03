@@ -1,7 +1,10 @@
 ##zmodload zsh/zprof
-source $HOME/Programs/zsh/prompt
-source $HOME/Programs/zsh/zle
-source $HOME/Programs/zsh/ranger-cd
+
+ZSHSCRIPTS=$HOME/.config/zsh
+
+source $ZSHSCRIPTS/prompt
+source $ZSHSCRIPTS/zle
+source $ZSHSCRIPTS/ranger-cd
 
 typeset -U path PATH fpath FPATH
 
