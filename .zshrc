@@ -1,6 +1,7 @@
 ##zmodload zsh/zprof
 source $HOME/Programs/zsh/prompt
 source $HOME/Programs/zsh/zle
+source $HOME/Programs/zsh/ranger-cd
 
 typeset -U path PATH fpath FPATH
 
@@ -10,7 +11,6 @@ for mod in $mods; do
     zmodload -i zsh/${mod} 2>/dev/null
 done
 
-
 lazymods=(stat)
 for mod in $lazymods; do
     zmodload -a zsh/${mod} 2>/dev/null
@@ -18,14 +18,12 @@ done
 
 builtin unset mods lazymods mod
 
-
 fpath+=($HOME/Programs/zfns)
 
 # load aliases
 if [[ -r ~/.aliasrc ]]; then
   . ~/.aliasrc
 fi
-
 
 # ----------- ZSH OPTIONS ------------
 #setopt sh_word_split # expand to several words except to one
@@ -160,7 +158,7 @@ WORDCHARS='*?_-.[]~=/&;!#$%^(){}<>' # dinger die als wort erkannt werden
 #
 ## FZF
 FZF=$HOME/Programs/cli/fzf
-source "$FZF/shell/completion.zsh" 2
+source "$FZF/shell/completion.zsh"
 source "$FZF/shell/key-bindings.zsh"
 
 ## opam configuration

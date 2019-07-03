@@ -471,3 +471,7 @@ if (( EUID == 0 )); then
     zstyle ':prompt:grml(|-large|-chroot):*:items:user' pre '%B%F{red}'
 fi
 prompt grml
+
+# highlight on tab-autocompletion
+zstyle ':completion:*' menu select
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
