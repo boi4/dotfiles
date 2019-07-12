@@ -1,4 +1,4 @@
-export VISUAL="nvim"
+export VISUAL="emacsclient -nw"
 export EDITOR="$VISUAL"
 export LESSHISTFILE="$HOME/.local/share/lesshst"
 export IPYTHONDIR="$HOME/.config/ipython"
@@ -6,11 +6,12 @@ export GOPATH="$HOME/Programs/go"
 export ARCHFLAGS="-arch x86_64"
 
 typeset -U path fpath
-for dir in ~/.local/bin ~/bin ~/.config/nvim/bundle/vim-live-latex-preview/bin $GOPATH/bin; do
-	if [[ -z ${path[(r)$dir]} ]]; then
-		path+=($dir)
-	fi 
-done
+
+#for dir in ~/.local/bin ~/bin ~/.config/nvim/bundle/vim-live-latex-preview/bin $GOPATH/bin; do
+#	if [[ -z ${path[(r)$dir]} ]]; then
+#		path+=($dir)
+#	fi 
+#done
 
 
 #export PYTHONSTARTUP="$HOME/.config/python/startup.py"
@@ -22,7 +23,7 @@ done
 #RANGER_LOAD_DEFAULT_RC=false
 #test -r /home/fecht/.opam/opam-init/init.zsh && . /home/fecht/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
 
-sudo loadkeys $HOME/.config/keystrings
+#sudo loadkeys $HOME/.config/keystrings
 
 # setup ssh-agent
 # http://mah.everybody.org/docs/ssh

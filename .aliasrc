@@ -1,14 +1,23 @@
 # --------- ALIASES ------------#
+alias ranger=ranger-cd
 alias yl='youtube-dl'
 alias za='zathura'
+alias ec='emacsclient --c'
+alias em='emacsclient -nw'
+# TODO: add sudo em command
 
 alias gdb='gdb -q'
 alias python3='python3 -q'
 alias python='python -q'
-alias xsel='xsel -b'
+#alias xsel='xsel -b'
 alias ip='ip --color'
-alias less='less -R'
+alias less='less -R -~'
 alias wgetr='wget --recursive --no-parent --continue'
+alias linkgrep='grep -oP --color=never "http.?://\S+" '
+# (?i)\b((?:[a-z][\w-]+:(?:/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]))
+
+
+#alias chill='mpv "https://www.youtube.com/watch?v=hHW1oY26kxQ"'
 
 alias icat='kitty +kitten icat'
 alias kssh='kitty +kitten ssh'
@@ -17,15 +26,14 @@ alias gcb='kitty +kitten clipboard --get-clipboard'
 
 alias batstat='upower -i /org/freedesktop/UPower/devices/battery_BAT0'
 #alias vim='nvim -p'
-alias vim='nvim'
-alias mvim='nvim -p'
-#alias vi='vim'
+#alias vim='nvim'
+#alias mvim='nvim -p' #alias vi='vim'
 alias objdump='objdump -M intel'
 alias calcurse='calcurse -D ~/.config/calcurse'
 alias sdrescan='echo 1 | sudo tee /sys/bus/pci/rescan'
 #alias tmux='TERM=screen-256color-bce tmux'
 # for dotfiles, see https://news.ycombinator.com/item?id=11071754
-alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
+alias dotf='git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 # to clone:  git clone --separate-git-dir=~/.myconf /path/to/repo ~
 alias zshup='antibody bundle < ~/.antibody/zsh_plugins.txt > ~/.antibody/zsh_plugins.sh && antibody bundle < ~/.antibody/zsh_themes.txt > ~/.antibody/zsh_themes.sh'
 
@@ -44,9 +52,7 @@ alias pb='nc janfecht.xyz 20000'
 alias zitat="printf 'http://zitate.net/zitat\?id\=%s' \$(shuf -i 0-10000 -n 1) | xargs curl --silent -r 0-10 | sed -e 's/</\n/g' | sed -n '/description/p' | sed 1q | cut -d '\"' -f 4 | head -c -20"
 
 alias grnvs='ssh grnvs@svm0000.net.in.tum.de && ssh root@svm0564.net.in.tum.de'
-
-
-
+alias s4="cd ~/University/Semester_4"
 alias grep='grep --color=auto'
 
 alias ls="ls -v --color=auto"
