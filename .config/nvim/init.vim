@@ -1,34 +1,19 @@
 set encoding=utf-8
 scriptencoding utf-8
 
-" Disable Plugins
-let g:pathogen_disabled = []
-call add(g:pathogen_disabled, 'vim-hardtime')
-call add(g:pathogen_disabled, 'ctrlp.vim')
-call add(g:pathogen_disabled, 'FastFold')
-call add(g:pathogen_disabled, 'nerdtree')
-"call add(g:pathogen_disabled, 'oceanic-next')
-call add(g:pathogen_disabled, 'rust')
-call add(g:pathogen_disabled, 'simplyfold')
-call add(g:pathogen_disabled, 'neomake')
-" call add(g:pathogen_disabled, 'surround')
-call add(g:pathogen_disabled, 'syntastic')
-call add(g:pathogen_disabled, 'tagbar')
-" call add(g:pathogen_disabled, 'vim-airline')
-call add(g:pathogen_disabled, 'vim-airline-themes')
-call add(g:pathogen_disabled, 'vim-colors-solarized')
-call add(g:pathogen_disabled, 'vim-fugitive')
-call add(g:pathogen_disabled, 'vim-instant-markdown')
-call add(g:pathogen_disabled, 'VimRegexTutor')
-call add(g:pathogen_disabled, 'vimux')
-call add(g:pathogen_disabled, 'YouCompleteMe')
-"call add(g:pathogen_disabled, 'vlime')
-"call add(g:pathogen_disabled, 'vim-markdown-composer')
 
+" Setup plugins
+call plug#begin('~/.config/nvim/plugged')
+"Plug 'mhartington/oceanic-next'
+Plug 'tpope/vim-surround'
+Plug 'vim-airline/vim-airline'
+Plug 'neovimhaskell/haskell-vim'
+Plug 'alx741/vim-hindent'
+"Plug 'sirver/UltiSnips'
+"Plug 'vim-airline/vim-airline-themes'
+"Plug 'fatih/vim-go'
+call plug#end()
 
-execute pathogen#infect()
-
-let g:hardtime_default_on = 1
 
 " source specific settings
 source ~/.config/nvim/rcsettings/search.vim
@@ -46,7 +31,6 @@ source ~/.config/nvim/rcsettings/rust.vim
 
 
 set nocompatible
-set encoding=utf-8
 set autowrite
 set backup
 set undofile
@@ -137,12 +121,6 @@ map <F11> ]
 " Git
 autocmd Filetype gitcommit setlocal spell textwidth=72
 
-" Calendar plugin
-let g:calendar_first_day = "monday"
-let g:calendar_date_endian = "little"
-let g:calendar_time_zone = "+0200"
-let g:calendar_date_separator= "."
-
 " You Complete Me
 let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
 
@@ -153,7 +131,7 @@ let g:airline_detect_modified=1
 let g:airline#extensions#syntastic#enabled = 1
 
 " Syntastic
-let g:syntastic_ocaml_checkers = ['merlin']
+" let g:syntastic_ocaml_checkers = ['merlin']
 " let g:syntastic_asm_compiler = 'nasm'
 
 " NERDTree
@@ -175,10 +153,10 @@ let g:UltiSnipsExpandTrigger="<tab>"
 "call neomake#configure#automake('nrwi', 500)
 
 
-set wildmenu		" display completion matches in a status line
+set wildmenu            " display completion matches in a status line
 
-set ttimeout		" time out for key codes
-set ttimeoutlen=100	" wait up to 100ms after Esc for special key
+set ttimeout            " time out for key codes
+set ttimeoutlen=100     " wait up to 100ms after Esc for special key
 
 
 map <C-n> :cnext<CR>
