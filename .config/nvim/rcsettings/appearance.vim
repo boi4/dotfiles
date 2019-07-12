@@ -10,7 +10,7 @@ syntax on
 
 "set cursorcolumn
 "set cursorline
-set showtabline=2
+"set showtabline=2
 
 " fixes black bar bug in tmux + kitty
 let &t_ut=''
