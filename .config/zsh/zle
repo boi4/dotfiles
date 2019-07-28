@@ -1,3 +1,6 @@
+# -*- mode: shell-script; -*-
+# vim:filetype=zsh
+
 # Custom widgets:
 ## beginning-of-line OR beginning-of-buffer OR beginning of history
 ## by: Bart Schaefer <schaefer@brasslantern.com>, Bernhard Tittelbach
@@ -192,7 +195,6 @@ function zrcgotkeymap () {
 
 zrcautozle insert-files
 zrcautozle edit-command-line
-zrcautozle insert-unicode-char
 if autoload -U history-search-end; then
     zle -N history-beginning-search-backward-end history-search-end
     zle -N history-beginning-search-forward-end  history-search-end
@@ -346,12 +348,6 @@ bind2maps emacs viins       -- -s '^x1' jump_after_first_word
 #k# complete word from history with menu
 bind2maps emacs viins       -- -s "^x^x" hist-complete
 
-# insert unicode character
-# usage example: 'ctrl-x i' 00A7 'ctrl-x i' will give you an §
-# See for example http://unicode.org/charts/ for unicode characters code
-#k# Insert Unicode character
-bind2maps emacs viins       -- -s '^xi' insert-unicode-char
-
 # use the new *-pattern-* widgets for incremental history search
 if zrcgotwidget history-incremental-pattern-search-backward; then
     for seq wid in '^r' history-incremental-pattern-search-backward \
@@ -404,3 +400,20 @@ bind2maps emacs viins vicmd -- -s '^[[1;3D' backward-word
 # Also try ESC Left/Right:
 bind2maps emacs viins vicmd -- -s '\e'${key[Right]} forward-word
 bind2maps emacs viins vicmd -- -s '\e'${key[Left]}  backward-word
+
+bindkey -e # -v für vim
+bindkey '\e[3~' delete-char # del löscht unter cursor, alternativ ctrl+d
+bindkey '\e#' copy-prev-word
+bindkey '^[[H' beginning-of-line # pos1
+bindkey '^[[F' end-of-line # ende
+
+## FZF
+FZF=$HOME/prg/cli/fzf
+if [[ -d $FZF ]]; then
+    source "$FZF/shell/completion.zsh"
+    source "$FZF/shell/key-bindings.zsh"
+fi
+
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+
+WORDCHARS='*?_-.[]~=/&;!#$%^(){}<>' # dinger die als wort erkannt werden
