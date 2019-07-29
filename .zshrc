@@ -38,10 +38,12 @@ setopt unset
 # ----------- RUN STUFF -------------
 typeset -U path PATH fpath FPATH
 
-source $ZSHSCRIPTS/prompt
-source $ZSHSCRIPTS/zle
-
-fpath+=($ZSHSCRIPTS/zfns)
+if [ -d "$ZSHSCRIPTS" ]; then
+    source $ZSHSCRIPTS/prompt
+    source $ZSHSCRIPTS/zle
+    
+    fpath+=($ZSHSCRIPTS/zfns)
+fi
 
 for mod in $mods; do
     zmodload -i zsh/${mod} 2>/dev/null
