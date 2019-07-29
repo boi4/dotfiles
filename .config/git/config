@@ -6,7 +6,6 @@
 	signingKey = 412165C851AB94C2
 [core]
 	editor = vim
-	pager = diff-so-fancy | less --tabs=4 -RFX
 [commit]
 	template = ~/.config/git/commit_template
 #	gpgSign = true
