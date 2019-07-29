@@ -245,7 +245,8 @@ bindsym $mod+Shift+g 		gaps inner current set 0; gaps outer current set 0
 bindsym $mod+Shift+c reload
 
 
-bindsym $mod+v exec $TERMINAL vim
+#bindsym $mod+v exec $TERMINAL vim
+bindsym $mod+v exec vbox_dmenu.sh
 bindsym $mod+Shift+v split v
 
 
