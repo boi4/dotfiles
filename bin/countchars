@@ -1,0 +1,5 @@
+#!/usr/bin/env python3
+import sys
+l = sys.stdin.read()
+for c in set(l):
+    print(c, l.count(c))
