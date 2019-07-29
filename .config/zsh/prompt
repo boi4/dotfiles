@@ -1,3 +1,7 @@
+# Prompt configuration
+# Mostly taken from grml with some modifications
+# Custom code at the bottom
+
 # completion system
 COMPDUMPFILE=${COMPDUMPFILE:-${ZDOTDIR:-${HOME}}/.zcompdump}
 if autoload -U compinit ; then
@@ -467,9 +471,19 @@ if autoload -U promptinit && promptinit 2>/dev/null ; then
     prompt_themes=( "${(@on)prompt_themes}" )
 fi
 
-if (( EUID == 0 )); then
+
+# added, different colors if on ssh
+if [ -n "$SSH_CONNECTION" ]; then
+    if (( EUID == 0 )); then
+        zstyle ':prompt:grml(|-large|-chroot):*:items:user' pre '%B%F{yellow}'
+    else
+        zstyle ':prompt:grml(|-large|-chroot):*:items:user' pre '%B%F{green}'
+    fi
+else if (( EUID == 0 )); then
     zstyle ':prompt:grml(|-large|-chroot):*:items:user' pre '%B%F{red}'
-fi
+fi; fi
+
+
 prompt grml
 
 # highlight on tab-autocompletion
