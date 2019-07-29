@@ -1,4 +1,4 @@
-# i3 config file
+# sway config file
 # by Jan Fecht
 
 set $TERMINAL kitty
@@ -10,17 +10,9 @@ for_window [window_role="pop-up"] floating enable
 
 
 assign [class="Firefox"] 2
-for_window [class="firefox"] border none
 assign [class="Elisa"] 1
 assign [class="Lollypop"] 1
 
-hide_edge_borders smart
-
-
-## quick terminal
-# exec --no-startup-id $TERMINAL --class quick_term
-# for_window [instance="quick_term"] floating enable;
-# for_window [instance="quick_term"] move scratchpad; [instance="quick_term"] scratchpad show; move position 0px 22px; resize shrink height 300px; resize grow width 683px; move scratchpad
 
 # gaps settings
 for_window [class="^.*"] border pixel 3
@@ -35,15 +27,17 @@ set $up k
 set $down j
 set $left h
 set $right l
-set $modr 135 # for the key next to alt gr
+# set $modr 135 # for the key next to alt gr
 
-floating_modifier $mod
+output * bg ~/Pictures/wallpaper/SajfREY.jpg fill
+
+floating_modifier $mod normal
 
 # startup apps
 # exec --no-startup-id i3-msg "workspace 1; exec kitty -e loadtmux.sh; workspace 1"
 # exec --no-startup-id i3-msg 'workspace 1; exec elisa; workspace 1'
-# exec --no-startup-id i3-msg 'workspace 1; exec lollypop; workspace 1'
-exec --no-startup-id i3-msg 'workspace 2; exec firefox; workspace 1'
+exec --no-startup-id i3-msg 'workspace 1; exec lollypop; workspace 1'
+exec --no-startup-id i3-msg 'workspace 2; exec MOZ_ENABLE_WAYLAND=1 firefox; workspace 1'
 exec --no-startup-id i3-msg 'workspace 3; exec start_persistent_kitty.sh; workspace 1'
 exec --no-startup-id i3-msg 'workspace 1'
 # exec --no-startup-id mpd
@@ -54,13 +48,8 @@ exec --no-startup-id i3-msg 'workspace 1'
 # exec --no-startup-id owncloud
 # exec --no-startup-id redshift-gtk
 
-exec --no-startup-id ~/.fehbg
+# exec --no-startup-id ~/.fehbg
 # exec --no-startup-id ~/bin/lock.sh 
-
-
-
-# set $xkbcomp "xkbcomp -w 0 ~/.config/xkb/xkbmap $DISPLAY"
-# exec $xkbcomp
 
 # lock after 10 min
 #exec --no-startup-id xautolock -locker "~/bin/lock.sh screenshot" -time 60 -detectsleep -notify 60
@@ -173,8 +162,8 @@ bindsym $mod+Shift+q kill
 
 
 bindsym $mod+e exec emacsclient -c -a \"\"
-# bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
-bindsym $mod+Shift+e exec $TERMINAL emacsclient -nw
+bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
+#bindsym $mod+Shift+e exec $TERMINAL emacsclient -nw
 
 
 bindsym $mod+r 			exec $TERMINAL ranger
@@ -216,11 +205,10 @@ bindsym $mod+s			gaps inner current plus 5
 bindsym $mod+Shift+s		gaps inner current minus 5
 
 # bindsym $mod+d exec dmenu_run
-bindsym $mod+d exec --no-startup-id i3-dmenu-desktop --dmenu='rofi -i -dmenu' # -font "Helvetica Neue 15" '
+bindsym $mod+d exec --no-startup-id j4-dmenu-desktop --dmenu='rofi -i -dmenu' # -font "Helvetica Neue 15" '
 ## bindsym $mod+Shift+d exec --no-startup-id j4-dmenu-desktop --dmenu="dmenu -l 20"
 
 bindsym $mod+f fullscreen toggle
-bindsym $mod+Shift+f floating toggle
 # bindsym $mod+Shift+f exec --no-startup-id display-setting-chooser.sh
 
 
@@ -312,35 +300,30 @@ bindsym Print exec --no-startup-id spectacle
 bindsym $mod+F1 layout splith
 bindsym $mod+F2 layout tabbed
 
-# Für alternativen Alt+F4 kill
-# bindsym Mod1+F4 kill
+exec --no-startup-id syncthing -no-browser
+
+bar {
+    #status_command i3status-rs
+    status_command while date +'%Y-%m-%d %l:%M:%S %p'; do sleep 1; done
+
+    colors {
+        statusline #ffffff
+        background #323232
+        inactive_workspace #32323200 #32323200 #5c5c5c
+    }
+    position top
+}
 
 
-# Pulse Audio controls
-# bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% #increase sound volume
-# bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5% #decrease sound volume
-# bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle # mute sound
-
-# #exec --no-startup-id display-visor -f -l
-
-exec --no-startup-id wmctrl -c Plasma
-
-for_window [title="Desktop — Plasma"] kill, floating enable, border none
-for_window [class="plasmashell"] floating enable, border none
-for_window [class="Plasma"] floating enable, border none
-for_window [title="plasma-desktop"] floating enable, border none
-for_window [title="win7"] floating enable, border none
-for_window [class="krunner"] floating enable, border none
-for_window [class="Kmix"] floating enable, border none
-for_window [class="Klipper"] floating enable, border none
-for_window [class="Plasmoidviewer"] floating enable, border none
-
-exec --no-startup-id syncthing
-#exec --no-startup-id i3expo.sh
+#input 1133:50484:Logitech_USB_Receiver repeat_rate 70
+# see man 5 sway-input
+input * repeat_delay 180
+input * repeat_rate 70
+input * xkb_layout "eu"
+input * xkb_options "caps:escape"
+input 1739:30382:DLL0704:01_06CB:76AE_Touchpad natural_scroll enabled
 
 for_window [instance="ida64.exe"] floating enable
 for_window [title="IDA: Quick start"] resize set 640 480
 for_window [title="IDA v7.*"] floating disable
 for_window [title="IDA -.*"] floating disable
-
-for_window [class="explorer.exe"] floating enable
