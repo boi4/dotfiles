@@ -408,10 +408,23 @@ bindkey '^[[H' beginning-of-line # pos1
 bindkey '^[[F' end-of-line # ende
 
 ## FZF
-FZF=$HOME/prg/cli/fzf
-if [[ -d $FZF ]]; then
-    source "$FZF/shell/completion.zsh"
-    source "$FZF/shell/key-bindings.zsh"
+FZF="$(which zsh)"
+FZF_BIN="$(dirname ${FZF})"
+FZF_ROOT="$(dirname ${FZF_BIN})"
+FZF_SHARE="$FZF_ROOT/share/fzf/"
+if [[ -d "$FZF_SHARE" ]]; then
+    source "$FZF_SHARE/completion.zsh"
+    source "$FZF_SHARE/key-bindings.zsh"
+    function fzf-git-branch {
+        if [[ -d .git ]]; then
+            br=$(git branch | fzf)
+            if [[ "$br" ]]; then
+                git checkout $(python3 -c "print(input().split()[-1])")
+            fi
+        fi
+    }
+    zle -N fzf-git-branch
+    bindkey '\eg'  fzf-git-branch
 fi
 
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
