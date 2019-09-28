@@ -1,4 +1,4 @@
-##zmodload zsh/zprof
+#zmodload zsh/zprof
 
 ZSHSCRIPTS=$HOME/.config/zsh
 mods=(parameter complist deltochar mathfunc)
@@ -65,7 +65,16 @@ if [[ -r ~/.aliasrc ]]; then
 fi
 
 # ls colors
-eval $(dircolors -b)
+if [ "$(command -v dircolors)" ]; then
+	eval $(dircolors -b)
+fi
 
-#source $HOME/Programs/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
-##zprof
+# get hub autocompletion
+if [ "$(command -v hub)" -a ! -f $ZSHSCRIPTS/hub.zsh_completion ]; then
+    echo "Downloading hub zsh completion"
+    wget https://raw.githubusercontent.com/github/hub/master/etc/hub.zsh_completion \
+        -O $ZSHSCRIPTS/hub.zsh_completion
+fi
+
+#source $HOME/prg/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
+#zprof
