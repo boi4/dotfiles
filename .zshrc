@@ -70,10 +70,11 @@ if [ "$(command -v dircolors)" ]; then
 fi
 
 # get hub autocompletion
-if [ "$(command -v hub)" -a ! -f $ZSHSCRIPTS/hub.zsh_completion ]; then
+if [ "$(command -v hub)" -a ! -f $ZSHSCRIPTS/hub/hub.zsh_completion ]; then
     echo "Downloading hub zsh completion"
+    mkdir -p $ZSHSCRIPTS/hub/
     wget https://raw.githubusercontent.com/github/hub/master/etc/hub.zsh_completion \
-        -O $ZSHSCRIPTS/hub.zsh_completion
+        -O $ZSHSCRIPTS/hub/hub.zsh_completion
 fi
 
 #source $HOME/prg/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh

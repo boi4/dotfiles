@@ -408,21 +408,17 @@ bindkey '^[[H' beginning-of-line # pos1
 bindkey '^[[F' end-of-line # ende
 
 ## FZF
-FZF="$(which zsh)"
-FZF_BIN="$(dirname ${FZF})"
-FZF_ROOT="$(dirname ${FZF_BIN})"
-FZF_SHARE="$FZF_ROOT/share/fzf/"
-if [[ ! -d "$FZF_SHARE" ]]; then
+if [[ ! -d "$ZSHSCRIPTS/fzf" ]]; then
     echo "Downloading fzf keybindings and completion"
-    mkdir -p $FZF_SHARE
+    mkdir -p $ZSHSCRIPTS/fzf
     wget https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.zsh \
-        -O $FZF_SHARE/key-bindings.zsh
+        -O $ZSHSCRIPTS/fzf/key-bindings.zsh
     wget https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.zsh \
-        -O $FZF_SHARE/completion.zsh
+        -O $ZSHSCRIPTS/fzf/completion.zsh
 fi
+source "$ZSHSCRIPTS/fzf/completion.zsh"
+source "$ZSHSCRIPTS/fzf/key-bindings.zsh"
 
-source "$FZF_SHARE/completion.zsh"
-source "$FZF_SHARE/key-bindings.zsh"
 function fzf-git-branch {
     if [[ -d .git ]]; then
         br=$(git branch | fzf)
@@ -431,6 +427,7 @@ function fzf-git-branch {
         fi
     fi
 }
+
 zle -N fzf-git-branch
 bindkey '\eg'  fzf-git-branch
 
