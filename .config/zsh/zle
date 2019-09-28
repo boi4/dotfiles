@@ -412,20 +412,27 @@ FZF="$(which zsh)"
 FZF_BIN="$(dirname ${FZF})"
 FZF_ROOT="$(dirname ${FZF_BIN})"
 FZF_SHARE="$FZF_ROOT/share/fzf/"
-if [[ -d "$FZF_SHARE" ]]; then
-    source "$FZF_SHARE/completion.zsh"
-    source "$FZF_SHARE/key-bindings.zsh"
-    function fzf-git-branch {
-        if [[ -d .git ]]; then
-            br=$(git branch | fzf)
-            if [[ "$br" ]]; then
-                git checkout $(python3 -c "print(input().split()[-1])")
-            fi
-        fi
-    }
-    zle -N fzf-git-branch
-    bindkey '\eg'  fzf-git-branch
+if [[ ! -d "$FZF_SHARE" ]]; then
+    echo "Downloading fzf keybindings and completion"
+    mkdir -p $FZF_SHARE
+    wget https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.zsh \
+        -O $FZF_SHARE/key-bindings.zsh
+    wget https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.zsh \
+        -O $FZF_SHARE/completion.zsh
 fi
+
+source "$FZF_SHARE/completion.zsh"
+source "$FZF_SHARE/key-bindings.zsh"
+function fzf-git-branch {
+    if [[ -d .git ]]; then
+        br=$(git branch | fzf)
+        if [[ "$br" ]]; then
+            git checkout $(python3 -c "print(input().split()[-1])")
+        fi
+    fi
+}
+zle -N fzf-git-branch
+bindkey '\eg'  fzf-git-branch
 
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 
