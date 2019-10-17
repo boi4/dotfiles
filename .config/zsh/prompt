@@ -1,3 +1,4 @@
+# -*- mode: shell-script -*-
 # Prompt configuration
 # Mostly taken from grml with some modifications
 # Custom code at the bottom
@@ -479,9 +480,15 @@ if [ -n "$SSH_CONNECTION" ]; then
     else
         zstyle ':prompt:grml(|-large|-chroot):*:items:user' pre '%B%F{green}'
     fi
+else if [ "$container" = "systemd-nspawn" ]; then
+        zstyle ':prompt:grml(|-large|-chroot):*:items:user' pre '%B%F{magenta}'
+else if [ -n "$CONDA_PROMPT_MODIFIER" ]; then
+         setopt prompt_subst
+         # TODO: fix the Promp modifier
+         zstyle ':prompt:grml(|-large|-chroot):*:items:user' pre '${CONDA_PROMPT_MODIFIER}%B%F{cyan}'
 else if (( EUID == 0 )); then
     zstyle ':prompt:grml(|-large|-chroot):*:items:user' pre '%B%F{red}'
-fi; fi
+fi; fi; fi; fi
 
 
 prompt grml
