@@ -1,72 +1,73 @@
 # --------- ALIASES ------------#
 
-# function that will check whether the alias declaration in $1 uses a valid command
-function calias () {
-	cmd=$(echo "$1" | cut -d '=' -f 2 | awk '{ print $1 }')
-	if [ "$(command -v $cmd)" ]; then
-		alias "$1"
-	fi
-}
-
 
 # better defaults
-calias ip='ip --color'
-calias less='less -R -~'
-calias gdb='gdb -q'
-calias python3='python3 -q'
-calias python='python -q'
-calias calcurse='calcurse -D ~/.config/calcurse'
-calias grep='grep --color=auto'
+alias ip='ip --color'
+alias less='less -R -~'
+alias gdb='gdb -q'
+alias python3='python3 -q'
+alias python='python -q'
+alias calcurse='calcurse -D ~/.config/calcurse'
+alias grep='grep --color=auto'
 
-if [ "$(uname --machine)" = "x86_64" ]; then
-	calias objdump='objdump -M intel'
+if [[ "$(uname --machine)" =~ "^x86(_64)?$" ]]; then
+	alias objdump='objdump -M intel'
+	#alias 'perf report'='perf report -M intel'
+fi
+
+if [ "$(command -v hub)" ]; then
+	alias git hub
 fi
 
 # use different command
-calias ranger=ranger-cd
-calias vim=nvim
+alias ranger=ranger-cd
+alias vim=nvim
 
 # shortcut whole command
-calias yl='youtube-dl'
-calias za='zathura'
+alias yl='youtube-dl'
+alias za='zathura'
 
 # shortcut command with args
-calias ec='emacsclient --c'
-calias em='emacsclient -nw'
-calias wgetr='wget --recursive --no-parent --continue'
-calias wgetreg='wget --recursive --no-parent --continue --accept-regex'
-calias linkgrep='grep -oP --color=never "http.?://\S+"'
-calias icat='kitty +kitten icat'
-calias kssh='kitty +kitten ssh'
-calias scb='kitty +kitten clipboard'
-calias gcb='kitty +kitten clipboard --get-clipboard'
-calias fumount='fusermount -u'
-calias findcdef='cscope -R -L1'
-calias spanisch='trans -t es'
-calias englisch='trans -t en'
-calias deutsch='trans -t de'
-calias polnisch='trans -t pl'
-calias xs='xsel -b'
+alias ec='emacsclient --c'
+alias em='emacsclient -nw'
+alias wgetr='wget --recursive --no-parent --continue -e robots=off' # -R "index.html*"'
+alias wgetreg='wget --recursive --no-parent --continue --accept-regex'
+alias linkgrep='grep -oP --color=never "http.?://\S+"'
+alias urlgrep='linkgrep'
+alias icat='kitty +kitten icat'
+alias kssh='kitty +kitten ssh'
+alias scb='kitty +kitten clipboard'
+alias gcb='kitty +kitten clipboard --get-clipboard'
+alias fumount='fusermount -u'
+alias findcdef='cscope -R -L1'
+alias spanisch='trans -t es'
+alias englisch='trans -t en'
+alias deutsch='trans -t de'
+alias polnisch='trans -t pl'
+alias xs='xsel -b'
 
 # new commands
-calias mountandroid='jmtpfs /media/android'
-calias umountandroid='fumount /media/android'
-calias batstat='upower -i /org/freedesktop/UPower/devices/battery_BAT0'
+alias mountandroid='jmtpfs /media/android'
+alias umountandroid='fumount /media/android'
+alias batstat='upower -i /org/freedesktop/UPower/devices/battery_BAT0'
 # for dotfiles, see https://news.ycombinator.com/item?id=11071754
 # to clone:  git clone --separate-git-dir=~/.cfg _repo_ ~
 # or git clone _repo_ && cp dotfiles/.git ~/.cfg
-calias dotf='git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
-calias grnvs='ssh grnvs@svm0000.net.in.tum.de && ssh root@svm0564.net.in.tum.de'
-calias s4="cd ~/University/Semester_4"
-calias speedtest='wget --report-speed=bits -O /dev/null http://speedtest.belwue.net/1000G'
+alias dotf='git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
+alias grnvs='ssh grnvs@svm0000.net.in.tum.de && ssh root@svm0564.net.in.tum.de'
+alias s4="cd ~/University/Semester_4"
+alias speedtest='wget --report-speed=bits -O /dev/null http://speedtest.belwue.net/1000G'
+
+
 
 # unchecked, TODO: add checks
 alias zitat="printf 'http://zitate.net/zitat\?id\=%s' \$(shuf -i 0-1000 -n 1) | xargs curl --silent -r 0-10 | sed -e 's/</\n/g' | sed -n '/description/p' | sed 1q | cut -d '\"' -f 4 | head -c -20"
 alias winenoin='sudo -g nointernet WINEPREFIX=$HOME/.wnointernet wine'
 alias wine64noin='sudo -g nointernet WINEPREFIX=$HOME/.wnointernet wine64'
-
 alias sdrescan='echo 1 | sudo tee /sys/bus/pci/rescan'
 alias vimr='fzf | xargs -r vim'
+alias nspawn='sudo systemd-nspawn -M'
+
 
 
 # shell related
