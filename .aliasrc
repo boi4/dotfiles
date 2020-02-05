@@ -10,6 +10,9 @@ alias python='python -q'
 alias calcurse='calcurse -D ~/.config/calcurse'
 alias grep='grep --color=auto'
 
+#alias ipython=ipython_cur
+#alias ipython3=ipython
+
 if [[ "$(uname --machine)" =~ "^x86(_64)?$" ]]; then
 	alias objdump='objdump -M intel'
 	#alias 'perf report'='perf report -M intel'
@@ -27,7 +30,9 @@ alias vim=nvim
 alias yl='youtube-dl'
 alias za='zathura'
 
+
 # shortcut command with args
+alias ylcook='youtube-dl --cookies <(export_cookies.sh)' #https://superuser.com/questions/666167/how-do-i-use-firefox-cookies-with-wget
 alias ec='emacsclient --c'
 alias em='emacsclient -nw'
 alias wgetr='wget --recursive --no-parent --continue -e robots=off' # -R "index.html*"'
