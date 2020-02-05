@@ -1,0 +1,9 @@
+# -*- mode: shell-script; -*-
+# vim:filetype=zsh
+
+function calias () {
+        cmd=$(echo "$1" | cut -d '=' -f 2 | awk '{ print $1 }')
+        if [ "$(command -v $cmd)" ]; then
+                alias "$1"
+        fi
+}
