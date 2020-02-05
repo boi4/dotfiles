@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+artist=$(playerctl metadata | sed -n -e 's/^.*artist[ \t]*//p')
+title=$(playerctl metadata | sed -n -e 's/^.*title[ \t]*//p')
+wget -qO- "http://makeitpersonal.co/lyrics?artist=$artist&title=$title" | less
+#curl -s --get "https://makeitpersonal.co/lyrics" --data-urlencode "artist=$artist" --data-urlencode "title=$title" | less
