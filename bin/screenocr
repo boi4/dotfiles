@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+set -e
+
+A="${RANDOM}.tif"
+if [ "$1" = "clipboard" ]; then
+    scrot -s "/tmp/$A"
+    tesseract "/tmp/$A" - | xsel -b
+else 
+    scrot -s "/tmp/$A" && tesseract "/tmp/$A" - 2>/dev/null
+fi
