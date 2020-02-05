@@ -480,7 +480,7 @@ if [ -n "$SSH_CONNECTION" ]; then
     else
         zstyle ':prompt:grml(|-large|-chroot):*:items:user' pre '%B%F{green}'
     fi
-else if [ "$container" = "systemd-nspawn" ]; then
+else if [ "$container" = "systemd-nspawn" -o "$(systemd-detect-virt)" = "systemd-nspawn" ]; then
         zstyle ':prompt:grml(|-large|-chroot):*:items:user' pre '%B%F{magenta}'
 else if [ -n "$CONDA_PROMPT_MODIFIER" ]; then
          setopt prompt_subst

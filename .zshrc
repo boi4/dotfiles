@@ -4,6 +4,7 @@ ZSHSCRIPTS=$HOME/.config/zsh
 mods=(parameter complist deltochar mathfunc)
 lazymods=(stat)
 funcs=(ranger-cd man)
+addpath=("$GOPATH/bin" "$HOME/bin")
 
 HISTFILE="$HOME/.history"
 HISTSIZE=10000
@@ -33,6 +34,7 @@ setopt nobeep
 setopt noglobdots
 setopt noshwordsplit
 setopt unset
+#setopt no_nomatch # disables globbing (also) for urls, use url-magic instead
 
 
 # ----------- RUN STUFF -------------
@@ -55,6 +57,10 @@ done
 
 for func in $funcs; do
     autoload ${funcs}  2>/dev/null
+done
+
+for pa in $addpath; do
+    PATH="$pa:$PATH"
 done
 
 builtin unset mods lazymods mod funcs
