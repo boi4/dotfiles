@@ -1,8 +1,10 @@
-#!/usr/bin/env bash
+    #!/usr/bin/env bash
 
 temp_file="/tmp/screen.png"
-width=1920
-height=1080
+
+width=$(xrandr | sed -n -E 's/^.*current ([0-9]+) x ([0-9]+).*$/\1/gp')
+height=$(xrandr | sed -n -E 's/^.*current ([0-9]+) x ([0-9]+).*$/\2/gp')
+
 blur_factor=5
 lock_blur_factor=0
 # https://ffmpeg.org/ffmpeg-filters.html
@@ -32,7 +34,12 @@ if [[ -z $WAYLAND_DISPLAY ]]; then
 		 $temp_file
 	fi
 
-	i3lock --no-unlock-indicator --ignore-empty-password --image=$temp_file -f
+#	i3lock --no-unlock-indicator --ignore-empty-password --image=$temp_file -f
+    XSECURELOCK_SAVER=saver_mpv \
+    XSECURELOCK_IMAGE_DURATION_SECONDS=inf \
+    XSECURELOCK_NO_COMPOSITE=1 \
+    XSECURELOCK_LIST_VIDEOS_COMMAND="echo $temp_file" \
+    xsecurelock
 else
   icon="$HOME/.config/i3/lock.png"
 	if [ "$1" == "screenshot" ]; then
