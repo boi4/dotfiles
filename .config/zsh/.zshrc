@@ -1,14 +1,14 @@
 #zmodload zsh/zprof
 
-ZSHSCRIPTS=$HOME/.config/zsh
+ZSHSCRIPTS=${ZDOTDIR:-${HOME}/.config/zsh}
 mods=(parameter complist deltochar mathfunc)
 lazymods=(stat)
 funcs=(ranger-cd man)
 addpath=("$GOPATH/bin" "$HOME/bin")
 
-HISTFILE="$HOME/.history"
-HISTSIZE=10000
-SAVEHIST=10000
+HISTFILE="${ZDOTDIR:-${HOME}}/.history"
+HISTSIZE=100000
+SAVEHIST=100000
 REPORTTIME=5
 
 # ----------- ZSH OPTIONS ------------
@@ -66,8 +66,8 @@ done
 builtin unset mods lazymods mod funcs
 
 # load aliases
-if [[ -r ~/.aliasrc ]]; then
-  . ~/.aliasrc
+if [[ -r ${ZDOTDIR:-${HOME}}/aliasrc ]]; then
+  . ${ZDOTDIR:-${HOME}}/aliasrc
 fi
 
 # ls colors
