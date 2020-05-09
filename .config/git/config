@@ -5,7 +5,7 @@
 	name = Jan Fecht
 	signingKey = 412165C851AB94C2
 [core]
-	editor = vim
+	editor = nvim
 [commit]
 	template = ~/.config/git/commit_template
 #	gpgSign = true
@@ -17,6 +17,7 @@
 [status]
 	short = true
 	branch = true
+	showUntrackedFiles = all
 [alias]
 	last = cat-file commit HEAD
 [web]
@@ -27,6 +28,15 @@
 	date = format:'%d.%m.%Y %H:%M:%S'
 [checkout]
 	defaultRemote = origin
+
+[diff]
+    tool = vimdiff
+[merge]
+    tool = vimdiff
+    conflictstyle = diff3
+[mergetool "vimdiff"]
+    cmd = nvim -d $BASE $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
+
 [color]
 	ui = true
 [color "diff-highlight"]
