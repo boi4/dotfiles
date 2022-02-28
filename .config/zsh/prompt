@@ -490,9 +490,31 @@ else if (( EUID == 0 )); then
     zstyle ':prompt:grml(|-large|-chroot):*:items:user' pre '%B%F{red}'
 fi; fi; fi; fi
 
+setopt local_options BASH_REMATCH
+pat="/nix/store/[A-Za-z0-9]{32}-([^:]*?-env)"
+if [[ $PATH =~ $pat ]];then
+        zstyle ':prompt:grml(|-large|-chroot):*:items:user' pre "[${BASH_REMATCH[2]}] "'%B%F{blue}'
+fi
+
 
 prompt grml
 
 # highlight on tab-autocompletion
 zstyle ':completion:*' menu select
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+
+## ssh hosts
+test -r ~/.ssh/known_hosts && _ssh_hosts=(${${${${${${${(f)"$(<$HOME/.ssh/known_hosts)"}:#[\|]*}:#\#*}%%\ *}%%,*}##\[}%%\]*}) || _ssh_hosts=()
+test -r /etc/hosts && : ${(A)_etc_hosts:=${(s: :)${(ps:\t:)${${(f)~~"$(</etc/hosts)"}%%\#*}##[:blank:]#[^[:blank:]]#}}} || _etc_hosts=()
+_hosts=(
+	"$_ssh_hosts[@]"
+	"$_etc_hosts[@]"
+	8.8.8.8
+	127.0.0.1
+	::1
+	localhost
+)
+unset _ssh_hosts
+unset _etc_hosts
+zstyle ':completion:*:hosts' hosts $_hosts
+unset _hosts

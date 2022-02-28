@@ -1,87 +1,124 @@
 # --------- ALIASES ------------#
+#
+
 
 
 # better defaults
 alias ip='ip --color'
 alias less='less -R -~'
-alias gdb='gdb -q'
-alias python3='PYTHONSTARTUP=~/.config/python/startup.py python3 -q'
+alias gdb='gdb -q -nh -x "$XDG_CONFIG_HOME"/gdb/init'
+alias pwndbg='pwndbg -nh -x "$XDG_CONFIG_HOME"/gdb/init'
+#alias python3='PYTHONSTARTUP=~/.config/python/startup.py python3 -q'
+alias python3='python3 -q'
 alias python='python3'
 alias calcurse='calcurse -D ~/.config/calcurse'
 alias grep='grep --color=auto'
 alias ocaml='ocaml -init ~/.config/ocamlinit'
 alias utop='utop -init ~/.config/ocamlinit'
 alias wget='wget --hsts-file=~/.cache/wget-hsts'
+alias wgetrin='wget --recursive --no-parent --continue -e robots=off'
+alias wgetr='wget --recursive --no-parent --continue -e robots=off -R "index.html*"'
+alias wgetreg='wget --recursive --no-parent --continue --accept-regex'
+alias wgetagent=wget --user-agent=" Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
+alias wgetcook='wget  --header="Accept: text/html" --user-agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:21.0) Gecko/20100101 Firefox/21.0" --load-cookies <(export_cookies.sh | grep -v dkb)' #https://superuser.com/questions/666167/how-do-i-use-firefox-cookies-with-wget
+alias tmux='tmux -f ~/.config/tmux/tmux.conf'
+alias weechat='weechat -d '"$XDG_CONFIG_HOME"'/weechat'
+alias mitmproxy="mitmproxy --set confdir=$XDG_CONFIG_HOME/mitmproxy"
+alias mitmweb="mitmweb --set confdir=$XDG_CONFIG_HOME/mitmproxy"
+alias sqlite3='sqlite3 -init "$XDG_CONFIG_HOME"/sqlite3/sqliterc'
+
+
+alias sqlite=sqlite3
+
+alias psql='PAGER="bat" psql'
+
+
+command -v codium >/dev/null && alias code=codium
+command -v hub>/dev/null && alias git=hub
+
 
 #alias ipython=ipython_cur
 #alias ipython3=ipython
+alias pycalc="ipython --no-banner --no-confirm-exit --classic -c 'from math import *' -i"
 
 if [[ "$(uname --machine)" =~ "^x86(_64)?$" ]]; then
 	alias objdump='objdump -M intel'
 	#alias 'perf report'='perf report -M intel'
 fi
 
-if [ "$(command -v hub)" ]; then
-	alias git hub
-fi
 
 # use different command
 alias ranger=ranger-cd
-alias vim=nvim
+#alias vim=nvim
+alias vim=lvim
+
+command -v pydocwrapper.py >/dev/null && alias pydoc=pydocwrapper.py
 
 # shortcut whole command
-alias yl='youtube-dl'
+alias yl='yt-dlp'
 alias za='zathura'
 
 function manpdf {
 	man -t $1 | ps2pdf - - #| zathura -
 }
+compdef manpdf='man'
 
-function ytmdl {
-	mkdir -p ~/Music
-	/run/current-system/sw/bin/ytmdl "$@"
-	rmdir ~/Music/ytmdl
-	rmdir ~/Music
-}
+#function ytmdl {
+#	mkdir -p ~/Music
+#	/usr/bin/ytmdl "$@"
+#	rmdir ~/Music/ytmdl
+#	rmdir ~/Music
+#}
+#compdef ytmdl='youtube-dl'
+
 
 # shortcut command with args
-alias ylm='youtube-dl -x -o ~/msc/zz_unsorted/%\(title\)s.%\(ext\)s'
+alias ylm='yt-dlp -x -o ~/msc/zz_unsorted/%\(title\)s.%\(ext\)s'
 alias yml=ylm
-alias ylcook='youtube-dl --cookies <(export_cookies.sh | grep -v dkb)' #https://superuser.com/questions/666167/how-do-i-use-firefox-cookies-with-wget
+#alias ylcook='yt-dlp --cookies <(export_cookies.sh | grep -v dkb)' #https://superuser.com/questions/666167/how-do-i-use-firefox-cookies-with-wget
+alias ylcook='yt-dlp --cookies-from-browser firefox:9kc4dbg1.default'
+alias mpvcook='mpv --cookies --cookies-file=<(export_cookies.sh) --ytdl-raw-options=cookies=<(export_cookies.sh)'
 alias ec='emacsclient --c'
 alias em='emacsclient -nw'
-alias wgetr='wget --recursive --no-parent --continue -e robots=off' # -R "index.html*"'
-alias wgetreg='wget --recursive --no-parent --continue --accept-regex'
-alias linkgrep='grep -oP --color=never "http.?://\S+"'
-alias urlgrep='linkgrep'
 alias icat='kitty +kitten icat'
 alias kssh='kitty +kitten ssh'
 alias scb='kitty +kitten clipboard'
 alias gcb='kitty +kitten clipboard --get-clipboard'
+alias krg='kitty +kitten hyperlinked_grep'
 alias fumount='fusermount -u'
 alias findcdef='cscope -R -L1'
 alias spanisch='trans -t es'
 alias englisch='trans -t en'
 alias deutsch='trans -t de'
 alias polnisch='trans -t pl'
+alias französisch='trans -t fr'
+alias franz='französisch'
 alias xs='xsel -b'
+alias dfh='df -h -x tmpfs'
+
+alias tt='tmux a -t `tmux list-sessions | fzf --layout=reverse | cut -d: -f 1`'
+
+#alias confvim='nvim ~/.config/nvim/init.vim'
+#alias confzsh='nvim ~/.config/zsh'
 
 # new commands
-alias mountandroid='jmtpfs /media/android'
-alias umountandroid='fumount /media/android'
+#alias mountandroid='jmtpfs /media/android'
+#alias umountandroid='fumount /media/android'
 alias batstat='upower -i /org/freedesktop/UPower/devices/battery_BAT0'
 # for dotfiles, see https://news.ycombinator.com/item?id=11071754
 # to clone:  git clone --separate-git-dir=~/.cfg _repo_ ~
 # or git clone _repo_ && cp dotfiles/.git ~/.cfg
 alias dotf='git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
-alias grnvs='ssh grnvs@svm0000.net.in.tum.de && ssh root@svm0564.net.in.tum.de'
-alias s4="cd ~/University/Semester_4"
+compdef dotf='git'
+
+#alias grnvs='ssh grnvs@svm0000.net.in.tum.de && ssh root@svm0564.net.in.tum.de'
+#alias s4="cd ~/University/Semester_4"
 alias speedtest='wget --report-speed=bits -O /dev/null http://speedtest.belwue.net/1000G'
 
 
 
 # unchecked, TODO: add checks
-alias zitat="printf 'http://zitate.net/zitat\?id\=%s' \$(shuf -i 0-1000 -n 1) | xargs curl --silent -r 0-10 | sed -e 's/</\n/g' | sed -n '/description/p' | sed 1q | cut -d '\"' -f 4 | head -c -20"
+#alias zitat="printf 'http://zitate.net/zitat\?id\=%s' \$(shuf -i 0-1000 -n 1) | xargs curl --silent -r 0-10 | sed -e 's/</\n/g' | sed -n '/description/p' | sed 1q | cut -d '\"' -f 4 | head -c -20"
 alias winenoin='sudo -g nointernet WINEPREFIX=$HOME/.wnointernet wine'
 alias wine64noin='sudo -g nointernet WINEPREFIX=$HOME/.wnointernet wine64'
 alias sdrescan='echo 1 | sudo tee /sys/bus/pci/rescan'
@@ -89,13 +126,15 @@ alias vimr='fzf | xargs -r vim'
 alias nspawn='sudo systemd-nspawn -M'
 
 
+alias rm='rm -I'
+
 
 # shell related
 alias rmcdir='cd ..; rmdir $OLDPWD || cd $OLDPWD'
 alias ...='cd ../../'
 
 # listing stuff, from grml
-alias ls="ls -v --color=auto"
+alias ls="ls -v --color=auto --hyperlink=auto"
 alias la="ls -la"
 alias ll="ls -l"
 alias lh="ls -hAl"
@@ -135,6 +174,81 @@ alias lsolddir="ls -rthdl *(/Om[1,10]) .*(D/Om[1,10])"
 
 
 
+# https://aur.archlinux.org/packages/x86-manpages-git/ & radare
 dis86() {
-	 man x86-$(rasm2 -d $1)
- }
+ man x86-$(rasm2 -d $1)
+}
+
+alias lorem="echo Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
+
+
+
+#https://askubuntu.com/questions/22037/aliases-not-available-when-using-sudo
+alias sudo='sudo '
+
+
+
+alias rebootwindows='sudo bootctl set-oneshot auto-windows && sudo reboot'
+
+alias suod=sudo
+alias ragner=ranger
+alias lsbkl=lsblk
+alias sl=ls
+alias amke=make
+
+
+alias :sp='test -n "$TMUX" && tmux split-window'
+alias :vs='test -n "$TMUX" && tmux split-window -h'
+
+
+alias gencrypthash="python3 -c 'import crypt, getpass; print(crypt.crypt(getpass.getpass(\"passwd> \"), crypt.mksalt()))'"
+
+
+alias pingd='ping $(ip --color=never route show default | cut -d " " -f 3)'
+
+funcion vimwhich() {
+	vim $(which $1)
+}
+
+alias pwndbg='gdb -ex "source /usr/share/pwndbg/gdbinit.py"'
+
+alias wetter='curl -ks v3.wttr.in/Munich.png | kitty icat --align=left '
+
+function newscript () {
+	cp ~/.local/bin/script_template.sh "$1"
+	sed -i "s@my-script@$1@g" "$1"
+	chmod +x "$1"
+}
+
+function vimwhich () {
+	vim "$(which "$1")"
+}
+compdef _path_commands vimwhich
+
+alias externalip='dig @resolver4.opendns.com myip.opendns.com +short'
+
+
+function venvactivate () {
+	P="$PWD"	
+	while true; do
+		if [ -d "$P/venv" ]; then
+			. "$P/venv/bin/activate"
+			break
+		fi
+		if [ "$P" = "/" ]; then
+			echo 'Failed to find venv folder in any parent dir'
+			break
+		fi
+		P="$(dirname $P)"
+		echo $P
+	done
+}
+
+#alias py='ipython --no-banner --no-confirm-exit --classic -c "from math import *" -i'
+alias py='ipython --no-banner --no-confirm-exit -c "\
+from math import *;\
+import numpy as np;\
+import matplotlib.pyplot as plt;\
+import matplotlib;\
+matplotlib.use(\"module://matplotlib-backend-kitty\");\
+" -i'

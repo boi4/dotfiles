@@ -431,17 +431,86 @@ function fzf-git-branch {
 zle -N fzf-git-branch
 bindkey '\eg'  fzf-git-branch
 
+
+#function fzf-tmux-session {
+#    session=$(tmux list-sessions | fzf --layout=reverse | awk -F: '{print $1}')
+#    tmux a -t $session
+#}
+#zle -N fzf-tmux-session
+#bindkey '\et'  fzf-tmux-session
+
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 
 WORDCHARS='*?_-.[]~=/&;!#$%^(){}<>' # dinger die als wort erkannt werden
 
 
+# https://github.com/wincent/wincent
+# make completion:
+# - try exact (case-sensitive) match first.
+# - then fall back to case-insensitive.
+# - accept abbreviations after . or _ or - (ie. f.b -> foo.bar).
+# - substring complete (ie. bar -> foobar).
+zstyle ':completion:*' matcher-list '' '+m:{[:lower:]}={[:upper:]}' '+m:{[:upper:]}={[:lower:]}' '+m:{_-}={-_}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+
+# colorize completions using default `ls` colors.
+zstyle ':completion:*' list-colors ''
+
+# allow completion of ..<tab> to ../ and beyond.
+zstyle -e ':completion:*' special-dirs '[[ $prefix = (../)#(..) ]] && reply=(..)'
+
+# $cdpath is overpowered (can allow us to jump to 100s of directories) so tends
+# to dominate completion; exclude path-directories from the tag-order so that
+# they will only be used as a fallback if no completions are found.
+zstyle ':completion:*:complete:(cd|pushd):*' tag-order 'local-directories named-directories'
+
+# categorize completion suggestions with headings:
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*:descriptions' format %f{default}%b%{$__wincent[italic_on]%}--- %d ---%{$__wincent[italic_off]%}%b%f
+
+# enable keyboard navigation of completions in menu
+# (not just tab/shift-tab but cursor keys as well):
+zstyle ':completion:*' menu select
 
 
 
 # for pasting urls, see https://superuser.com/questions/649635/zsh-says-no-matches-found-when-trying-to-download-video-with-youtube-dl/1237124#1237124
-autoload -Uz bracketed-paste-magic
-zle -N bracketed-paste bracketed-paste-magic
+#autoload -Uz bracketed-paste-magic
+#zle -N bracketed-paste bracketed-paste-magic
 
-autoload -Uz url-quote-magic
-zle -N self-insert url-quote-magic
+#autoload -Uz url-quote-magic
+#zle -N self-insert url-quote-magic
+
+
+
+
+## Anonymous function to avoid leaking variables.
+#function () {
+#  # Check for tmux by looking at $TERM, because $TMUX won't be propagated to any
+#  # nested sudo shells but $TERM will.
+#  local TMUXING=$([[ "$TERM" =~ "tmux" ]] && echo tmux)
+#  if [ -n "$TMUXING" -a -n "$TMUX" ]; then
+#    # In a a tmux session created in a non-root or root shell.
+#    local LVL=$(($SHLVL - 1))
+#  else
+#    # Either in a root shell created inside a non-root tmux session,
+#    # or not in a tmux session.
+#    local LVL=$SHLVL
+#  fi
+#  if [[ $EUID -eq 0 ]]; then
+#    local SUFFIX='%F{yellow}%n%f'$(printf '%%F{yellow}\u276f%.0s%%f' {1..$LVL})
+#  else
+#    local SUFFIX=$(printf '%%F{red}\u276f%.0s%%f' {1..$LVL})
+#  fi
+#  export PS1="%F{green}${SSH_TTY:+%n@%m}%f%B${SSH_TTY:+:}%b%F{blue}%B%1~%b%F{yellow}%B%(1j.*.)%(?..!)%b%f %B${SUFFIX}%b "
+#  if [[ -n "$TMUXING" ]]; then
+#    # Outside tmux, ZLE_RPROMPT_INDENT ends up eating the space after PS1, and
+#    # prompt still gets corrupted even if we add an extra space to compensate.
+#    export ZLE_RPROMPT_INDENT=0
+#  fi
+#}
+#
+#export RPROMPT=$RPROMPT_BASE
+#export SPROMPT="zsh: correct %F{red}'%R'%f to %F{red}'%r'%f [%B%Uy%u%bes, %B%Un%u%bo, %B%Ue%u%bdit, %B%Ua%u%bbort]? "
+
+
+bindkey '^H' backward-kill-word
