@@ -4,9 +4,9 @@ ZSHSCRIPTS=${ZDOTDIR:-${HOME}/.config/zsh}
 mods=(parameter complist deltochar mathfunc)
 lazymods=(stat)
 funcs=(ranger-cd man)
-addpath=("$GOPATH/bin" "$HOME/bin")
 
-HISTFILE="${ZDOTDIR:-${HOME}}/.history"
+#HISTFILE="${ZDOTDIR:-${HOME}}/.history"
+HISTFILE="${HOME}/.history"
 HISTSIZE=100000
 SAVEHIST=100000
 REPORTTIME=5
@@ -59,10 +59,6 @@ for func in $funcs; do
     autoload ${funcs}  2>/dev/null
 done
 
-for pa in $addpath; do
-    PATH="$pa:$PATH"
-done
-
 builtin unset mods lazymods mod funcs
 
 # load aliases
@@ -75,13 +71,14 @@ if [ "$(command -v dircolors)" ]; then
 	eval $(dircolors -b)
 fi
 
-# get hub autocompletion
-if [ "$(command -v hub)" -a ! -f $ZSHSCRIPTS/hub/hub.zsh_completion ]; then
-    echo "Downloading hub zsh completion"
-    mkdir -p $ZSHSCRIPTS/hub/
-    wget https://raw.githubusercontent.com/github/hub/master/etc/hub.zsh_completion \
-        -O $ZSHSCRIPTS/hub/hub.zsh_completion
-fi
+## get hub autocompletion
+#if [ "$(command -v hub)" -a ! -f $ZSHSCRIPTS/hub/hub.zsh_completion ]; then
+#    echo "Downloading hub zsh completion"
+#    mkdir -p $ZSHSCRIPTS/hub/
+#    wget https://raw.githubusercontent.com/github/hub/master/etc/hub.zsh_completion \
+#        -O $ZSHSCRIPTS/hub/hub.zsh_completion
+#fi
 
+TRAPUSR1() { rehash }
 #source $HOME/prg/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
 #zprof
