@@ -1,6 +1,10 @@
 # -*- mode: shell-script; -*-
 # vim:filetype=zsh
 
+bindkey -e
+bindkey \^U backward-kill-line
+bindkey '^H' backward-kill-word
+
 # Custom widgets:
 ## beginning-of-line OR beginning-of-buffer OR beginning of history
 ## by: Bart Schaefer <schaefer@brasslantern.com>, Bernhard Tittelbach
@@ -408,16 +412,9 @@ bindkey '^[[H' beginning-of-line # pos1
 bindkey '^[[F' end-of-line # ende
 
 ## FZF
-if [[ ! -d "$ZSHSCRIPTS/fzf" ]]; then
-    echo "Downloading fzf keybindings and completion"
-    mkdir -p $ZSHSCRIPTS/fzf
-    wget https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.zsh \
-        -O $ZSHSCRIPTS/fzf/key-bindings.zsh
-    wget https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.zsh \
-        -O $ZSHSCRIPTS/fzf/completion.zsh
-fi
-source "$ZSHSCRIPTS/fzf/completion.zsh"
-source "$ZSHSCRIPTS/fzf/key-bindings.zsh"
+test -f /usr/share/fzf/completion.zsh && source /usr/share/fzf/completion.zsh
+test -f /usr/share/fzf/key-bindings.zsh && source /usr/share/fzf/key-bindings.zsh
+
 
 function fzf-git-branch {
     if [[ -d .git ]]; then
@@ -428,16 +425,6 @@ function fzf-git-branch {
     fi
 }
 
-zle -N fzf-git-branch
-bindkey '\eg'  fzf-git-branch
-
-
-#function fzf-tmux-session {
-#    session=$(tmux list-sessions | fzf --layout=reverse | awk -F: '{print $1}')
-#    tmux a -t $session
-#}
-#zle -N fzf-tmux-session
-#bindkey '\et'  fzf-tmux-session
 
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 
@@ -513,4 +500,3 @@ zstyle ':completion:*' menu select
 #export SPROMPT="zsh: correct %F{red}'%R'%f to %F{red}'%r'%f [%B%Uy%u%bes, %B%Un%u%bo, %B%Ue%u%bdit, %B%Ua%u%bbort]? "
 
 
-bindkey '^H' backward-kill-word

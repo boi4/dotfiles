@@ -1,11 +1,9 @@
 #zmodload zsh/zprof
-
 ZSHSCRIPTS=${ZDOTDIR:-${HOME}/.config/zsh}
 mods=(parameter complist deltochar mathfunc)
 lazymods=(stat)
-funcs=(ranger-cd man)
+funcs=(ranger-cd man d)
 
-#HISTFILE="${ZDOTDIR:-${HOME}}/.history"
 HISTFILE="${HOME}/.history"
 HISTSIZE=100000
 SAVEHIST=100000
@@ -66,19 +64,7 @@ if [[ -r ${ZDOTDIR:-${HOME}}/aliasrc ]]; then
   . ${ZDOTDIR:-${HOME}}/aliasrc
 fi
 
-# ls colors
-if [ "$(command -v dircolors)" ]; then
-	eval $(dircolors -b)
-fi
 
-## get hub autocompletion
-#if [ "$(command -v hub)" -a ! -f $ZSHSCRIPTS/hub/hub.zsh_completion ]; then
-#    echo "Downloading hub zsh completion"
-#    mkdir -p $ZSHSCRIPTS/hub/
-#    wget https://raw.githubusercontent.com/github/hub/master/etc/hub.zsh_completion \
-#        -O $ZSHSCRIPTS/hub/hub.zsh_completion
-#fi
-
+# pacman install rehash hook
 TRAPUSR1() { rehash }
-#source $HOME/prg/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
 #zprof
