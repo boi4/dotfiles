@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-
-arg="$1"
-r=$RANDOM
-pdftk "$arg" cat output /tmp/$r.pdf uncompress; strings /tmp/$r.pdf | grep -oP --color=never "http.?://\S+"
