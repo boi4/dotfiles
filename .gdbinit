@@ -1,1 +1,1 @@
-set disassembly-flavor intel
+/home/fecht/.config/gdb/init

@@ -1,27 +1,23 @@
 [advice]
 	statusHints = true
 [user]
-	email = jan.fecht@tum.de
+	email = mail@fecht.cc
 	name = Jan Fecht
-	signingKey = 412165C851AB94C2
 [core]
 	editor = nvim
 [commit]
 	template = ~/.config/git/commit_template
-#	gpgSign = true
 	verbose = true
-[push]
-#	gpgSign = true
-[gpg]
-	program = gpg2
 [status]
 	short = true
 	branch = true
 	showUntrackedFiles = all
 [alias]
 	last = cat-file commit HEAD
-[web]
-	browser = firefox
+	unstage = reset HEAD --
+	visual = !gitk
+	# Allows you to easily pick what to rebase
+	frbi = "!f() { git rebase -i $(git log --pretty=oneline --color=always | fzf --ansi | cut -d ' ' -f1)^ ; }; f"
 [blame]
 	date = format:'%d.%m.%Y %H:%M:%S'
 [log]
@@ -51,3 +47,5 @@
 	old = red bold
 	new = green bold
 	whitespace = red reverse
+[pull]
+	rebase = true
