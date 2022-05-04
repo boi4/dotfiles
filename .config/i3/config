@@ -4,7 +4,6 @@
 
 # Variables
 set $TERMINAL kitty
-#set $TERMINAL terminator
 
 set $mod Mod4
 set $up k
@@ -31,21 +30,8 @@ font pango:DejaVu Sans Mono 10
 # Input Settings
 exec --no-startup-id xinput set-prop 'SynPS/2 Synaptics TouchPad' 'libinput Natural Scrolling Enabled' 1
 exec --no-startup-id xinput set-prop 'DLL0704:01 06CB:76AE Touchpad' 'libinput Natural Scrolling Enabled' 1
-#exec --no-startup-id xinput set-prop 'SynPS/2 Synaptics TouchPad' 'Synaptics Scrolling Distance' '-113, -113'
-#exec --no-startup-id xset r rate 180 50
-#exec --no-startup-id setxkbmap eu -option caps:escape
-# exec --no-startup-id systemctl --user set-environment DISPLAY=":0" # TODO: use display var
-exec --no-startup-id dunst
-exec --no-startup-id unclutter
-#exec --no-startup-id picom --config ~/.config/picom.conf
-#exec --no-startup-id keepassxc
-#exec --no-startup-id xbindkeys
-#exec --no-startup-id /usr/lib/kdeconnectd
-#exec --no-startup-id systemctl --user start dbus
 
-exec --no-startup-id python3 ~/prj/dynwalls/dynwalls update
 
-#exec_always --no-startup-id ~/prg/autotiling/autotiling.py
 
 
 
@@ -54,40 +40,26 @@ no_focus [window_role="pop-up"]
 for_window [window_role="pop-up"] floating enable
 
 
-# assign [class="Firefox"] 2
-#assign [class="Elisa"] 1
-#assign [class="Lollypop"] 1
-
-
 # gaps settings
 for_window [class="^.*"] border pixel 3
 gaps inner 0
 gaps outer 0
 # smart_gaps on
 
-# background
-#exec_always --no-startup-id ~/.fehbg
-
 # startup apps
-# exec --no-startup-id i3-msg 'workspace 1; exec $TERMINAL cmus; workspace 1'
 exec --no-startup-id i3-msg 'workspace 2; exec firefox -p default; workspace 1'
-#exec --no-startup-id i3-msg 'workspace 2; exec firefox -p uni; workspace 1'
-#exec --no-startup-id i3-msg 'workspace 2; exec firefox-bin -p default; workspace 1'
-#exec --no-startup-id i3-msg 'workspace 1; exec lollypop; workspace 1'
-#exec --no-startup-id i3-msg 'workspace 1; exec spotify; workspace 1'
-#exec --no-startup-id i3-msg 'workspace 1; exec kitty -d ~/uni/cur/bachelor-mpi-sessions/ausarbeitung; workspace 1'
-#exec ~/.screenlayout/4kmedium.sh
 
-# exec --no-startup-id owncloud
+# tray
 exec --no-startup-id nm-applet
 exec --no-startup-id redshift-gtk -l 51.0:2.6
-#exec --no-startup-id kmix
 exec --no-startup-id blueman-applet
-#exec --no-startup-id kdeconnect-indicator
-#exec --no-startup-id birdtray
 
-# setup lock
-exec --no-startup-id ~/.local/bin/lock.sh
+# daemons
+exec --no-startup-id dunst
+
+# wallpaper
+exec --no-startup-id python3 ~/prj/dynwalls/dynwalls update
+
 
 bar {
     mode dock
@@ -115,9 +87,6 @@ bar {
         urgent_workspace #2f343a #900000 #ffffff
     }
 }
-#bar {
-#    i3bar_command i3bar --transparency
-#}
 
 
 # ---------------------------------- KEY BINDINGS -----------------------------------------
@@ -169,119 +138,83 @@ bindsym $mod+Shift+9 move container to workspace 9
 bindsym $mod+Shift+0 move container to workspace 10
 
 
-#bindsym $mod+q exec kill_win.sh
 bindsym $mod+q kill
 bindsym $mod+Shift+q kill
 
 
-bindsym $mod+w exec stream_movie.py --random --chooser rofi
-#bindsym $mod+Shift+w exec tv.py
+#bindsym $mod+w 
 bindsym $mod+Shift+w exec vbox_dmenu.sh
 
 
-#bindsym $mod+e exec emacsclient -c -a \"\"
-bindsym $mod+e exec emacs
+bindsym $mod+e exec emacsclient -c -a \"\"
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
-#bindsym $mod+Shift+e exec $TERMINAL emacsclient -nw
 
 
-bindsym $mod+r 			exec $TERMINAL ranger
-#bindsym $mod+r 			exec $TERMINAL lf
+bindsym $mod+r exec $TERMINAL ranger
 bindsym $mod+Shift+r restart
-## bindsym $mod+Shift+r exec $TERMINAL -e "sudo ranger"
 
 
 bindsym $mod+t exec xcalib -invert -alter
-## bindsym $mod+t [instance="mate-terminal"] scratchpad show
-# bindsym $mod+Shift+t exec --no-startup-id "geni3conf"; restart
 bindsym $mod+Shift+t restart
 
 
-# bindsym $mod+y			exec --no-startup-id "bash ~/.local/bin/openvpn.sh"
 bindsym $mod+y exec --no-startup-id ffchooser.py
-bindsym $mod+Shift+y		exec --no-startup-id "bash ~/.config/i3/i3resize left"
+bindsym $mod+Shift+y exec --no-startup-id "bash ~/.config/i3/i3resize left"
 
 
-##bindsym $mod+u [instance="dropdown"] scratchpad show; [instance="dropdown"] move position center
-bindsym $mod+u exec --no-startup-id $TERMINAL -e newsboat
-# bindsym $mod+u exec --no-startup-id "$TERMINAL -e 'utop'"
-bindsym $mod+Shift+u		exec --no-startup-id "bash ~/.config/i3/i3resize down"
+#bindsym $mod+u
+bindsym $mod+Shift+u exec --no-startup-id "bash ~/.config/i3/i3resize down"
 
 
-bindsym $mod+i			exec --no-startup-id $TERMINAL htop
-bindsym $mod+Shift+i		exec --no-startup-id "bash ~/.config/i3/i3resize up"
+bindsym $mod+i exec --no-startup-id $TERMINAL htop
+bindsym $mod+Shift+i exec --no-startup-id "bash ~/.config/i3/i3resize up"
 
 
-# bindsym $mod+o mode "$mode_launcher"
-bindsym $mod+o exec --no-startup-id $TERMINAL lyrics
-bindsym $mod+Shift+o 		exec --no-startup-id "bash ~/.config/i3/i3resize right"
+#bindsym $mod+o
+bindsym $mod+Shift+o exec --no-startup-id "bash ~/.config/i3/i3resize right"
 
 
-#bindsym $mod+p exec $TERMINAL 'bpython'
-#bindsym $mod+p exec $TERMINAL ipython --no-banner --no-confirm-exit --classic -c "from math import *" -i
 bindsym $mod+p exec --no-startup-id ~/.local/bin/i3-promote-window.py
-# bindsym $mod+p exec $TERMINAL 'ipython_cur'
 bindsym $mod+Shift+p floating toggle
 
 
-# bindsym $mod+a exec --no-startup-id 'pkill --signal SIGUSR1 -f i3expod'
 bindsym $mod+a focus parent
 bindsym $mod+Shift+a focus child
 
 
-bindsym $mod+s			gaps inner current plus 5
-bindsym $mod+Shift+s		gaps inner current minus 5
+bindsym $mod+s gaps inner current plus 5
+bindsym $mod+Shift+s gaps inner current minus 5
 
 # bindsym $mod+d exec dmenu_run
 bindsym $mod+d exec --no-startup-id $Menu3
 bindsym $mod+Shift+d exec --no-startup-id $Menu2
 
 bindsym $mod+f fullscreen toggle
-# bindsym $mod+Shift+f floating toggle
 bindsym $mod+Shift+f exec --no-startup-id "display-setting-chooser.sh; /home/fecht/.fehbg"
-#bindsym $mod+Shift+f exec --no-startup-id "run_floating.sh arandr_chooser.py"
 
 
-bindsym $mod+g 			gaps inner current set 15; gaps outer current set 15
-bindsym $mod+Shift+g 		gaps inner current set 0; gaps outer current set 0
+bindsym $mod+g gaps inner current set 15; gaps outer current set 15
+bindsym $mod+Shift+g gaps inner current set 0; gaps outer current set 0
 
 
-# bindsym $mod+odiaeresis [instance="quick_term"] scratchpad show
-# bindsym $mod+Shift+odiaeresis exec --no-startup-id $TERMINAL --class quick_term
-#bindsym $mod+Shift+0
-
-
-#bindsym $mod+z exec --no-startup-id southpark.py
 bindsym $mod+z bar mode toggle
-bindsym $mod+Shift+z exec ~/prj/tabfs-scripts/geoguessr.py
-#bindsym $mod+Shift+z exec --no-startup-id unichooser.sh
-# bindsym $mod+Shift+z exec --no-startup-id "pkill --signal SIGUSR1 compton"
+#bindsym $mod+Shift+z
 
 
-# bindsym $mod+x mode "$mode_language_key"
-#exec feh ~/dws/eurkey.png
-#for_window [title=".*/home/fecht/dws/eurkey.png.*"] floating enable
-#for_window [title=".*/home/fecht/dws/eurkey.png.*"] move scratchpad
-bindsym $mod+x scratchpad show
-# bindsym $mod+Shift+x exec --no-startup-id "$TERMINAL -e asciiquarium"
-#bindsym $mod+Shift+x exec --no-startup-id "run_floating.sh arandr_chooser.py"
-bindsym $mod+Shift+x exec --no-startup-id bash -c "echo reload > ~/prg/TabFS/fs/mnt/tabs/last-focused/control"
+#bindsym $mod+x
+#bindsym $mod+Shift+x
 
 
-#bindsym --release $mod+c exec screenocr clipboard
-bindsym --release $mod+c exec cheatsheetdmenu.sh
-bindsym --release $mod+Shift+c exec tex-match
-#bindsym $mod+Shift+c exec chill
+bindsym $mod+c exec cheatsheetdmenu.sh
+bindsym $mod+Shift+c exec tex-match
 
 
-#bindsym $mod+v exec $TERMINAL vim
 bindsym $mod+v split v
-#bindsym $mod+Shift+v split v
 bindsym $mod+Shift+v exec --no-startup-id vpn_dmenu.sh
 
 
 bindsym $mod+b split h
-bindsym $mod+Shift+b split h
+#bindsym $mod+Shift+b
 
 
 #TODO: have a toggle
@@ -289,88 +222,59 @@ bindsym $mod+n exec --no-startup-id xinput --disable 'DLL0704:01 06CB:76AE Touch
 bindsym $mod+Shift+n exec --no-startup-id xinput --enable 'DLL0704:01 06CB:76AE Touchpad'
 
 
-bindsym $mod+m exec --no-startup-id vpn_chooser.py
-# bindsym $mod+m exec --no-startup-id manchooser.sh
-# bindsym $mod+m exec --no-startup-id mount-manage.sh
-#bindsym $mod+Shift+m exec kitty env.sh
-#bindsym $mod+Shift+m exec binchooser.sh
+#bindsym $mod+m
+#bindsym $mod+Shift+m
+
+
+
 
 
 # Special Keys
 
-#bindsym $mod+period exec loginctl lock-session
-#bindsym $mod+Shift+period move scratchpad
+#bindsym $mod+period
 bindsym $mod+Shift+period exec ~/.local/bin/lock.sh screenshot
 
-# bindsym $mod+Tab workspace next
-# bindsym $mod+Shift+Tab workspace prev
-bindsym $mod+Tab focus right
-bindsym $mod+Shift+Tab focus left
+#bindsym $mod+Tab
+#bindsym $mod+Shift+Tab
 
+
+# screenshots
+bindsym --release Print exec --no-startup-id "scrot '/home/fecht/pix/screens/%Y-%m-%d-%h-%m-%s_$wx$h.png' -s -e 'xclip -selection clipboard -t image/png -i $f'"
 bindsym --release $mod+Print exec --no-startup-id screenshot_edit.sh
-#bindsym --release $mod+Shift+Print exec --no-startup-id /home/fecht/.local/bin/snipaste.sh
-bindsym --release Print exec --no-startup-id "scrot '/home/fecht/pix/screens/%Y-%m-%d-%h-%m-%s_$wx$h.png' -s"
 bindsym --release Shift+Print exec --no-startup-id "scrot '/home/fecht/pix/screens/%Y-%m-%d-%h-%m-%s_$wx$h.png'"
-bindsym --release $mod+Shift+Print exec --no-startup-id /home/fecht/.local/bin/screencolor.sh
+bindsym --release $mod+Shift+Print exec --no-startup-id /home/fecht/.local/bin/snipaste.sh
+
 
 bindsym $mod+Return exec --no-startup-id $TERMINAL
 bindsym $mod+Shift+Return exec $TERMINAL --directory "$(xcwd)"
-#bindsym $mod+Mod2+Return exec $TERMINAL --class kittytrans
 
-#bindsym $mod+BackSpace exec rofi-power
 bindsym $mod+BackSpace exec ~/.config/rofi/scripts/menu_powermenu
-# bindsym $mod+BackSpace exec "~/.local/bin/confirm.sh systemctl reboot"
-# bindsym $mod+Shift+BackSpace exec "~/.local/bin/confirm.sh systemctl poweroff"
+#bindsym $mod+BackSpace
 
-
-##bindsym $mod+Shift+space 	floating toggle
-#bindsym $mod+space exec nix-shell -p python3Packages.pygame -p python3Packages.i3ipc -p python3Packages.pillow -p python3Packages.pyxdg --run i3expod.py
 
 bindsym $mod+space move workspace to output right
 bindsym $mod+Shift+space move workspace to output left
 
-#bindsym $mod+Shift+period move workspace to output right # ">"
-#bindsym $mod+Shift+comma move workspace to output left # "<"
-
 bindsym $mod+Shift+bracketright exec --no-startup-id i3-msg 'open'
-
-# bindsym $mod+numbersign split vertical;;exec --no-startup-id $TERMINAL
-
-# bindsym Menu mode "$mode_ctrl"
 
 bindsym $mod+F1 layout splith
 bindsym $mod+F2 layout tabbed
 bindsym $mod+F3 layout stacked
 bindsym $mod+F4 layout toggle split
 
-
-
 bindsym $mod+F10 exec monitor_brightness.py set 0
 bindsym $mod+F11 exec monitor_brightness.py set 20
 bindsym $mod+F12 exec monitor_brightness.py set 100
 
-# Für alternativen Alt+F4 kill
-# bindsym Mod1+F4 kill
-
-#bindsym XF86AudioRaiseVolume exec --no-startup-id bash -c '/usr/bin/pulsemixer --change-volume +5'
-#bindsym XF86AudioLowerVolume exec --no-startup-id bash -c '/usr/bin/pulsemixer --change-volume -5'
-#bindsym XF86AudioMute exec --no-startup-id bash -c '/usr/bin/pulsemixer --toggle-mute'
 bindsym XF86AudioRaiseVolume exec --no-startup-id ~/prj/i3-volume/volume -N libnotify up 10 -p -n
 bindsym XF86AudioLowerVolume exec --no-startup-id  ~/prj/i3-volume/volume -N libnotify down 10 -p -n
 bindsym XF86AudioMute exec --no-startup-id  ~/prj/i3-volume/volume -N libnotify mute -p -n
 
 
-#bindsym XF86AudioRaiseVolume exec --no-startup-id /usr/bin/pactl set-sink-volume 0 +5%
-#bindsym XF86AudioLowerVolume exec --no-startup-id /usr/bin/pactl set-sink-volume 0 -5%
-#bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle
-
 # Sreen brightness controls
-# ln -sv /usr/lib/udev/rules.d/90-backlight.rules /etc/udev/rules.d/
-#bindsym XF86MonBrightnessUp exec bash -c 'sudo /usr/bin/light -A 5'
-#usermod -aG video fecht
+# set minimum to 1
+exec light -N 1
 bindsym XF86MonBrightnessUp exec light -A 5
-#bindsym XF86MonBrightnessDown exec bash -c 'sudo /usr/bin/light -U 5'
-exec_always light -N 1
 bindsym XF86MonBrightnessDown exec light -U 5
 
 
@@ -387,14 +291,10 @@ bindsym XF86AudioPrev exec playerctl previous
 
 
 
-
-#exec --no-startup-id wmctrl -c Plasma
-
 for_window [title="Desktop — Plasma"] kill, floating enable, border none
 for_window [class="plasmashell"] floating enable, border none
 for_window [class="Plasma"] floating enable, border none
 for_window [title="plasma-desktop"] floating enable, border none
-for_window [title="win7"] floating enable, border none
 for_window [class="krunner"] floating enable, border none
 for_window [class="Kmix"] floating enable, border none
 for_window [class="Klipper"] floating enable, border none
@@ -409,8 +309,6 @@ for_window [title="IDA -.*"] floating disable
 for_window [title="Ghidra Help"] floating enable
 for_window [class="Ghidra" title="win0"] floating enable
 
-#for_window [class="explorer.exe"] floating enable
-
 for_window [title="opencv_lab*"] floating enable
 for_window [class="matplotlib"] floating enable
 for_window [class="Matplotlib"] floating enable
@@ -423,12 +321,9 @@ for_window [class="java-lang-Thread" title="win0"] floating enable border none
 
 # emacs
 for_window [title="^Helm$"] floating enable border none
-for_window [class="^Test_FastInverse$"] floating enable border none
 
 for_window [class="^jetbrains-idea$" title="^Confirm Exit$"] floating enable
-for_window [class="Arandr_chooser.py"] floating enable
 
-#for_window [class="Vncviewer"] floating enable
 for_window [class="^custom-float-no-border$"] floating enable
 for_window [class="^custom-float-no-border$"] border pixel 0
 
