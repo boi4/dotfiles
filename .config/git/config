@@ -3,8 +3,6 @@
 [user]
 	email = mail@fecht.cc
 	name = Jan Fecht
-[core]
-	editor = nvim
 [commit]
 	template = ~/.config/git/commit_template
 	verbose = true
