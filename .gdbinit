@@ -1,1 +1,1 @@
-/home/fecht/.config/gdb/init
+.config/gdb/init
