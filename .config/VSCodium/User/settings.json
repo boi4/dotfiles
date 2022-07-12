@@ -1,0 +1,13 @@
+{
+    "workbench.colorTheme": "One Dark Pro",
+    "window.menuBarVisibility": "toggle",
+    "vscode-neovim.neovimExecutablePaths.linux": "/usr/bin/nvim",
+
+    "keyboard.dispatch": "keyCode",
+    "fortran.fortls.disableAutoupdate": true,
+    "[FortranFreeForm]": {
+        "editor.rulers": [132]
+    },
+    "window.zoomLevel": 2
+    
+}
