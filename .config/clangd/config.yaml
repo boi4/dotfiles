@@ -1,0 +1,9 @@
+If:
+  PathMatch: .*\.c
+CompileFlags:
+    Add: [-std=c99]
+---
+If:
+  PathMatch: .*\.cpp
+CompileFlags:
+    Add: [-std=c++17]
