@@ -65,3 +65,6 @@
    :recipe (:local-repo "~/src/isabelle-emacs/src/Tools/emacs-lsp/lsp-isar/"))
 
 (package! session-async)
+
+(package! sphinx-doc)
+(package! night-owl-theme)
