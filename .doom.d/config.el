@@ -144,6 +144,8 @@
 
 
 
+;; disable auto-closing of parenthesis
+(remove-hook 'doom-first-buffer-hook #'smartparens-global-mode)
 
 
 
@@ -194,7 +196,7 @@
   (lsp-isar-output-use-async t)
   (lsp-isar-output-time-before-printing-goal nil)
   (lsp-isar-experimental t)
-  (lsp-isar-split-pattern 'lsp-isar-split-pattern-three-columns)
+  (lsp-isar-split-pattern 'lsp-isar-split-pattern-two-columns)
   (lsp-isar-decorations-delayed-printing t)
   :init
   (add-hook 'lsp-isar-init-hook 'lsp-isar-open-output-and-progress-right-spacemacs)
