@@ -25,15 +25,32 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-;;(setq doom-theme 'doom-one)
+(setq doom-theme 'doom-one)
 ;;(setq doom-theme 'doom-miramare)
-(setq doom-theme 'doom-ir-black)
+;; (setq doom-theme 'doom-ir-black)
 ;;(setq doom-theme 'night-owl)
 ;;(setq doom-theme 'doom-one)
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/notes/org/")
+
+(setq! bibtex-completion-bibliography '("~/dox/Zotero/zotero_full.bib")
+       bibtex-completion-library-path '("~/dox/Zotero/storage/"))
+
+(setq reftex-default-bibliography "~/dox/Zotero/zotero_full.bib")
+
+(setq! citar-bibliography '("~/dox/Zotero/zotero_full.bib")
+       citar-library-path '("~/dox/Zotero/storage/"))
+
+
+(setq citar-symbols
+   `((file ,(all-the-icons-faicon "file-pdf-o" :face 'all-the-icons-red :v-adjust -0.1) . " ")
+     (note ,(all-the-icons-material "speaker_notes" :face 'all-the-icons-blue :v-adjust -0.3) . " ")
+     (link ,(all-the-icons-material "link" :face 'all-the-icons-blue) . " "))
+)
+
+(setq +latex-viewers '(zathura))
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -134,7 +151,12 @@
 ;; make "s" do subsitute like in vim
 (remove-hook 'doom-first-input-hook #'evil-snipe-mode)
 
+(add-hook 'LaTeX-mode-hook (lambda ()
+                             (local-set-key (kbd "SPC i c") #'citar-insert-citation)))
+(defun citar-setup-capf ()
+        (add-to-list 'completion-at-point-functions 'citar-capf))
 
+(add-hook 'LaTeX-mode-hook #'citar-setup-capf)
 
 
 ;; (add-hook 'fortran-mode-hook #'lsp-mode)
