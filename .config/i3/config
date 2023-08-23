@@ -57,6 +57,8 @@ exec --no-startup-id blueman-applet
 # daemons
 exec --no-startup-id dunst
 
+exec --no-startup-id picom -cb
+
 # wallpaper
 exec --no-startup-id python3 ~/prj/dynwalls/dynwalls update
 
@@ -191,7 +193,8 @@ bindsym $mod+d exec --no-startup-id $Menu3
 bindsym $mod+Shift+d exec --no-startup-id $Menu2
 
 bindsym $mod+f fullscreen toggle
-bindsym $mod+Shift+f exec --no-startup-id "display-setting-chooser.sh; /home/fecht/.fehbg"
+bindsym $mod+Shift+f exec --no-startup-id "display-setting-chooser.sh"
+ #; /home/fecht/.fehbg"
 
 
 bindsym $mod+g gaps inner current set 15; gaps outer current set 15
@@ -240,7 +243,9 @@ bindsym $mod+Shift+period exec ~/.local/bin/lock.sh screenshot
 
 
 # screenshots
-bindsym --release Print exec --no-startup-id "scrot '/home/fecht/pix/screens/%Y-%m-%d-%h-%m-%s_$wx$h.png' -s -e 'xclip -selection clipboard -t image/png -i $f'"
+bindsym --release Print exec --no-startup-id "scrot '/home/fecht/pix/screens/%Y-%m-%d-%h-%m-%s_$wx$h.png' -a  $(slop -f '%x,%y,%w,%h') -e 'xclip -selection clipboard -t image/png -i $f'"
+#bindsym --release Print exec --no-startup-id "scrot '/home/fecht/pix/screens/%Y-%m-%d-%h-%m-%s_$wx$h.png'"
+#bindsym --release Print exec --no-startup-id "scrot '/home/fecht/pix/screens/%Y-%m-%d-%h-%m-%s_$wx$h.png' -s -e 'xclip -selection clipboard -t image/png -i $f'"
 bindsym --release $mod+Print exec --no-startup-id screenshot_edit.sh
 bindsym --release Shift+Print exec --no-startup-id "scrot '/home/fecht/pix/screens/%Y-%m-%d-%h-%m-%s_$wx$h.png'"
 bindsym --release $mod+Shift+Print exec --no-startup-id /home/fecht/.local/bin/snipaste.sh
