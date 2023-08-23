@@ -2,7 +2,7 @@
 ZSHSCRIPTS=${ZDOTDIR:-${HOME}/.config/zsh}
 mods=(parameter complist deltochar mathfunc)
 lazymods=(stat)
-funcs=(ranger-cd man d)
+funcs=(ranger-cd man d activate-freesurfer activate-conda activate-fsl)
 
 HISTFILE="${HOME}/.history"
 HISTSIZE=100000
