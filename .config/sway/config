@@ -1,102 +1,99 @@
 # sway config file
 # by Jan Fecht
 
-set $TERMINAL kitty
-
-# general settings
-default_orientation auto
-no_focus [window_role="pop-up"]
-for_window [window_role="pop-up"] floating enable
-
-
-assign [class="Firefox"] 2
-assign [class="Elisa"] 1
-assign [class="Lollypop"] 1
-
-
-# gaps settings
-for_window [class="^.*"] border pixel 3
-gaps inner 0
-gaps outer 0
-smart_gaps on
-
 
 # Variables 
+set $TERMINAL kitty
+
 set $mod Mod4
 set $up k
 set $down j
 set $left h
 set $right l
-# set $modr 135 # for the key next to alt gr
 
-output * bg ~/Pictures/wallpaper/SajfREY.jpg fill
+set $Menu1 j4-dmenu-desktop --dmenu='rofi -i -dmenu' # -font "Helvetica Neue 15" '
+set $Menu2 dmenu_path | dmenu | xargs swaymsg exec -- 
+set $Menu3 rofi -theme Arc-Dark -combi-modi window#drun -show combi -modi combi -show-icons
 
+#output HDMI-A-1 scale 2
+
+
+# general settings
+xwayland enable
 floating_modifier $mod normal
+default_orientation auto
+popup_during_fullscreen smart
+smart_borders on
+
+font pango:DejaVu Sans Mono 10
+
+# Input Settings
+#input 1133:50484:Logitech_USB_Receiver repeat_rate 70
+# see man 5 sway-input
+input * {
+  repeat_delay 180
+  repeat_rate 70
+  xkb_layout "eu"
+  xkb_options "caps:escape"
+}
+input 1739:30382:DLL0704:01_06CB:76AE_Touchpad natural_scroll enabled
+
+
+
+# gaps settings
+gaps inner 0
+default_border pixel 2
+gaps outer 0
+smart_gaps on
+
+
+# background
+output * bg /home/fecht/.config/sway/wallpaper.jpg fill
+
+
+#exec --no-startup-id systemctl --user import-environment
+
 
 # startup apps
-# exec --no-startup-id i3-msg "workspace 1; exec kitty -e loadtmux.sh; workspace 1"
-# exec --no-startup-id i3-msg 'workspace 1; exec elisa; workspace 1'
-exec --no-startup-id i3-msg 'workspace 1; exec lollypop; workspace 1'
-exec --no-startup-id i3-msg 'workspace 2; exec MOZ_ENABLE_WAYLAND=1 firefox; workspace 1'
-exec --no-startup-id i3-msg 'workspace 3; exec start_persistent_kitty.sh; workspace 1'
-exec --no-startup-id i3-msg 'workspace 1'
-# exec --no-startup-id mpd
-# exec --no-startup-id dunst
-# exec --no-startup-id compton
-
-# exec --no-startup-id nm-applet
-# exec --no-startup-id owncloud
-# exec --no-startup-id redshift-gtk
-
-# exec --no-startup-id ~/.fehbg
-# exec --no-startup-id ~/bin/lock.sh 
-
-# lock after 10 min
-#exec --no-startup-id xautolock -locker "~/bin/lock.sh screenshot" -time 60 -detectsleep -notify 60
+exec --no-startup-id i3-msg 'workspace 2; exec MOZ_ENABLE_WAYLAND=1 firefox -p default; workspace 1'
 
 
-# # ----- MODES -----
-# set $mode_launcher Launch: [f]irefox [t]hunderbird [k]eepassx [s]lack [v]irtualbox [r]iot
-# mode "$mode_launcher" {
-# 	bindsym f exec firefox; mode "default"
-# 	bindsym t exec thunderbird; mode "default"
-# 	bindsym k exec keepassx; mode "default"
-# 	bindsym s exec slack; mode "default"
-# 	bindsym v exec sudo virtualbox; mode "default"
-# 	bindsym r exec riot-desktop; mode "default"
-
-# 	bindsym Escape mode "default"
-# 	bindsym Return mode "default"
-# }
-
-# set $mode_language_key Keyboard: [c]ustom [e]spanol [g]erman [p]]olish
-# mode "$mode_language_key" {
-
-# 	bindsym c exec $xkbcomp; exec "notify-send 'Keyboard layout: Custom'"; mode "default"
-# 	bindsym d exec $xkbcomp; exec "notify-send 'Keyboard layout: Custom'"; mode "default"
-
-# 	bindsym e exec "setxkbmap -layout es"; exec "notify-send 'Keyboard layout: Spanish'"; mode "default"
-# 	bindsym g exec "setxkbmap -layout de"; exec "notify-send 'Keyboard layout: German'"; mode "default"
-# 	bindsym p exec "setxkbmap -layout pl"; exec "notify-send 'Keyboard layout: Polish'"; mode "default"
-
-# 	bindsym Escape mode "default"
-# 	bindsym Return mode "default"
-# }
-
-set $mode_ctrl [s]ave pdfs [r]estore pdfs
-mode "$mode_ctrl" {
-	bindsym s exec --no-startup-id i3ctl save_pdfs; mode "default"
-	bindsym r exec --no-startup-id i3ctl restore_pdfs; mode "default"
-
-	bindsym Escape mode "default"
-	bindsym Return mode "default"
-	bindsym Menu mode "default"
+bar {
+    font pango:DejaVu Sans Mono, FontAwesome 10
+    position top
+    status_command i3status-wrapper.py ~/.config/i3status-rust/config.toml
+    height 23
+    colors {
+        separator #66666680
+        # background #2222280
+        # statusline $color5
+        #background #1d202110
+        background #00000000
+        #statusline #dddddd10
+        statusline #ddddddff
+        focused_workspace #0088CC #0088CC #ffffff
+        #active_workspace #333333 #333333 #ffffff
+        active_workspace #333333 #333333 #ffffff
+        inactive_workspace #333333 #333333 #888888
+        urgent_workspace #2f343a #900000 #ffffff
+    }
 }
 
 
+exec --no-startup-id 'nm-applet --indicator'
+exec --no-startup-id redshift-gtk -l 51.0:2.6 
+exec --no-startup-id blueman-applet
 
-# Key Bindings
 
+
+
+
+
+# ---------------------------------- KEY BINDINGS -----------------------------------------
+# =========================================================================================
+
+# to close dunst notifications
+bindsym Control+Space exec dunstctl close
 
 # Basic Movement
 
@@ -105,11 +102,6 @@ bindsym $mod+$left focus left
 bindsym $mod+$down focus down
 bindsym $mod+$up focus up
 bindsym $mod+$right focus right
-
-##bindsym $mod+Left focus left
-##bindsym $mod+Down focus down
-##bindsym $mod+Up focus up
-##bindsym $mod+Right focus right
 
 # move focused window
 bindsym $mod+Shift+$left move left
@@ -122,11 +114,6 @@ bindsym $mod+Shift+$right move right
 bindsym Mod1+Shift+$down workspace next
 bindsym Mod1+Shift+$up workspace prev
 #bindsym $mod+Shift+$right move right
-
-##bindsym $mod+Shift+Left move left
-##bindsym $mod+Shift+Down move down
-##bindsym $mod+Shift+Up move up
-##bindsym $mod+Shift+Right move right
 
 # switch to workspace
 bindsym $mod+1 workspace 1
@@ -153,31 +140,33 @@ bindsym $mod+Shift+9 move container to workspace 9
 bindsym $mod+Shift+0 move container to workspace 10
 
 
-bindsym $mod+q exec kill_win.sh
+# bindsym $mod+q exec kill_win.sh
+bindsym $mod+q kill
 bindsym $mod+Shift+q kill
 
 
-##bindsym $mod+w
-##bindsym $mod+Shift+w
+bindsym $mod+w exec stream_movie.py --random --chooser rofi
+#bindsym $mod+Shift+w exec tv.py
+bindsym $mod+Shift+w exec vbox_dmenu.sh
 
 
-bindsym $mod+e exec emacsclient -c -a \"\"
+bindsym $mod+e exec emacs
 bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
 #bindsym $mod+Shift+e exec $TERMINAL emacsclient -nw
 
 
 bindsym $mod+r 			exec $TERMINAL ranger
-bindsym $mod+Shift+r restart
+bindsym $mod+Shift+r reload
 ## bindsym $mod+Shift+r exec $TERMINAL -e "sudo ranger" 
 
 
 ## bindsym $mod+t [instance="mate-terminal"] scratchpad show
 # bindsym $mod+Shift+t exec --no-startup-id "geni3conf"; restart
-bindsym $mod+Shift+t restart
+bindsym $mod+Shift+t reload
 
 
-# bindsym $mod+z			exec --no-startup-id "bash ~/bin/openvpn.sh"
-bindsym $mod+Shift+z		exec --no-startup-id "bash ~/.config/i3/i3resize left"
+bindsym $mod+y exec --no-startup-id ffchooser.py
+bindsym $mod+Shift+y		exec --no-startup-id "bash ~/.config/i3/i3resize left"
 
 
 ##bindsym $mod+u [instance="dropdown"] scratchpad show; [instance="dropdown"] move position center
@@ -193,22 +182,27 @@ bindsym $mod+Shift+i		exec --no-startup-id "bash ~/.config/i3/i3resize up"
 bindsym $mod+Shift+o 		exec --no-startup-id "bash ~/.config/i3/i3resize right"
 
 
-bindsym $mod+p exec $TERMINAL bpython
+#bindsym $mod+p exec $TERMINAL bpython
+bindsym $mod+p exec --no-startup-id ~/.local/bin/i3-promote-window.py
 bindsym $mod+Shift+p floating toggle
 
 
-bindsym $mod+ exec --no-startup-id 'pkill --signal SIGUSR1 -f i3expod'
+# bindsym $mod+a exec --no-startup-id 'pkill --signal SIGUSR1 -f i3expod'
 ##bindsym $mod+Shift+a
+bindsym $mod+a focus parent
+bindsym $mod+Shift+a focus child
 
 
 bindsym $mod+s			gaps inner current plus 5
 bindsym $mod+Shift+s		gaps inner current minus 5
 
 # bindsym $mod+d exec dmenu_run
-bindsym $mod+d exec --no-startup-id j4-dmenu-desktop --dmenu='rofi -i -dmenu' # -font "Helvetica Neue 15" '
-## bindsym $mod+Shift+d exec --no-startup-id j4-dmenu-desktop --dmenu="dmenu -l 20"
+bindsym $mod+d exec --no-startup-id $Menu3
+bindsym $mod+Shift+d exec --no-startup-id $Menu2
 
 bindsym $mod+f fullscreen toggle
+#bindsym $mod+Shift+f floating toggle
+bindsym $mod+Shift+f exec --no-startup-id "display-setting-chooser.sh; /home/fecht/.fehbg"
 # bindsym $mod+Shift+f exec --no-startup-id display-setting-chooser.sh
 
 
@@ -222,7 +216,12 @@ bindsym $mod+Shift+g 		gaps inner current set 0; gaps outer current set 0
 
 
 # bindsym $mod+y exec --no-startup-id randbg
+#bindsym $mod+y exec --no-startup-id ffchooser.py
 # bindsym $mod+Shift+y exec --no-startup-id "pkill --signal SIGUSR1 compton"
+bindsym $mod+z bar mode toggle
+#bindsym $mod+Shift+z exec ~/prj/tabfs-scripts/geoguessr.py
+
+bindsym $mod+x scratchpad show
 
 
 # bindsym $mod+x mode "$mode_language_key"
@@ -230,47 +229,37 @@ bindsym $mod+Shift+g 		gaps inner current set 0; gaps outer current set 0
 
 
 # bindsym $mod+c exec $TERMINAL -e "nvim -c ':Calendar'"
-bindsym $mod+Shift+c reload
+#bindsym $mod+Shift+c reload
+bindsym --release $mod+c exec cheatsheetdmenu.sh
+bindsym --release $mod+Shift+c exec tex-match
 
 
-bindsym $mod+v exec $TERMINAL vim
-bindsym $mod+Shift+v split v
+#bindsym $mod+v exec $TERMINAL vim
+#bindsym $mod+v exec vbox_dmenu.sh
+bindsym $mod+v split v
+bindsym $mod+Shift+v exec --no-startup-id vpn_dmenu.sh
 
 
 bindsym $mod+b split h
 bindsym $mod+Shift+b split h
 
 
-## bindsym $mod+n exec --no-startup-id nm-connection-editor
-##bindsym $mod+Shift+n
+bindsym $mod+n input 1739:30382:DLL0704:01_06CB:76AE_Touchpad events toggle
+#bindsym $mod+Shift+n
 
-
-bindsym $mod+m exec --no-startup-id manchooser.sh
+#bindsym $mod+m exec --no-startup-id manchooser.sh
 ##bindsym $mod+Shift+m
 
 
-##bindsym $mod+0
-##bindsym $mod+Shift+0
 
 
-##bindsym $mod+0
-##bindsym $mod+Shift+0
+
+# Special Keys
 
 
-##bindsym $mod+0
-##bindsym $mod+Shift+0
-
-
-##bindsym $mod+0
-##bindsym $mod+Shift+0
-
-
-##bindsym $mod+0
-##bindsym $mod+Shift+0
-
-# bindsym $mod+period exec ~/bin/lock.sh screenshot
-# TODO: add lock
-# bindsym $mod+Shift+period exec ~/bin/lock.sh screenshot
+#bindsym $mod+period exec lock.sh
+#bindsym $mod+period exec loginctl lock-session
+bindsym $mod+Shift+period exec lock.sh
 
 # bindsym $mod+Tab workspace next
 # bindsym $mod+Shift+Tab workspace prev
@@ -278,52 +267,117 @@ bindsym $mod+Tab focus right
 bindsym $mod+Shift+Tab focus left
 
 bindsym $mod+Return exec --no-startup-id $TERMINAL
-bindsym $mod+Shift+Return exec $TERMINAL --directory `xcwd`
+bindsym $mod+Shift+Return exec $TERMINAL --directory `swaycwd.sh`
+#bindsym $mod+Shift+Return exec --no-startup-id alacritty
 
 #bindsym $mod+BackSpace exec killall -s SIGTERM firefox; exec sleep 1; exec reboot 
 # bindsym $mod+BackSpace exec "~/bin/confirm.sh reboot"
 #bindsym $mod+Shift+BackSpace exec killall -s SIGTERM firefox; exec sleep 1; exec shutdown -h now
 # bindsym $mod+Shift+BackSpace exec "~/bin/confirm.sh shutdown"
-
+bindsym $mod+BackSpace exec ~/.config/rofi/scripts/menu_powermenu
 
 ##bindsym $mod+Shift+space 	floating toggle
-#bindsym $mod+space exec nix-shell -p python3Packages.pygame -p python3Packages.i3ipc -p python3Packages.pillow -p python3Packages.pyxdg --run i3expod.py
 
 bindsym $mod+space move workspace to output right
 bindsym $mod+Shift+space move workspace to output left
 
 # bindsym $mod+numbersign split vertical;;exec --no-startup-id $TERMINAL
 
-bindsym Menu mode "$mode_ctrl"
-bindsym Print exec --no-startup-id spectacle
+
+# Screenshots
+bindsym Print exec --no-startup-id sway_screenshot.sh select
+bindsym Shift+Print exec --no-startup-id sway_screenshot.sh full
+bindsym --release $mod+Print exec --no-startup-id screenshot_edit.sh
 
 bindsym $mod+F1 layout splith
 bindsym $mod+F2 layout tabbed
+bindsym $mod+F3 layout stacking
+bindsym $mod+F4 layout toggle split
 
-exec --no-startup-id syncthing -no-browser
+bindsym $mod+F10 exec monitor_brightness.py set 0
+bindsym $mod+F11 exec monitor_brightness.py set 20
+bindsym $mod+F12 exec monitor_brightness.py set 100
 
-bar {
-    #status_command i3status-rs
-    status_command while date +'%Y-%m-%d %l:%M:%S %p'; do sleep 1; done
+#bindsym --locked XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5%
+#bindsym --locked XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5%
+#bindsym --locked XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle
+bindsym XF86AudioRaiseVolume exec --no-startup-id ~/prj/i3-volume/volume -N libnotify up 10 -p -n
+bindsym XF86AudioLowerVolume exec --no-startup-id  ~/prj/i3-volume/volume -N libnotify down 10 -p -n
+bindsym XF86AudioMute exec --no-startup-id  ~/prj/i3-volume/volume -N libnotify mute -p -n
 
-    colors {
-        statusline #ffffff
-        background #323232
-        inactive_workspace #32323200 #32323200 #5c5c5c
-    }
-    position top
-}
+# Sreen brightness controls
+#bindsym --locked XF86MonBrightnessUp exec sudo /usr/bin/light -A 5
+#bindsym --locked XF86MonBrightnessDown exec sudo /usr/bin/light -U 5
+#bindsym XF86MonBrightnessDown exec bash -c 'sudo /usr/bin/light -U 5'
+exec_always light -N 1
+bindsym XF86MonBrightnessUp exec light -A 5
+bindsym XF86MonBrightnessDown exec light -U 5
 
 
-#input 1133:50484:Logitech_USB_Receiver repeat_rate 70
-# see man 5 sway-input
-input * repeat_delay 180
-input * repeat_rate 70
-input * xkb_layout "eu"
-input * xkb_options "caps:escape"
-input 1739:30382:DLL0704:01_06CB:76AE_Touchpad natural_scroll enabled
+# Media player controls
+#bindsym XF86AudioPlay exec ~/bin/playpause.sh
+bindsym --locked XF86AudioPlay exec playerctl play-pause
+bindsym --locked XF86AudioNext exec playerctl next
+bindsym --locked XF86AudioPrev exec playerctl previous
+
+
+
+#bindswitch lid:toggle border none
+
+
+# special window settings
+no_focus [window_role="pop-up"]
+for_window [window_role="pop-up"] floating enable
 
 for_window [instance="ida64.exe"] floating enable
 for_window [title="IDA: Quick start"] resize set 640 480
 for_window [title="IDA v7.*"] floating disable
 for_window [title="IDA -.*"] floating disable
+
+# for_window [title=".*"] opacity 0.8
+
+for_window [title="Desktop — Plasma"] kill, floating enable, border none
+for_window [class="plasmashell"] floating enable, border none
+for_window [class="Plasma"] floating enable, border none
+for_window [title="plasma-desktop"] floating enable, border none
+for_window [title="win7"] floating enable, border none
+for_window [class="krunner"] floating enable, border none
+for_window [class="Kmix"] floating enable, border none
+for_window [class="Klipper"] floating enable, border none
+for_window [class="Plasmoidviewer"] floating enable, border none
+
+for_window [instance="ida64.exe"] floating enable
+for_window [instance="ida.exe"] floating enable
+for_window [title="IDA: Quick start"] resize set 640 480
+for_window [title="IDA v7.*"] floating disable
+for_window [title="IDA -.*"] floating disable
+
+for_window [title="Ghidra Help"] floating enable
+for_window [class="Ghidra" title="win0"] floating enable
+
+#for_window [class="explorer.exe"] floating enable
+
+for_window [title="opencv_lab*"] floating enable
+for_window [class="matplotlib"] floating enable
+for_window [class="Matplotlib"] floating enable
+
+for_window [class="Desmume"] floating enable, resize set 800 px 600 px
+for_window [class="mGBA"] floating enable, resize set 800 px 600 px
+# for_window [class="\ "] floating enable
+for_window [class="jetbrains-.*" title="win0"] floating enable border none
+for_window [class="java-lang-Thread" title="win0"] floating enable border none
+
+# emacs
+for_window [title="^Helm$"] floating enable border none
+for_window [class="^Test_FastInverse$"] floating enable border none
+
+for_window [class="^jetbrains-idea$" title="^Confirm Exit$"] floating enable
+for_window [class="Arandr_chooser.py"] floating enable
+
+#for_window [class="Vncviewer"] floating enable
+for_window [class="^custom-float-no-border$"] floating enable
+for_window [class="^custom-float-no-border$"] border pixel 0
+
+
+for_window [class="Anki" title="Hinzufügen"] floating enable
+for_window [class="Anki" title="Einstellungen"] floating enable
