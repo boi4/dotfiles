@@ -1,5 +1,5 @@
 {
-    "workbench.colorTheme": "One Dark Pro",
+    "workbench.colorTheme": "Night Owl",
     "window.menuBarVisibility": "toggle",
     "vscode-neovim.neovimExecutablePaths.linux": "/usr/bin/nvim",
 
@@ -8,6 +8,6 @@
     "[FortranFreeForm]": {
         "editor.rulers": [132]
     },
-    "window.zoomLevel": 2
+    "terminal.external.linuxExec": "kitty"
     
 }
