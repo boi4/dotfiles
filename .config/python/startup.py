@@ -1,6 +1,5 @@
 # https://bugs.python.org/issue20886
 # Make python a little bit better
-
 def get_history_file():
     import os
     if 'PYTHONHISTFILE' in os.environ:
@@ -69,12 +68,25 @@ def override_sys_interactivehook(history):
 
 
 override_sys_interactivehook(get_history_file())
-
-
-
+del override_sys_interactivehook
+del get_history_file
 
 
 ## UTIL Functions
+
+def xs(text):
+    import subprocess
+    r = subprocess.run(["xsel", "-b"], input=text.encode('utf-8'))
+
+def xdg_open(s):
+    import subprocess
+    subprocess.run(["zsh"], input=f"xdg-open {s} &|".encode('utf-8'),
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+def ff(url):
+    import subprocess
+    subprocess.run(["zsh"], input=f"ffchooser.py {url} &|".encode('utf-8'),
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 def format_size(size_bytes):
     power = 1024
@@ -84,3 +96,5 @@ def format_size(size_bytes):
         size_bytes /= power
         n += 1
     return f"{size_bytes:.2f} {power_labels[n]}B"
+
+
