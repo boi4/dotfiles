@@ -2,3 +2,5 @@ set disassembly-flavor intel
 set history file ~/.local/share/gdb_history
 set history save on
 set history remove-duplicates 10
+set debuginfod enabled on
+set breakpoint pending on
