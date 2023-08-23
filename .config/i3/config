@@ -142,11 +142,12 @@ bindsym $mod+q kill
 bindsym $mod+Shift+q kill
 
 
-#bindsym $mod+w 
+#bindsym $mod+w
 bindsym $mod+Shift+w exec vbox_dmenu.sh
 
 
-bindsym $mod+e exec emacsclient -c -a \"\"
+#bindsym $mod+e exec emacsclient -c -a \"\"
+bindsym $mod+e exec --no-startup-id rofi -modi emoji -show emoji
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 
 
