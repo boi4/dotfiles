@@ -1,0 +1,5 @@
+FSLDIR=/opt/fsl
+. ${FSLDIR}/etc/fslconf/fsl.sh
+export FSLDIR
+export FSLCONFDIR="$FSLDIR/config"
+export FSLDEVDIR="$FSLDIR"

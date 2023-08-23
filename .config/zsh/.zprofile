@@ -1,9 +1,7 @@
 export PATH=$HOME/.local/bin:$PATH
 
-if command -v emacsclient > /dev/null && [ -d "$HOME/doom.d" ]; then
+if command -v emacsclient > /dev/null && [ -d "$HOME/.doom.d" ]; then
   export VISUAL="emacsclient -a '' --c"
-elif command -v lvim > /dev/null ;then
-  export VISUAL="lvim"
 elif command -v nvim > /dev/null ; then
   export VISUAL="nvim"
 else
@@ -11,42 +9,44 @@ else
 fi
 export EDITOR="$VISUAL"
 
+if [ "$(hostnamectl hostname)" = torbus ]; then
+	source "${ZDOTDIR:-${HOME}/.config/zsh}"/desktop
+fi
 
 
-if [ -d "$HOME/.local/bin/dmenupass" ]; then
+if [ -f "$HOME/.local/bin/dmenupass" ]; then
     export SUDO_ASKPASS="$HOME/.local/bin/dmenupass"
 fi
 
-if [ -d "$XDG_CONFIG_HOME/python/startup.py" ]; then
+if [ -f "$XDG_CONFIG_HOME/python/startup.py" ]; then
     export PYTHONSTARTUP="$XDG_CONFIG_HOME/python/startup.py"
 fi
 
+export GPG_TTY="$(tty)"
 
-if [[ $(command -v go) ]]; then
-    if [ -d "$HOME/prj/go" ]; then
-        export GOPATH="$HOME/prj/go"
-    fi
+
+if command -v go > /dev/null; then
+    export GOPATH="$HOME/.local/share/go"
+    mkdir -p "$GOPATH"
     PATH="$(go env GOPATH)/bin:$PATH"
 fi
 
-if [[ $(command -v cabal) ]]; then
-    export PATH=$HOME/.cabal/bin:$PATH
+if command -v cabal > /dev/null; then
+    export PATH="$HOME/.cabal/bin:$PATH"
 fi
 
 systemctl --user set-environment PATH="$PATH"
 
 
 
-eval $(ssh-agent -s) > /dev/null
-
 # ls colors
-if [ "$(command -v dircolors)" ]; then
+if command -v dircolors > /dev/null; then
     eval $(dircolors -b)
 fi
 
 
-USEWAYLAND="1"
-if ! command -v sway; then
+USEWAYLAND="false"
+if ! command -v sway > /dev/null; then
     USEWAYLAND=
 fi
 

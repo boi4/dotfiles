@@ -38,8 +38,8 @@ alias python='python3'
 
 
 
-command -v codium >/dev/null && alias code=codium
-command -v hub>/dev/null && alias git=hub
+#command -v codium >/dev/null && alias code=codium
+#command -v hub>/dev/null && alias git=hub
 
 
 # new commands
@@ -67,12 +67,18 @@ alias ranger=ranger-cd
 alias yl='yt-dlp'
 alias za='zathura'
 # emacs
-function ec {
-		 d emacsclient -a '' --c "$@"
-}
-function em {
-		 emacsclient -a '' -nw --c "$@"
-}
+#function ec {
+alias em="d emacsclient -a ''"
+#}
+#function em {
+alias et="emacsclient -a '' -nw -c"
+#}
+#function ec {
+#	d emacs "$@"
+#}
+#function em {
+#
+#}
 
 
 # better wget
@@ -112,7 +118,7 @@ alias batstat='upower -i /org/freedesktop/UPower/devices/battery_BAT0'
 # for dotfiles, see https://news.ycombinator.com/item?id=11071754
 # to clone:  git clone --separate-git-dir=~/.cfg _repo_ ~
 # or git clone _repo_ && cp dotfiles/.git ~/.cfg
-alias dotf='git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
+alias dotf='git --git-dir ~/.cfg --work-tree ~'
 compdef dotf='git'
 
 alias speedtest='wget --report-speed=bits -O /dev/null http://speedtest.belwue.net/1000G'
@@ -235,4 +241,5 @@ function venvactivate () {
 		P="$(dirname $P)"
 		echo $P
 	done
+    rehash
 }
