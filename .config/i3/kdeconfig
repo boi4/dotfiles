@@ -1,0 +1,381 @@
+# i3 config file (v4)
+# by Jan Fecht
+
+
+
+# How to find cli commands for invoking kde shortcuts???
+# 1. go into normal plasma session
+# 2. start dbus-monitor
+# 3. invoke shortcut
+# 4. look for org.kde.kglobalaccess
+# 5. run qdbus --literal org.kde.kglobalaccel /component/<COMPONENT_NAME> shortcutNames
+# 6. command is qdbus --literal org.kde.kglobalaccel /component/<COMPONENT_NAME> invokeShortcut <SHORTCUT_NAME>
+
+
+# Variables
+set $TERMINAL kitty
+
+set $mod Mod4
+set $up k
+set $down j
+set $left h
+set $right l
+set $modr 135 # for the key next to alt gr
+
+
+set $Menu1 j4-dmenu-desktop --dmenu='rofi -i -dmenu' # -font "Helvetica Neue 15" '
+set $Menu2 dmenu_path | dmenu | xargs i3-msg exec --
+set $Menu3 rofi -theme Arc-Dark -combi-modi window#drun -show combi -modi combi -show-icons -run-command
+
+# krunner
+set $Menu4 qdbus org.kde.krunner /App toggleDisplay
+#set $Menu5 qdbus org.kde.kglobalaccel /component/org_kde_krunner_desktop invokeShortcut "_launch"
+
+# general settings
+floating_modifier $mod
+default_orientation auto
+popup_during_fullscreen smart
+smart_borders on
+# hide_edge_borders smart
+
+
+font pango:DejaVu Sans Mono 10
+
+
+
+default_orientation auto
+
+
+# gaps settings
+for_window [class="^.*"] border pixel 3
+gaps inner 0
+gaps outer 0
+# smart_gaps on
+
+
+# compositor
+exec --no-startup-id picom -b
+
+# tray
+#exec --no-startup-id nm-applet
+#exec --no-startup-id redshift-gtk -l 51.0:2.6
+#exec --no-startup-id redshift-gtk -l 50.88:4.7 # leuven
+#exec --no-startup-id blueman-applet
+
+# daemons
+#exec --no-startup-id dunst
+
+
+
+# ---------------------------------- KEY BINDINGS -----------------------------------------
+# =========================================================================================
+
+# Basic Movement
+
+# change focus
+bindsym $mod+$left focus left
+bindsym $mod+$down focus down
+bindsym $mod+$up focus up
+bindsym $mod+$right focus right
+
+# move focused window
+bindsym $mod+Shift+$left move left
+bindsym $mod+Shift+$down move down
+bindsym $mod+Shift+$up move up
+bindsym $mod+Shift+$right move right
+
+
+#bindsym $mod+Shift+$left move left
+bindsym Mod1+Shift+$down workspace next
+bindsym Mod1+Shift+$up workspace prev
+#bindsym $mod+Shift+$right move right
+#bindsym $mod+Escape workspace next
+
+# switch to workspace
+bindsym $mod+1 workspace 1
+bindsym $mod+2 workspace 2
+bindsym $mod+3 workspace 3
+bindsym $mod+4 workspace 4
+bindsym $mod+5 workspace 5
+bindsym $mod+6 workspace 6
+bindsym $mod+7 workspace 7
+bindsym $mod+8 workspace 8
+bindsym $mod+9 workspace 9
+bindsym $mod+0 workspace 10
+
+# move focused container to workspace
+bindsym $mod+Shift+1 move container to workspace 1
+bindsym $mod+Shift+2 move container to workspace 2
+bindsym $mod+Shift+3 move container to workspace 3
+bindsym $mod+Shift+4 move container to workspace 4
+bindsym $mod+Shift+5 move container to workspace 5
+bindsym $mod+Shift+6 move container to workspace 6
+bindsym $mod+Shift+7 move container to workspace 7
+bindsym $mod+Shift+8 move container to workspace 8
+bindsym $mod+Shift+9 move container to workspace 9
+bindsym $mod+Shift+0 move container to workspace 10
+
+
+
+
+
+
+bindsym $mod+q kill
+bindsym $mod+Shift+q kill
+
+
+#bindsym $mod+w
+bindsym $mod+Shift+w exec vbox_dmenu.sh
+
+
+#bindsym $mod+e exec emacsclient -c -a \"\"
+bindsym $mod+e exec --no-startup-id rofi -modi emoji -show emoji
+# kde logout confirmation
+bindsym $mod+Shift+e exec --no-startup-id qdbus org.kde.ksmserver /KSMServer org.kde.KSMServerInterface.logout -1 -1 -1
+#bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
+
+
+bindsym $mod+r exec $TERMINAL ranger
+bindsym $mod+Shift+r restart
+
+
+bindsym $mod+t exec xcalib -invert -alter
+bindsym $mod+Shift+t restart
+
+
+bindsym $mod+y exec --no-startup-id ffchooser.py
+bindsym $mod+Shift+y exec --no-startup-id "bash ~/.config/i3/i3resize left"
+
+
+#bindsym $mod+u
+bindsym $mod+Shift+u exec --no-startup-id "bash ~/.config/i3/i3resize down"
+
+
+bindsym $mod+i exec --no-startup-id $TERMINAL htop
+bindsym $mod+Shift+i exec --no-startup-id "bash ~/.config/i3/i3resize up"
+
+
+#bindsym $mod+o
+bindsym $mod+Shift+o exec --no-startup-id "bash ~/.config/i3/i3resize right"
+
+
+bindsym $mod+p sticky toggle
+bindsym $mod+Shift+p floating toggle
+# kde monitor chooser
+#bindsym $mod+p exec --no-startup-id qdbus org.kde.kglobalaccel /component/kded5 invokeShortcut "display"
+
+
+bindsym $mod+a focus parent
+bindsym $mod+Shift+a focus child
+
+
+bindsym $mod+s gaps inner current plus 5
+bindsym $mod+Shift+s gaps inner current minus 5
+
+# bindsym $mod+d exec dmenu_run
+bindsym $mod+d exec --no-startup-id $Menu4
+bindsym $mod+Shift+d exec --no-startup-id $Menu3
+
+bindsym $mod+f fullscreen toggle
+bindsym $mod+Shift+f exec --no-startup-id "display-setting-chooser.sh; /home/fecht/.fehbg"
+
+
+bindsym $mod+g gaps inner current set 15; gaps outer current set 15
+bindsym $mod+Shift+g gaps inner current set 0; gaps outer current set 0
+
+
+bindsym $mod+z bar mode toggle
+#bindsym $mod+Shift+z
+
+
+#bindsym $mod+x
+#bindsym $mod+Shift+x
+
+
+bindsym $mod+c exec cheatsheetdmenu.sh
+bindsym $mod+Shift+c exec tex-match
+
+
+bindsym $mod+v split v
+bindsym $mod+Shift+v exec --no-startup-id vpn_dmenu.sh
+#bindsym $mod+Shift+v exec vbox_dmenu.sh
+
+
+bindsym $mod+b split h
+#bindsym $mod+Shift+b
+
+
+##TODO: have a toggle
+#bindsym $mod+n exec --no-startup-id xinput --disable 'DLL0704:01 06CB:76AE Touchpad'
+#bindsym $mod+Shift+n exec --no-startup-id xinput --enable 'DLL0704:01 06CB:76AE Touchpad'
+
+
+#bindsym $mod+m
+#bindsym $mod+Shift+m
+
+
+
+
+
+# Special Keys
+
+#bindsym $mod+period
+#bindsym $mod+Shift+period exec ~/.local/bin/lock.sh screenshot
+#bindsym $mod+Shift+period exec ~/.local/bin/lock.sh screenshot
+# TODO: move from kde settings to here
+
+#bindsym $mod+Tab
+#bindsym $mod+Shift+Tab
+
+
+# screenshots
+#bindsym --release Print exec --no-startup-id "scrot '/home/fecht/pix/screens/%Y-%m-%d-%h-%m-%s_$wx$h.png' -s -e 'xclip -selection clipboard -t image/png -i $f'"
+#bindsym --release $mod+Print exec --no-startup-id screenshot_edit.sh
+#bindsym --release Shift+Print exec --no-startup-id "scrot '/home/fecht/pix/screens/%Y-%m-%d-%h-%m-%s_$wx$h.png'"
+#bindsym --release $mod+Shift+Print exec --no-startup-id /home/fecht/.local/bin/snipaste.sh
+# TODO: migrate kde shortcuts to qdbus commands here
+
+
+bindsym $mod+Return exec --no-startup-id $TERMINAL
+bindsym $mod+Shift+Return exec $TERMINAL --directory "$(xcwd)"
+
+bindsym $mod+BackSpace exec --no-startup-id qdbus-qt5 org.kde.ksmserver /KSMServer org.kde.KSMServerInterface.logout -1 -1 -1
+#bindsym $mod+BackSpace
+
+
+#bindsym $mod+space move workspace to output right
+# open kde application launcher
+#bindsym $mod+space exec --no-startup-id qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.activateLauncherMenu
+bindsym $mod+space move workspace to output right
+bindsym $mod+Shift+space move workspace to output left
+
+bindsym $mod+Shift+bracketright exec --no-startup-id i3-msg 'open'
+
+bindsym $mod+F1 layout splith
+bindsym $mod+F2 layout tabbed
+bindsym $mod+F3 layout stacked
+bindsym $mod+F4 layout toggle split
+
+
+bindsym XF86AudioRaiseVolume exec --no-startup-id qdbus org.kde.kglobalaccel /component/kmix invokeShortcut "increase_volume"
+bindsym XF86AudioLowerVolume exec --no-startup-id qdbus org.kde.kglobalaccel /component/kmix invokeShortcut "decrease_volume"
+bindsym XF86AudioMute exec --no-startup-id qdbus org.kde.kglobalaccel /component/kmix invokeShortcut "mute"
+bindsym XF86AudioMicMute exec --no-startup-id qdbus org.kde.kglobalaccel /component/kmix invokeShortcut "mic_mute"
+
+
+# Sreen brightness controls
+bindsym XF86MonBrightnessUp exec  --no-startup-id qdbus org.kde.kglobalaccel /component/org_kde_powerdevil invokeShortcut "Increase Screen Brightness"
+bindsym XF86MonBrightnessDown exec --no-startup-id qdbus org.kde.kglobalaccel /component/org_kde_powerdevil invokeShortcut "Decrease Screen Brightness"
+
+
+# Media player controls
+bindsym XF86AudioPlay exec playerctl play-pause
+bindsym XF86AudioNext exec playerctl next
+bindsym XF86AudioPrev exec playerctl previous
+
+
+
+
+no_focus [window_role="pop-up"]
+
+
+# KDE
+#for_window [title="Desktop — Plasma"] kill, floating enable, border none
+#for_window [title="^Desktop — Plasma$"] move scratchpad, floating enable, border none
+#for_window [title="^Desktop — Plasma$"] kill
+for_window [title="^Desktop @ QRect.*"] kill
+for_window [class="^Plasma$"] floating enable, border none
+for_window [title="^plasma-desktop$"] floating enable, border none
+for_window [class="^krunner$"] floating enable, border none
+for_window [class="^Kmix$"] floating enable, border none
+for_window [class="^Klipper$"] floating enable, border none
+for_window [class="^Plasmoidviewer$"] floating enable, border none
+for_window [class="^plasmashell$"] floating enable;
+
+# notification fixes plasma
+# no_focus [class="plasmashell" window_type="notification"]
+
+
+for_window [window_role="pop-up"] floating enable
+for_window [window_role="task_dialog"] floating enable
+
+for_window [class="yakuake"] floating enable
+#for_window [class="systemsettings"] floating enable
+for_window [title="win7"] floating enable; border none
+#for_window [class="(?i)*nextcloud*"] floating disable
+for_window [class=".*nextcloud.*"] floating disable
+for_window [class="plasmashell" window_type="notification"] border none
+no_focus [class="plasmashell" window_type="notification"]
+for_window [class="plasmashell" window_type="notification"] border none, move position 70 ppt 81 ppt
+
+for_window [instance="ida64.exe"] floating enable
+for_window [instance="ida.exe"] floating enable
+for_window [title="IDA: Quick start"] resize set 640 480
+for_window [title="IDA v7.*"] floating disable
+for_window [title="IDA -.*"] floating disable
+
+for_window [title="Ghidra Help"] floating enable
+for_window [class="Ghidra" title="win0"] floating enable
+
+for_window [title="opencv_lab.*"] floating enable
+for_window [class="matplotlib"] floating enable
+for_window [class="Matplotlib"] floating enable
+
+for_window [class="Desmume"] floating enable, resize set 800 px 600 px
+for_window [class="mGBA"] floating enable, resize set 800 px 600 px
+# for_window [class="\ "] floating enable
+for_window [class="jetbrains-.*" title="win0"] floating enable border none
+for_window [class="java-lang-Thread" title="win0"] floating enable border none
+
+# emacs
+for_window [title="^Helm$"] floating enable border none
+
+for_window [class="^jetbrains-idea$" title="^Confirm Exit$"] floating enable
+#
+for_window [class="^custom-float-no-border$"] floating enable
+for_window [class="^custom-float-no-border$"] border pixel 0
+
+for_window [class="^spectacle$"] floating enable
+
+
+
+for_window [class="Anki" title="Hinzufügen"] floating enable
+for_window [class="Anki" title="Einstellungen"] floating enable
+
+
+
+
+
+# wallpaper
+#exec --no-startup-id python3 ~/prj/dynwalls/dynwalls update
+exec --no-startup-id timewall set
+exec --no-startup-id systemctl --user start timewall
+
+
+workspace 1 output primary
+workspace 2 output primary
+workspace 3 output DP-1
+workspace 4 output DP-1
+workspace 5 output DP-1
+workspace 6 output DP-1
+workspace 7 output DP-1
+workspace 8 output DP-1
+workspace 9 output DP-1
+workspace 10 output DP-1
+#for_window [class="^element$"] floating disable # why is it floating???
+#exec --no-startup-id i3-msg 'workspace 10; exec element-desktop'
+
+# start communication apps on the right monitor
+#exec --no-startup-id i3-msg 'workspace 10; exec thunderbird'
+#exec --no-startup-id i3-msg 'workspace 10; exec whatsapp-nativefier'
+#exec --no-startup-id i3-msg 'workspace 10; exec element-desktop'
+exec setsid wslaunch.sh -w 10 -e thunderbird
+exec setsid wslaunch.sh -w 10 -e whatsapp-nativefier
+#exec setsid wslaunch.sh -w 10 -e element-desktop
+
+exec setsid wslaunch.sh -w 2 -e "firefox-developer-edition -p dev-edition-default"
+#exec --no-startup-id i3-msg 'workspace 2; exec firefox-developer-edition -p dev-edition-default'
+
+#workspace 3 output DP-1
+#exec --no-startup-id i3-msg 'workspace 3; workspace 2'
+
