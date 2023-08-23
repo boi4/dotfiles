@@ -69,3 +69,11 @@
 
 (package! sphinx-doc)
 (package! night-owl-theme)
+
+
+(package! openai
+  :recipe (:host github :repo "emacs-openai/openai"))
+(package! codegpt
+  :recipe (:host github :repo "emacs-openai/codegpt"))
+(package! chatgpt
+  :recipe (:host github :repo "emacs-openai/chatgpt"))
