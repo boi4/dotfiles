@@ -1,9 +1,5 @@
-
-
 # https://bugs.python.org/issue20886
-
 # Make python a little bit better
-
 
 def get_history_file():
     import os
@@ -73,3 +69,18 @@ def override_sys_interactivehook(history):
 
 
 override_sys_interactivehook(get_history_file())
+
+
+
+
+
+## UTIL Functions
+
+def format_size(size_bytes):
+    power = 1024
+    n = 0
+    power_labels = {0 : '', 1: 'K', 2: 'M', 3: 'G', 4: 'T'}
+    while size_bytes >= power and n < len(power_labels) - 1:
+        size_bytes /= power
+        n += 1
+    return f"{size_bytes:.2f} {power_labels[n]}B"
