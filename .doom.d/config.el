@@ -4,6 +4,9 @@
 ;; sync' after modifying this file!
 
 
+(load "~/.doom.d/secrets.el")
+
+
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets.
 (setq user-full-name "Jan Fecht"
@@ -35,13 +38,13 @@
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/notes/org/")
 
-(setq! bibtex-completion-bibliography '("~/dox/Zotero/zotero_full.bib")
-       bibtex-completion-library-path '("~/dox/Zotero/storage/"))
+(setq! bibtex-completion-bibliography '("~/Zotero/zotero_full.bib")
+       bibtex-completion-library-path '("~/Zotero/storage/"))
 
-(setq reftex-default-bibliography "~/dox/Zotero/zotero_full.bib")
+(setq reftex-default-bibliography "~/Zotero/zotero_full.bib")
 
-(setq! citar-bibliography '("~/dox/Zotero/zotero_full.bib")
-       citar-library-path '("~/dox/Zotero/storage/"))
+(setq! citar-bibliography '("~/Zotero/zotero_full.bib")
+       citar-library-path '("~/Zotero/storage/"))
 
 
 (setq citar-symbols
@@ -62,6 +65,7 @@
       completion-category-overrides '((file (styles partial-completion))))
 
 
+
 ;; accept completion from copilot and fallback to company
 (use-package! copilot
   :hook (prog-mode . copilot-mode)
@@ -70,6 +74,17 @@
               ("TAB" . 'copilot-accept-completion)
               ("C-TAB" . 'copilot-accept-completion-by-word)
               ("C-<tab>" . 'copilot-accept-completion-by-word)))
+
+;; openai config
+;; (setq codegpt-tunnel 'chat            ; The default is 'completion
+;;       codegpt-model "gpt-4")  ; You can pick any model you want!
+;; (setq chatgpt-model "gpt-4")  ; You can pick any model you want!
+(setq codegpt-tunnel 'chat            ; The default is 'completion
+      codegpt-model "gpt-3.5-turbo")
+(setq chatgpt-model "gpt-4")  ; You can pick any model you want!
+(map! :leader
+      :v "ll" 'codegpt)
+
 
 ;; Comment/Uncomment
 ;; (map! :leader
@@ -151,12 +166,14 @@
 ;; make "s" do subsitute like in vim
 (remove-hook 'doom-first-input-hook #'evil-snipe-mode)
 
-(add-hook 'LaTeX-mode-hook (lambda ()
-                             (local-set-key (kbd "SPC i c") #'citar-insert-citation)))
-(defun citar-setup-capf ()
-        (add-to-list 'completion-at-point-functions 'citar-capf))
+;; (add-hook 'LaTeX-mode-hook (lambda ()
+;;                              (local-set-key (kbd "SPC i c") #'citar-insert-citation)))
+(map! :map LaTeX-mode-map
+      :n "SPC i c" #'citar-insert-citation)
 
-(add-hook 'LaTeX-mode-hook #'citar-setup-capf)
+(add-hook 'LaTeX-mode-hook #'citar-capf-setup)
+
+(add-hook 'LaTeX-mode-hook (lambda () (add-to-list 'completion-at-point-functions 'citar-capf)))
 
 
 ;; (add-hook 'fortran-mode-hook #'lsp-mode)
@@ -189,45 +206,45 @@
 
 
 
-;; Isabelle setup
-(use-package! isar-mode
-  :mode "\\.thy\\'"
-  :config
-  ;; (add-hook 'isar-mode-hook 'turn-on-highlight-indentation-mode)
-  ;; (add-hook 'isar-mode-hook 'flycheck-mode)
-  (add-hook 'isar-mode-hook 'company-mode)
-  (add-hook 'isar-mode-hook
-            (lambda ()
-              (set (make-local-variable 'company-backends)
-                   '((company-dabbrev-code company-yasnippet)))))
-  (add-hook 'isar-mode-hook
-            (lambda ()
-              (set (make-local-variable 'indent-tabs-mode) nil)))
-  (add-hook 'isar-mode-hook
-            (lambda ()
-              (yas-minor-mode)))
-  )
+;; ;; Isabelle setup
+;; (use-package! isar-mode
+;;   :mode "\\.thy\\'"
+;;   :config
+;;   ;; (add-hook 'isar-mode-hook 'turn-on-highlight-indentation-mode)
+;;   ;; (add-hook 'isar-mode-hook 'flycheck-mode)
+;;   (add-hook 'isar-mode-hook 'company-mode)
+;;   (add-hook 'isar-mode-hook
+;;             (lambda ()
+;;               (set (make-local-variable 'company-backends)
+;;                    '((company-dabbrev-code company-yasnippet)))))
+;;   (add-hook 'isar-mode-hook
+;;             (lambda ()
+;;               (set (make-local-variable 'indent-tabs-mode) nil)))
+;;   (add-hook 'isar-mode-hook
+;;             (lambda ()
+;;               (yas-minor-mode)))
+;;   )
 
-(use-package! lsp-isar-parse-args
-  :custom
-  (lsp-isar-parse-args-nollvm nil))
+;; (use-package! lsp-isar-parse-args
+;;   :custom
+;;   (lsp-isar-parse-args-nollvm nil))
 
-(use-package! lsp-isar
-  :commands lsp-isar-define-client-and-start
-  :custom
-  (lsp-isar-output-use-async t)
-  (lsp-isar-output-time-before-printing-goal nil)
-  (lsp-isar-experimental t)
-  (lsp-isar-split-pattern 'lsp-isar-split-pattern-two-columns)
-  (lsp-isar-decorations-delayed-printing t)
-  :init
-  (add-hook 'lsp-isar-init-hook 'lsp-isar-open-output-and-progress-right-spacemacs)
-  (add-hook 'isar-mode-hook #'lsp-isar-define-client-and-start)
+;; (use-package! lsp-isar
+;;   :commands lsp-isar-define-client-and-start
+;;   :custom
+;;   (lsp-isar-output-use-async t)
+;;   (lsp-isar-output-time-before-printing-goal nil)
+;;   (lsp-isar-experimental t)
+;;   (lsp-isar-split-pattern 'lsp-isar-split-pattern-two-columns)
+;;   (lsp-isar-decorations-delayed-printing t)
+;;   :init
+;;   (add-hook 'lsp-isar-init-hook 'lsp-isar-open-output-and-progress-right-spacemacs)
+;;   (add-hook 'isar-mode-hook #'lsp-isar-define-client-and-start)
 
-  (push (concat "~/src/isabelle-emacs/src/Tools/emacs-lsp/yasnippet")
-   yas-snippet-dirs)
-  (setq lsp-isar-path-to-isabelle "~/src/isabelle-emacs")
-  )
+;;   (push (concat "~/src/isabelle-emacs/src/Tools/emacs-lsp/yasnippet")
+;;    yas-snippet-dirs)
+;;   (setq lsp-isar-path-to-isabelle "~/src/isabelle-emacs")
+;;   )
 
 
   ;; https://github.com/m-fleury/isabelle-release/issues/21
