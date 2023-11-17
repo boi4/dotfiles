@@ -22,8 +22,16 @@
 ;;
 ;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
 ;; font string. You generally only need these two:
-;; (setq doom-font (font-spec :family "monospace" :size 12 :weight 'semi-light)
-;;       doom-variable-pitch-font (font-spec :family "sans" :size 13))
+;; (setq doom-font (font-spec :family "monospace" :size 15 :weight 'normal)
+;;       doom-variable-pitch-font (font-spec :family "sans" :size 15))
+;; (setq doom-font (font-spec :family "Source Code Pro" :size 15 :weight 'normal)
+;;       doom-variable-pitch-font (font-spec :family "Source Code Pro" :size 15))
+;; (setq doom-font "-ADBO-Source Code Pro-normal-normal-normal-*-18-*-*-*-m-0-iso10646-1")
+;; (setq doom-font "Source Code Pro Medium")
+(setq doom-font (font-spec :family "Source Code Pro" :size 15 :weight 'normal :slant 'normal)
+      doom-serif-font (font-spec :family "Noto Serif" :size: 15 :weight 'normal :slant 'normal)
+      doom-variable-pitch-font (font-spec :family "Comfortaa" :size 15 :weight 'normal :slant 'normal)
+      doom-big-font (font-spec :family "Source Code Pro" :size 24 :weight 'normal :slant 'normal))
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
@@ -38,22 +46,8 @@
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/notes/org/")
 
-(setq! bibtex-completion-bibliography '("~/Zotero/zotero_full.bib")
-       bibtex-completion-library-path '("~/Zotero/storage/"))
 
-(setq reftex-default-bibliography "~/Zotero/zotero_full.bib")
-
-(setq! citar-bibliography '("~/Zotero/zotero_full.bib")
-       citar-library-path '("~/Zotero/storage/"))
-
-
-(setq citar-symbols
-   `((file ,(all-the-icons-faicon "file-pdf-o" :face 'all-the-icons-red :v-adjust -0.1) . " ")
-     (note ,(all-the-icons-material "speaker_notes" :face 'all-the-icons-blue :v-adjust -0.3) . " ")
-     (link ,(all-the-icons-material "link" :face 'all-the-icons-blue) . " "))
-)
-
-(setq +latex-viewers '(zathura))
+(load "~/.doom.d/latex.el")
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -84,6 +78,12 @@
 (setq chatgpt-model "gpt-4")  ; You can pick any model you want!
 (map! :leader
       :v "ll" 'codegpt)
+
+;; disable jk escape
+(after! evil-escape
+  (evil-escape-mode -1))
+;; make "s" do subsitute like in vim
+(remove-hook 'doom-first-input-hook #'evil-snipe-mode)
 
 
 ;; Comment/Uncomment
@@ -141,10 +141,10 @@
 (add-hook 'python-mode 'lsp)
 
 ;; ZOOMING
-(map! :n "C-+" 'text-scale-increase
-      :n "C-_" 'text-scale-decrease)
-;; (map! :n "C-+" 'doom/increase-font-size
-;;       :n "C-_" 'doom/decrease-font-size)
+;; (map! :n "C-+" 'text-scale-increase
+;;       :n "C-_" 'text-scale-decrease)
+(map! :n "C-+" 'doom/increase-font-size
+      :n "C-_" 'doom/decrease-font-size)
 
 ;; old: doom/increase-font-size
 ;; old: doom/decrease-font-size
@@ -160,26 +160,17 @@
 (map! :leader
       :n "ok" (lambda () (interactive) (call-process "kitty" nil 0 nil)))
 (map! :leader
+      :n "ow" (lambda () (interactive) (call-process "kitty" nil 0 nil "-e" "zsh" "-c" "make work")))
+(map! :leader
       :n "k" (lambda () (interactive) (call-process "kitty" nil 0 nil)))
 
 
-;; make "s" do subsitute like in vim
-(remove-hook 'doom-first-input-hook #'evil-snipe-mode)
-
-;; (add-hook 'LaTeX-mode-hook (lambda ()
-;;                              (local-set-key (kbd "SPC i c") #'citar-insert-citation)))
-(map! :map LaTeX-mode-map
-      :n "SPC i c" #'citar-insert-citation)
-
-(add-hook 'LaTeX-mode-hook #'citar-capf-setup)
-
-(add-hook 'LaTeX-mode-hook (lambda () (add-to-list 'completion-at-point-functions 'citar-capf)))
+(global-clipetty-mode)
 
 
 ;; (add-hook 'fortran-mode-hook #'lsp-mode)
 ;; (add-hook 'f90-mode-hook 'eglot-ensure)
-(add-hook 'f90-mode-hook 'lsp)
-
+;; (add-hook 'f90-mode-hook 'lsp)
 
 
 
@@ -205,6 +196,157 @@
   (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]\\venv\\'"))
 
 
+
+;; (use-package lsp-grammarly
+;;   :ensure t
+;;   :hook (LaTeX-mode . (lambda ()
+;;                        (require 'lsp-grammarly)
+;;                        (lsp))))  ; or lsp-deferred
+
+;; (use-package lsp-ltex
+;;   :ensure t
+;;   :hook (text-mode . (lambda ()
+;;                        (require 'lsp-ltex)
+;;                        (lsp)))  ; or lsp-deferred
+;;   :init
+;;   (setq lsp-ltex-version "15.2.0"))
+
+
+(use-package! lsp-ltex
+  :commands (+lsp-ltex-toggle
+             +lsp-ltex-enable
+             +lsp-ltex-disable
+             +lsp-ltex-setup)
+  :hook ((latex-mode LaTeX-mode org-mode markdown-mode html-mode bibtex-mode) . #'+lsp-ltex-setup)
+  :init
+  ;; There is some problematic modes when it comes to enabling LSP
+  (defvar +lsp-ltex-disabled-modes '(org-msg-edit-mode))
+  :config
+  ;; Add doom-docs-mode to LSP language IDs
+  (add-to-list 'lsp-language-id-configuration '(doom-docs-org-mode . "org"))
+  :init
+  (setq lsp-ltex-check-frequency "save"
+        lsp-ltex-log-level "warning" ;; No need to log everything
+        lsp-ltex-diagnostic-severity "warning"
+        lsp-ltex-enabled ["bibtex" "context" "context.tex"
+                          "html" "latex" "markdown" "org"
+                          "restructuredtext" "rsweave"]
+        ;; Path in which, interactively added words and rules will be stored.
+        lsp-ltex-user-rules-path (expand-file-name "lsp-ltex" doom-data-dir))
+
+  ;; When n-gram data sets are available, use them to detect errors with words
+  ;; that are often confused (like their and there).
+  (when (file-directory-p "/usr/share/ngrams")
+    (setq lsp-ltex-additional-rules-language-model "/usr/share/ngrams"))
+
+  (defun +lsp-ltex-setup ()
+    "Load LTeX LSP server."
+    (interactive)
+    (require 'lsp-ltex)
+    (when (and (+lsp-ltex--enabled-p)
+               (not (memq major-mode +lsp-ltex-disabled-modes)))
+      (lsp-deferred)))
+
+  (defun +lsp-ltex--enabled-p ()
+    (not (memq 'ltex-ls lsp-disabled-clients)))
+
+  (defun +lsp-ltex-enable ()
+    "Enable LTeX LSP for the current buffer."
+    (interactive)
+    (unless (+lsp-ltex--enabled-p)
+      (setq-local lsp-disabled-clients (delq 'ltex-ls lsp-disabled-clients))
+      (message "Enabled ltex-ls"))
+    (+lsp-ltex-setup))
+
+  (defun +lsp-ltex-disable ()
+    "Disable LTeX LSP for the current buffer."
+    (interactive)
+    (when (+lsp-ltex--enabled-p)
+      (setq-local lsp-disabled-clients (cons 'ltex-ls lsp-disabled-clients))
+      (lsp-disconnect)
+      (message "Disabled ltex-ls")))
+
+  (defun +lsp-ltex-toggle ()
+    "Toggle LTeX LSP for the current buffer."
+    (interactive)
+    (if (+lsp-ltex--enabled-p)
+        (+lsp-ltex-disable)
+      (+lsp-ltex-enable)))
+
+  (map! :localleader
+        :map (text-mode-map latex-mode-map LaTeX-mode-map org-mode-map markdown-mode-map)
+        :desc "Toggle grammar check" "G" #'+lsp-ltex-toggle))
+
+
+
+;; (after! flycheck
+;;   (flycheck-define-checker proselint
+;;     "A linter for prose."
+;;     :command ("proselint" source-inplace)
+;;     :error-patterns
+;;     ((warning line-start (file-name) ":" line ":" column ": "
+;;               (id (one-or-more (not (any " "))))
+;;               (message) line-end))
+;;     :modes (latex-mode)))
+
+
+;; (use-package! lsp-grammarly
+;;   :commands (+lsp-grammarly-load +lsp-grammarly-toggle)
+;;   :init
+;;   (defun +lsp-grammarly-load ()
+;;     "Load Grammarly LSP server for LSP Mode."
+;;     (interactive)
+;;     (require 'lsp-grammarly)
+;;     (lsp-deferred)) ;; or (lsp)
+
+;;   (defun +lsp-grammarly-enabled-p ()
+;;     (not (member 'grammarly-ls lsp-disabled-clients)))
+
+;;   (defun +lsp-grammarly-enable ()
+;;     "Enable Grammarly LSP."
+;;     (interactive)
+;;     (when (not (+lsp-grammarly-enabled-p))
+;;       (setq lsp-disabled-clients (remove 'grammarly-ls lsp-disabled-clients))
+;;       (message "Enabled grammarly-ls"))
+;;     (+lsp-grammarly-load))
+
+;;   (defun +lsp-grammarly-disable ()
+;;     "Disable Grammarly LSP."
+;;     (interactive)
+;;     (when (+lsp-grammarly-enabled-p)
+;;       (add-to-list 'lsp-disabled-clients 'grammarly-ls)
+;;       (lsp-disconnect)
+;;       (message "Disabled grammarly-ls")))
+
+;;   (defun +lsp-grammarly-toggle ()
+;;     "Enable/disable Grammarly LSP."
+;;     (interactive)
+;;     (if (+lsp-grammarly-enabled-p)
+;;         (+lsp-grammarly-disable)
+;;       (+lsp-grammarly-enable)))
+
+;;   ;; (after! lsp-mode
+;;   ;;   ;; Disable by default
+;;   ;;   (add-to-list 'lsp-disabled-clients 'grammarly-ls))
+
+;;   :config
+;;   (set-lsp-priority! 'grammarly-ls 1))
+
+;; (use-package flycheck
+;;   :config
+;;   (flycheck-add-mode 'proselint 'latex-mode)
+;;   (flycheck-add-next-checker 'lsp 'proselint))
+
+;; (add-to-list 'flycheck-checkers 'proselint)
+;; (flycheck-add-next-checker 'lsp 'proselint)
+
+;; (with-eval-after-load 'flycheck
+;;   (flycheck-grammarly-setup))
+;; (use-package flycheck-grammarly
+;;   :ensure t
+;;   :hook (LaTeX-mode . flymake-grammarly-load
+;;                        (require 'flycheck-grammarly)
+;;                        (lsp)))  ; or lsp-deferred
 
 ;; ;; Isabelle setup
 ;; (use-package! isar-mode
@@ -256,10 +398,6 @@
                        (apply fn args)))
 
             (advice-add #'evil-motion-range :around #'~/evil-motion-range--wrapper)
-
-
-;; fortran lsp
-(add-hook 'f90-mode-hook 'lsp)
 
 
 (use-package! disaster

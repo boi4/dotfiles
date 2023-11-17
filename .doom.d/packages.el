@@ -70,6 +70,13 @@
 (package! sphinx-doc)
 (package! night-owl-theme)
 
+(package! lsp-grammarly)
+;; (package! flycheck-grammarly)
+
+(package! lsp-ltex)
+
+(package! clipetty)
+
 
 (package! openai
   :recipe (:host github :repo "emacs-openai/openai"))
@@ -77,3 +84,4 @@
   :recipe (:host github :repo "emacs-openai/codegpt"))
 (package! chatgpt
   :recipe (:host github :repo "emacs-openai/chatgpt"))
+
