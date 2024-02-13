@@ -1,8 +1,9 @@
 export PATH=$HOME/.local/bin:$PATH
 
-if command -v emacsclient > /dev/null && [ -d "$HOME/.doom.d" ]; then
-  export VISUAL="emacsclient -a '' --c"
-elif command -v nvim > /dev/null ; then
+#if command -v emacsclient > /dev/null && [ -d "$HOME/.doom.d" ]; then
+#  export VISUAL="emacsclient -a '' --c"
+#elif command -v nvim > /dev/null ; then
+if command -v nvim > /dev/null ; then
   export VISUAL="nvim"
 else
   export VISUAL="vim"
@@ -11,6 +12,8 @@ export EDITOR="$VISUAL"
 
 if [ "$(hostnamectl hostname)" = torbus ]; then
 	source "${ZDOTDIR:-${HOME}/.config/zsh}"/desktop
+else
+	export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR}/ssh-agent.socket"
 fi
 
 

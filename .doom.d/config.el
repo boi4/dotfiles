@@ -49,6 +49,8 @@
 
 (load "~/.doom.d/latex.el")
 
+(setq +latex-viewers '(zathura))
+
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type t)
@@ -70,11 +72,11 @@
               ("C-<tab>" . 'copilot-accept-completion-by-word)))
 
 ;; openai config
-;; (setq codegpt-tunnel 'chat            ; The default is 'completion
-;;       codegpt-model "gpt-4")  ; You can pick any model you want!
-;; (setq chatgpt-model "gpt-4")  ; You can pick any model you want!
 (setq codegpt-tunnel 'chat            ; The default is 'completion
-      codegpt-model "gpt-3.5-turbo")
+      codegpt-model "gpt-4")  ; You can pick any model you want!
+;; (setq chatgpt-model "gpt-4")  ; You can pick any model you want!
+;; (setq codegpt-tunnel 'chat            ; The default is 'completion
+;;       codegpt-model "gpt-3.5-turbo")
 (setq chatgpt-model "gpt-4")  ; You can pick any model you want!
 (map! :leader
       :v "ll" 'codegpt)
