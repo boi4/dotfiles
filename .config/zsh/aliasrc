@@ -20,7 +20,7 @@ command -v pydocwrapper.py >/dev/null && alias pydoc=pydocwrapper.py
 alias rm='rm -I'
 
 # change config locations
-alias tmux='tmux -f ~/.config/tmux/tmux.conf'
+#alias tmux='tmux -f ~/.config/tmux/tmux.conf'
 alias weechat='weechat -d '"$XDG_CONFIG_HOME"'/weechat'
 alias mitmproxy="mitmproxy --set confdir=$XDG_CONFIG_HOME/mitmproxy"
 #alias sqlite3='sqlite3 -init "$XDG_CONFIG_HOME"/sqlite3/sqliterc'
@@ -43,7 +43,7 @@ alias python='python3'
 
 
 # new commands
-alias pycalc="ipython --no-banner --no-confirm-exit --classic -c 'from math import *' -i"
+alias pycalc="ipython --no-banner --no-confirm-exit --classic -c 'from math import *; import numpy as np; import matplotlib.pyplot as plt' -i"
 function manpdf {
 	man -t $1 | ps2pdf - - #| zathura -
 }
@@ -89,7 +89,7 @@ alias wgetagent=wget --user-agent=" Mozilla/5.0 (Windows NT 10.0; Win64; x64) Ap
 
 # cookies
 alias wgetcook='wget  --header="Accept: text/html" --user-agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:21.0) Gecko/20100101 Firefox/21.0" --load-cookies <(export_cookies.sh | grep -v dkb)' #https://superuser.com/questions/666167/how-do-i-use-firefox-cookies-with-wget
-alias ylcook='yt-dlp --cookies-from-browser firefox:9kc4dbg1.default'
+alias ylcook='yt-dlp --cookies-from-browser firefox'
 alias mpvcook='mpv --cookies --cookies-file=<(export_cookies.sh) --ytdl-raw-options=cookies=<(export_cookies.sh)'
 
 
@@ -107,7 +107,8 @@ alias deutsch='trans -t de'
 alias polnisch='trans -t pl'
 alias französisch='trans -t fr'
 alias franz='französisch'
-alias xs='xsel -b'
+#alias xs='xsel -b'
+alias xs='wl-copy'
 alias dfh='df -h -x tmpfs'
 
 alias tt='tmux a -t `tmux list-sessions | fzf --layout=reverse | cut -d: -f 1`'
@@ -243,3 +244,7 @@ function venvactivate () {
 	done
     rehash
 }
+
+
+
+

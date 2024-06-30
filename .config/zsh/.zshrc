@@ -2,7 +2,7 @@
 ZSHSCRIPTS=${ZDOTDIR:-${HOME}/.config/zsh}
 mods=(parameter complist deltochar mathfunc)
 lazymods=(stat)
-funcs=(ranger-cd man d activate-freesurfer activate-conda activate-fsl)
+funcs=(ranger-cd man d lm reclist cert-san)
 
 HISTFILE="${HOME}/.history"
 HISTSIZE=100000
@@ -64,7 +64,17 @@ if [[ -r ${ZDOTDIR:-${HOME}}/aliasrc ]]; then
   . ${ZDOTDIR:-${HOME}}/aliasrc
 fi
 
-
 # pacman install rehash hook
 TRAPUSR1() { rehash }
+
+# load optional zsh scripts
+zshrc_d_dir=~/.config/zsh/zshrc.d
+if [ -d "$zshrc_d_dir" ]; then
+  for script in "$zshrc_d_dir"/*; do
+    if [ -f "$script" ]; then
+      source "$script"
+    fi
+  done
+fi
+
 #zprof

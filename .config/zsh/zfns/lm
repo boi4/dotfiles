@@ -1,0 +1,6 @@
+# -*- mode: shell-script; -*-
+# vim:filetype=zsh
+
+function lm {
+    llm --no-stream "$@"
+}
