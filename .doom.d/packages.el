@@ -49,39 +49,39 @@
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;(unpin! t)
 
-(package! copilot
-  :recipe (:host github :repo "zerolfx/copilot.el" :files ("*.el" "dist")))
+;; (package! copilot
+  ;; :recipe (:host github :repo "zerolfx/copilot.el" :files ("*.el" "dist")))
 
 
-(package! isar-mode
-   :recipe (:local-repo "~/src/isar-mode/"))
-
-(package! isar-goal-mode
-   :recipe (:local-repo "~/src/isar-mode/"))
-
-(package! lsp-isar
-   :recipe (:local-repo "~/src/isabelle-emacs/src/Tools/emacs-lsp/lsp-isar/"))
-
-(package! lsp-isar-parse-args
-   :recipe (:local-repo "~/src/isabelle-emacs/src/Tools/emacs-lsp/lsp-isar/"))
+;; (package! isar-mode
+;;    :recipe (:local-repo "~/src/isar-mode/"))
+;; 
+;; (package! isar-goal-mode
+;;    :recipe (:local-repo "~/src/isar-mode/"))
+;; 
+;; (package! lsp-isar
+;;    :recipe (:local-repo "~/src/isabelle-emacs/src/Tools/emacs-lsp/lsp-isar/"))
+;; 
+;; (package! lsp-isar-parse-args
+;;    :recipe (:local-repo "~/src/isabelle-emacs/src/Tools/emacs-lsp/lsp-isar/"))
 
 (package! session-async)
-
 (package! sphinx-doc)
 (package! night-owl-theme)
+(package! clipetty)
+(package! puppet-mode)
+(package! gptel)
 
-(package! lsp-grammarly)
+;; (package! lsp-grammarly)
 ;; (package! flycheck-grammarly)
 
-(package! lsp-ltex)
-
-(package! clipetty)
+;; (package! lsp-ltex)
 
 
-(package! openai
-  :recipe (:host github :repo "emacs-openai/openai"))
-(package! codegpt
-  :recipe (:host github :repo "emacs-openai/codegpt"))
-(package! chatgpt
-  :recipe (:host github :repo "emacs-openai/chatgpt"))
+;; (package! openai
+;;   :recipe (:host github :repo "emacs-openai/openai"))
+;; (package! codegpt
+;;   :recipe (:host github :repo "emacs-openai/codegpt"))
+;; (package! chatgpt
+;;   :recipe (:host github :repo "emacs-openai/chatgpt"))
 

@@ -4,6 +4,7 @@
 ;; sync' after modifying this file!
 
 
+;; TODO: check if file exists
 (load "~/.doom.d/secrets.el")
 
 
@@ -30,7 +31,7 @@
 ;; (setq doom-font "Source Code Pro Medium")
 (setq doom-font (font-spec :family "Source Code Pro" :size 15 :weight 'normal :slant 'normal)
       doom-serif-font (font-spec :family "Noto Serif" :size: 15 :weight 'normal :slant 'normal)
-      doom-variable-pitch-font (font-spec :family "Comfortaa" :size 15 :weight 'normal :slant 'normal)
+      ;;doom-variable-pitch-font (font-spec :family "Comfortaa" :size 15 :weight 'normal :slant 'normal)
       doom-big-font (font-spec :family "Source Code Pro" :size 24 :weight 'normal :slant 'normal))
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
@@ -44,10 +45,10 @@
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/notes/org/")
+;; (setq org-directory "~/notes/org/")
 
 
-(load "~/.doom.d/latex.el")
+;; (load "~/.doom.d/latex.el")
 
 (setq +latex-viewers '(zathura))
 
@@ -63,23 +64,23 @@
 
 
 ;; accept completion from copilot and fallback to company
-(use-package! copilot
-  :hook (prog-mode . copilot-mode)
-  :bind (:map copilot-completion-map
-              ("<tab>" . 'copilot-accept-completion)
-              ("TAB" . 'copilot-accept-completion)
-              ("C-TAB" . 'copilot-accept-completion-by-word)
-              ("C-<tab>" . 'copilot-accept-completion-by-word)))
+;; (use-package! copilot
+;;   :hook (prog-mode . copilot-mode)
+;;   :bind (:map copilot-completion-map
+;;               ("<tab>" . 'copilot-accept-completion)
+;;               ("TAB" . 'copilot-accept-completion)
+;;               ("C-TAB" . 'copilot-accept-completion-by-word)
+;;               ("C-<tab>" . 'copilot-accept-completion-by-word)))
 
 ;; openai config
-(setq codegpt-tunnel 'chat            ; The default is 'completion
-      codegpt-model "gpt-4")  ; You can pick any model you want!
+;; (setq codegpt-tunnel 'chat            ; The default is 'completion
+;;       codegpt-model "gpt-4")  ; You can pick any model you want!
 ;; (setq chatgpt-model "gpt-4")  ; You can pick any model you want!
 ;; (setq codegpt-tunnel 'chat            ; The default is 'completion
 ;;       codegpt-model "gpt-3.5-turbo")
-(setq chatgpt-model "gpt-4")  ; You can pick any model you want!
-(map! :leader
-      :v "ll" 'codegpt)
+;; (setq chatgpt-model "gpt-4")  ; You can pick any model you want!
+;; (map! :leader
+;;       :v "ll" 'codegpt)
 
 ;; disable jk escape
 (after! evil-escape
@@ -94,9 +95,9 @@
 ;; (map! :leader
 ;;       :n "/" 'comment-or-uncomment-region)
 (map! :leader
-      :v "cl" 'comment-or-uncomment-region)
+      :v "cL" 'comment-or-uncomment-region)
 (map! :leader
-      :n "cl" 'comment-or-uncomment-region)
+      :n "cL" 'comment-or-uncomment-region)
 ;; split
 (map! :leader
       :n "w-" 'evil-window-split)
@@ -155,7 +156,15 @@
 
 ;(call-process "kitty" nil 0 nil)
 ;(call-process "kitty" nil 0 nil)
-
+;
+(use-package! gptel
+ :config
+(setq
+ gptel-model "llama3:latest"
+ gptel-backend (gptel-make-ollama "Ollama"
+                 :host "ollama.fecht.cc"
+                 :stream t
+                 :models '("llama3:latest"))))
 
 
 
@@ -214,70 +223,6 @@
 ;;   (setq lsp-ltex-version "15.2.0"))
 
 
-(use-package! lsp-ltex
-  :commands (+lsp-ltex-toggle
-             +lsp-ltex-enable
-             +lsp-ltex-disable
-             +lsp-ltex-setup)
-  :hook ((latex-mode LaTeX-mode org-mode markdown-mode html-mode bibtex-mode) . #'+lsp-ltex-setup)
-  :init
-  ;; There is some problematic modes when it comes to enabling LSP
-  (defvar +lsp-ltex-disabled-modes '(org-msg-edit-mode))
-  :config
-  ;; Add doom-docs-mode to LSP language IDs
-  (add-to-list 'lsp-language-id-configuration '(doom-docs-org-mode . "org"))
-  :init
-  (setq lsp-ltex-check-frequency "save"
-        lsp-ltex-log-level "warning" ;; No need to log everything
-        lsp-ltex-diagnostic-severity "warning"
-        lsp-ltex-enabled ["bibtex" "context" "context.tex"
-                          "html" "latex" "markdown" "org"
-                          "restructuredtext" "rsweave"]
-        ;; Path in which, interactively added words and rules will be stored.
-        lsp-ltex-user-rules-path (expand-file-name "lsp-ltex" doom-data-dir))
-
-  ;; When n-gram data sets are available, use them to detect errors with words
-  ;; that are often confused (like their and there).
-  (when (file-directory-p "/usr/share/ngrams")
-    (setq lsp-ltex-additional-rules-language-model "/usr/share/ngrams"))
-
-  (defun +lsp-ltex-setup ()
-    "Load LTeX LSP server."
-    (interactive)
-    (require 'lsp-ltex)
-    (when (and (+lsp-ltex--enabled-p)
-               (not (memq major-mode +lsp-ltex-disabled-modes)))
-      (lsp-deferred)))
-
-  (defun +lsp-ltex--enabled-p ()
-    (not (memq 'ltex-ls lsp-disabled-clients)))
-
-  (defun +lsp-ltex-enable ()
-    "Enable LTeX LSP for the current buffer."
-    (interactive)
-    (unless (+lsp-ltex--enabled-p)
-      (setq-local lsp-disabled-clients (delq 'ltex-ls lsp-disabled-clients))
-      (message "Enabled ltex-ls"))
-    (+lsp-ltex-setup))
-
-  (defun +lsp-ltex-disable ()
-    "Disable LTeX LSP for the current buffer."
-    (interactive)
-    (when (+lsp-ltex--enabled-p)
-      (setq-local lsp-disabled-clients (cons 'ltex-ls lsp-disabled-clients))
-      (lsp-disconnect)
-      (message "Disabled ltex-ls")))
-
-  (defun +lsp-ltex-toggle ()
-    "Toggle LTeX LSP for the current buffer."
-    (interactive)
-    (if (+lsp-ltex--enabled-p)
-        (+lsp-ltex-disable)
-      (+lsp-ltex-enable)))
-
-  (map! :localleader
-        :map (text-mode-map latex-mode-map LaTeX-mode-map org-mode-map markdown-mode-map)
-        :desc "Toggle grammar check" "G" #'+lsp-ltex-toggle))
 
 
 
@@ -414,3 +359,14 @@
 ;; (setq disaster-objdump (concat disaster-objdump " -M intel"))
 ;; (map! :localleader
 ;;       :v "d" 'disaster)
+
+
+
+;; load further scripts from additional.d
+(let ((additional-dir (expand-file-name "~/.doom.d/additional.d")))
+  ;; Check if the directory exists
+  (when (file-directory-p additional-dir)
+    ;; Iterate over each .el file in the directory
+    (dolist (file (directory-files additional-dir t "\\.el$"))
+      ;; Load the file
+      (load file))))

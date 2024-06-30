@@ -16,6 +16,7 @@
 	visual = !gitk
 	# Allows you to easily pick what to rebase
 	frbi = "!f() { git rebase -i $(git log --pretty=oneline --color=always | fzf --ansi | cut -d ' ' -f1)^ ; }; f"
+	pushf = push --force-with-lease --force-if-includes
 [blame]
 	date = format:'%d.%m.%Y %H:%M:%S'
 [log]

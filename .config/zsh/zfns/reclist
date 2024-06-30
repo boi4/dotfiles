@@ -1,0 +1,8 @@
+function reclist() {
+	echo '```'
+	find "${1:-.}" -type d -name '.git' -prune -o -type f -print0 | while IFS= read -r -d '' file; do
+	 echo "----$file----"
+	 cat "$file"
+	done
+	echo '```'
+}
