@@ -28,8 +28,8 @@ smart_borders on
 font pango:DejaVu Sans Mono 10
 
 # Input Settings
-exec --no-startup-id xinput set-prop 'SynPS/2 Synaptics TouchPad' 'libinput Natural Scrolling Enabled' 1
-exec --no-startup-id xinput set-prop 'DLL0704:01 06CB:76AE Touchpad' 'libinput Natural Scrolling Enabled' 1
+#exec --no-startup-id xinput set-prop 'SynPS/2 Synaptics TouchPad' 'libinput Natural Scrolling Enabled' 1
+#exec --no-startup-id xinput set-prop 'DLL0704:01 06CB:76AE Touchpad' 'libinput Natural Scrolling Enabled' 1
 
 
 
@@ -273,9 +273,9 @@ bindsym $mod+F10 exec monitor_brightness.py set 0
 bindsym $mod+F11 exec monitor_brightness.py set 20
 bindsym $mod+F12 exec monitor_brightness.py set 100
 
-bindsym XF86AudioRaiseVolume exec --no-startup-id ~/prj/i3-volume/volume -N libnotify up 10 -p -n
-bindsym XF86AudioLowerVolume exec --no-startup-id  ~/prj/i3-volume/volume -N libnotify down 10 -p -n
-bindsym XF86AudioMute exec --no-startup-id  ~/prj/i3-volume/volume -N libnotify mute -p -n
+bindsym XF86AudioRaiseVolume exec --no-startup-id i3-volume -N libnotify up 10 -p -n
+bindsym XF86AudioLowerVolume exec --no-startup-id  i3-volume -N libnotify down 10 -p -n
+bindsym XF86AudioMute exec --no-startup-id  i3-volume -N libnotify mute -p -n
 
 
 # Sreen brightness controls
