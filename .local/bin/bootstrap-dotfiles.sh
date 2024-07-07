@@ -128,6 +128,12 @@ function main() {
 
     # Clone miscellaneous repositories
     clone_misc "https://github.com/SL-RU/ranger_udisk_menu" "$HOME/.config/ranger/plugins"
+    clone_misc "https://github.com/cdump/ranger-devicons2" "$HOME/.config/ranger/ranger-devicons2"
+    clone_misc "https://github.com/maximtrp/ranger-archives.git" "$HOME/.config/ranger/ranger-archives"
+    ln -s "ranger-archives/compress.py" "$HOME/.config/ranger/"
+    ln -s "ranger-archives/extract.py" "$HOME/.config/ranger/"
+    touch "$HOME/.config/ranger/__init__.py"
+    
     
     echo ""
     echo "Please update your shell to zsh and add the following to your .zshrc:"
