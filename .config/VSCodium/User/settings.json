@@ -8,6 +8,9 @@
     "[FortranFreeForm]": {
         "editor.rulers": [132]
     },
-    "terminal.external.linuxExec": "kitty"
+    "terminal.external.linuxExec": "kitty",
+    "extensions.experimental.affinity": {
+        "asvetliakov.vscode-neovim": 1
+    }
     
 }
