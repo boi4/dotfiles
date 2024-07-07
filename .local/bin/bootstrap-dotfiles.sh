@@ -103,6 +103,20 @@ function checkout_files() {
     process_files
 }
 
+# Clone miscellaneous repositories
+function clone_misc() {
+    local repo_url=$1
+    local dest_dir=$2
+    
+    if [ ! -d "$dest_dir" ] || [ -z "$(ls -A "$dest_dir")" ]; then
+        echo "Cloning $repo_url into $dest_dir..."
+        mkdir -p "$dest_dir"
+        git clone "$repo_url" "$dest_dir"
+    else
+        echo "$dest_dir already exists and is not empty."
+    fi
+}
+
 # Main function
 function main() {
     if [ ! -d "$repo_dir" ]; then
@@ -112,6 +126,9 @@ function main() {
         echo "$repo_dir already exists. Please remove it if you want to re-initialize."
     fi
 
+    # Clone miscellaneous repositories
+    clone_misc "https://github.com/SL-RU/ranger_udisk_menu" "$HOME/.config/ranger/plugins"
+    
     echo ""
     echo "Please update your shell to zsh and add the following to your .zshrc:"
     echo "alias dotf='git --git-dir=$repo_dir --work-tree=$HOME'"
