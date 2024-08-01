@@ -37,7 +37,6 @@ alias sqlite=sqlite3
 alias python='python3'
 
 
-
 #command -v codium >/dev/null && alias code=codium
 #command -v hub>/dev/null && alias git=hub
 
@@ -88,9 +87,11 @@ alias wgetreg='wget --recursive --no-parent --continue --accept-regex'
 alias wgetagent=wget --user-agent=" Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
 
 # cookies
-alias wgetcook='wget  --header="Accept: text/html" --user-agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:21.0) Gecko/20100101 Firefox/21.0" --load-cookies <(export_cookies.sh | grep -v dkb)' #https://superuser.com/questions/666167/how-do-i-use-firefox-cookies-with-wget
+alias wgetcook='wget --user-agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:21.0) Gecko/20100101 Firefox/21.0" --load-cookies <(export_cookies.sh | grep -v dkb)' #https://superuser.com/questions/666167/how-do-i-use-firefox-cookies-with-wget
 alias ylcook='yt-dlp --cookies-from-browser firefox'
 alias mpvcook='mpv --cookies --cookies-file=<(export_cookies.sh) --ytdl-raw-options=cookies=<(export_cookies.sh)'
+alias curlcook='curl -A "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:21.0) Gecko/20100101 Firefox/21.0" -b <(export_cookies.sh | grep -v dkb)'
+
 
 
 
@@ -206,6 +207,14 @@ alias gencrypthash="python3 -c 'import crypt, getpass; print(crypt.crypt(getpass
 
 alias pingd='ping $(ip --color=never route show default | cut -d " " -f 3)'
 
+
+
+
+
+
+
+
+
 funcion vimwhich() {
 	vim $(which $1)
 }
@@ -248,3 +257,8 @@ function venvactivate () {
 
 
 
+function pdfterm() {
+  local temp_file="/tmp/$(basename "$1").png"
+
+  convert -density 500 "$1""[0]" -resize 80% -format jpg "$temp_file" && kitty +kitten icat "$temp_file"
+}
