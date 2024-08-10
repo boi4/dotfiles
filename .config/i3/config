@@ -70,7 +70,8 @@ bar {
     #font pango:DejaVu Sans Mono Nerd Font 10
     position top
     #status_command i3status-rs ~/.config/i3status-rust/config.toml
-    status_command i3status-wrapper.py ~/.config/i3status-rust/config.toml
+    #status_command i3status-wrapper.py ~/.config/i3status-rust/config.toml
+    status_command i3status
     #status_command i3status
     i3bar_command i3bar -t
     height 23
@@ -173,7 +174,7 @@ bindsym $mod+i exec --no-startup-id $TERMINAL htop
 bindsym $mod+Shift+i exec --no-startup-id "bash ~/.config/i3/i3resize up"
 
 
-#bindsym $mod+o
+bindsym $mod+o exec --no-startup-id obsidian-vault-chooser.py
 bindsym $mod+Shift+o exec --no-startup-id "bash ~/.config/i3/i3resize right"
 
 
@@ -244,13 +245,15 @@ bindsym $mod+Shift+period exec ~/.local/bin/lock.sh screenshot
 
 
 # screenshots
-bindsym --release Print exec --no-startup-id "scrot '/home/fecht/pix/screens/%Y-%m-%d-%h-%m-%s_$wx$h.png' -a  $(slop -f '%x,%y,%w,%h') -e 'xclip -selection clipboard -t image/png -i $f'"
+bindsym --release Print exec --no-startup-id "scrot '/home/fecht/pix/screens/%Y-%m-%d-%h-%m-%s_$wx$h.png' -a  $(slop -f '%x,%y,%w,%h') -e 'xclip -selection clipboard -t image/png < $f'"
 #bindsym --release Print exec --no-startup-id "scrot '/home/fecht/pix/screens/%Y-%m-%d-%h-%m-%s_$wx$h.png'"
 #bindsym --release Print exec --no-startup-id "scrot '/home/fecht/pix/screens/%Y-%m-%d-%h-%m-%s_$wx$h.png' -s -e 'xclip -selection clipboard -t image/png -i $f'"
 bindsym --release $mod+Print exec --no-startup-id screenshot_edit.sh
 bindsym --release Shift+Print exec --no-startup-id "scrot '/home/fecht/pix/screens/%Y-%m-%d-%h-%m-%s_$wx$h.png'"
 bindsym --release $mod+Shift+Print exec --no-startup-id /home/fecht/.local/bin/snipaste.sh
 
+
+bindsym $mod+colon exec --no-startup-id ~/.local/bin/lithuanian_letters.sh
 
 bindsym $mod+Return exec --no-startup-id $TERMINAL
 bindsym $mod+Shift+Return exec $TERMINAL --directory "$(xcwd)"
