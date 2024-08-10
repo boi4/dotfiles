@@ -68,7 +68,7 @@ bar {
     font pango:DejaVu Sans Mono, FontAwesome 10
     #font pango:DejaVu Sans Mono Nerd Font, FontAwesome5Free, FontAwesome5Brands 10
     #font pango:DejaVu Sans Mono Nerd Font 10
-    position top
+    position bottom
     #status_command i3status-rs ~/.config/i3status-rust/config.toml
     #status_command i3status-wrapper.py ~/.config/i3status-rust/config.toml
     status_command i3status
