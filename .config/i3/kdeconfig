@@ -56,6 +56,9 @@ gaps outer 0
 # compositor
 exec --no-startup-id picom -b
 
+# clipboard manager
+#exec --no-startup-id greenclib daemon
+
 # tray
 #exec --no-startup-id nm-applet
 #exec --no-startup-id redshift-gtk -l 51.0:2.6
@@ -124,12 +127,13 @@ bindsym $mod+q kill
 bindsym $mod+Shift+q kill
 
 
-#bindsym $mod+w
+bindsym $mod+w exec tv.py
 bindsym $mod+Shift+w exec vbox_dmenu.sh
 
 
 #bindsym $mod+e exec emacsclient -c -a \"\"
-bindsym $mod+e exec --no-startup-id rofi -modi emoji -show emoji
+#bindsym $mod+e exec --no-startup-id rofi -modi emoji -show emoji
+bindsym $mod+e exec --no-startup-id rofimoji
 # kde logout confirmation
 bindsym $mod+Shift+e exec --no-startup-id qdbus org.kde.ksmserver /KSMServer org.kde.KSMServerInterface.logout -1 -1 -1
 #bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
@@ -152,10 +156,11 @@ bindsym $mod+Shift+u exec --no-startup-id "bash ~/.config/i3/i3resize down"
 
 
 bindsym $mod+i exec --no-startup-id $TERMINAL htop
+#bindsym $mod+i exec --no-startup-id missioncenter
 bindsym $mod+Shift+i exec --no-startup-id "bash ~/.config/i3/i3resize up"
 
 
-#bindsym $mod+o
+bindsym $mod+o exec --no-startup-id obsidian-vault-chooser.py
 bindsym $mod+Shift+o exec --no-startup-id "bash ~/.config/i3/i3resize right"
 
 
@@ -192,7 +197,8 @@ bindsym $mod+z bar mode toggle
 #bindsym $mod+Shift+x
 
 
-bindsym $mod+c exec cheatsheetdmenu.sh
+bindsym $mod+c --release exec --no-startup-id ~/.local/bin/ocr_clipboard.sh
+#bindsym $mod+c exec cheatsheetdmenu.sh
 bindsym $mod+Shift+c exec tex-match
 
 
