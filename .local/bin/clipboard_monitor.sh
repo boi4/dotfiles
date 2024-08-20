@@ -10,9 +10,10 @@ while true; do
   if [ "$current_clipboard" != "$previous_clipboard" ]; then
     processed_clipboard=$(echo -n "$current_clipboard" | clipboard_filter.py)
 
+    echo "$processed_clipboard" | wl-copy
     if [ "$current_clipboard" != "$processed_clipboard" ]; then
 	    # Set the processed text back to the clipboard
-	    echo "$processed_clipboard" | wl-copy
+	    #echo "$processed_clipboard" | wl-copy
 	    notify-send "Clipboard was filtered"
     fi
 

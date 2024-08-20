@@ -189,6 +189,8 @@
 (remove-hook 'doom-first-buffer-hook #'smartparens-global-mode)
 
 
+(after! ruby-mode
+  (setq ruby-indent-level 2))
 
 ;; ; sphinx doc
 (use-package! sphinx-doc

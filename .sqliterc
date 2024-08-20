@@ -1,0 +1,9 @@
+.mode line
+.headers on
+.prompt '> '
+.output stdout
+.timer on
+.headers on
+.mode column
+.timer on
+.changes on

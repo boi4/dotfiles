@@ -1,3 +1,4 @@
+# -*- mode: conf-mode -*-
 # i3 config file (v4)
 # by Jan Fecht
 
@@ -44,6 +45,9 @@ font pango:DejaVu Sans Mono 10
 
 
 default_orientation auto
+focus_follows_mouse yes
+mouse_warping output
+popup_during_fullscreen smart
 
 
 # gaps settings
@@ -135,7 +139,7 @@ bindsym $mod+Shift+w exec vbox_dmenu.sh
 #bindsym $mod+e exec --no-startup-id rofi -modi emoji -show emoji
 bindsym $mod+e exec --no-startup-id rofimoji
 # kde logout confirmation
-bindsym $mod+Shift+e exec --no-startup-id qdbus org.kde.ksmserver /KSMServer org.kde.KSMServerInterface.logout -1 -1 -1
+#bindsym $mod+Shift+e exec --no-startup-id qdbus org.kde.ksmserver /KSMServer org.kde.KSMServerInterface.logout -1 -1 -1
 #bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 
 
@@ -174,15 +178,17 @@ bindsym $mod+a focus parent
 bindsym $mod+Shift+a focus child
 
 
-bindsym $mod+s gaps inner current plus 5
-bindsym $mod+Shift+s gaps inner current minus 5
+bindsym $mod+s exec ~/src/ops/scripts/venv/bin/python3 ~/src/ops/dco/dco-scripts/server_chooser/server_chooser.py
+# bindsym $mod+s gaps inner current plus 5
+# bindsym $mod+Shift+s gaps inner current minus 5
 
 # bindsym $mod+d exec dmenu_run
 bindsym $mod+d exec --no-startup-id $Menu4
 bindsym $mod+Shift+d exec --no-startup-id $Menu3
 
 bindsym $mod+f fullscreen toggle
-bindsym $mod+Shift+f exec --no-startup-id "display-setting-chooser.sh; /home/fecht/.fehbg"
+#bindsym $mod+Shift+f exec --no-startup-id "display-setting-chooser.sh; /home/fecht/.fehbg"
+bindsym $mod+Shift+f exec --no-startup-id rofi -show bookmarks
 
 
 bindsym $mod+g gaps inner current set 15; gaps outer current set 15
@@ -216,8 +222,9 @@ bindsym $mod+b split h
 #bindsym $mod+Shift+n exec --no-startup-id xinput --enable 'DLL0704:01 06CB:76AE Touchpad'
 
 
-#bindsym $mod+m
-#bindsym $mod+Shift+m
+
+bindsym --release $mod+m         exec --no-startup-id toggle_mute_zoom.sh
+bindsym --release $mod+Shift+m   exec --no-startup-id toggle_mute_zoom.sh --camera
 
 
 
@@ -234,18 +241,12 @@ bindsym $mod+b split h
 #bindsym $mod+Shift+Tab
 
 
-# screenshots
-#bindsym --release Print exec --no-startup-id "scrot '/home/fecht/pix/screens/%Y-%m-%d-%h-%m-%s_$wx$h.png' -s -e 'xclip -selection clipboard -t image/png -i $f'"
-#bindsym --release $mod+Print exec --no-startup-id screenshot_edit.sh
-#bindsym --release Shift+Print exec --no-startup-id "scrot '/home/fecht/pix/screens/%Y-%m-%d-%h-%m-%s_$wx$h.png'"
-#bindsym --release $mod+Shift+Print exec --no-startup-id /home/fecht/.local/bin/snipaste.sh
-# TODO: migrate kde shortcuts to qdbus commands here
-
 
 bindsym $mod+Return exec --no-startup-id $TERMINAL
 bindsym $mod+Shift+Return exec $TERMINAL --directory "$(xcwd)"
 
-bindsym $mod+BackSpace exec --no-startup-id qdbus-qt5 org.kde.ksmserver /KSMServer org.kde.KSMServerInterface.logout -1 -1 -1
+#bindsym $mod+BackSpace exec --no-startup-id qdbus-qt5 org.kde.ksmserver /KSMServer org.kde.KSMServerInterface.logout -1 -1 -1
+bindsym $mod+BackSpace exec --no-startup-id qdbus-qt5 org.kde.LogoutPrompt /LogoutPrompt org.kde.LogoutPrompt.promptLogout
 #bindsym $mod+BackSpace
 
 
@@ -282,13 +283,22 @@ bindsym XF86AudioPrev exec playerctl previous
 
 
 
-no_focus [window_role="pop-up"]
+
+
+
+
+
 
 
 # KDE
 #for_window [title="Desktop — Plasma"] kill, floating enable, border none
 #for_window [title="^Desktop — Plasma$"] move scratchpad, floating enable, border none
 #for_window [title="^Desktop — Plasma$"] kill
+
+
+
+
+# To add new panel: comment block below, re-login, right click one of the new windows
 for_window [title="^Desktop @ QRect.*"] kill
 for_window [class="^Plasma$"] floating enable, border none
 for_window [title="^plasma-desktop$"] floating enable, border none
@@ -297,22 +307,29 @@ for_window [class="^Kmix$"] floating enable, border none
 for_window [class="^Klipper$"] floating enable, border none
 for_window [class="^Plasmoidviewer$"] floating enable, border none
 for_window [class="^plasmashell$"] floating enable;
+for_window [class="plasmashell" window_type="notification"] border none
+for_window [class="plasmashell" window_type="notification"] border none, move position 70 ppt 81 ppt
+no_focus [class="plasmashell" window_type="notification"]
+no_focus [title="plasmashell" window_type="notification"]
+no_focus [class="plasmashell" window_role="pop-up"]
+no_focus [class="plasmashell"]
+no_focus [title="plasmashell"]
+for_window [class="plasmashell" window_type="notification"] floating enable; border none; no_focus
 
-# notification fixes plasma
-# no_focus [class="plasmashell" window_type="notification"]
+
+# notification fixes plasma doesn't work
+no_focus [class="plasmashell" window_type="notification"]
+# no_focus [window_role="pop-up"]
+# for_window [window_role="pop-up"] floating enable
+# for_window [window_role="task_dialog"] floating enable
 
 
-for_window [window_role="pop-up"] floating enable
-for_window [window_role="task_dialog"] floating enable
 
 for_window [class="yakuake"] floating enable
 #for_window [class="systemsettings"] floating enable
 for_window [title="win7"] floating enable; border none
 #for_window [class="(?i)*nextcloud*"] floating disable
 for_window [class=".*nextcloud.*"] floating disable
-for_window [class="plasmashell" window_type="notification"] border none
-no_focus [class="plasmashell" window_type="notification"]
-for_window [class="plasmashell" window_type="notification"] border none, move position 70 ppt 81 ppt
 
 for_window [instance="ida64.exe"] floating enable
 for_window [instance="ida.exe"] floating enable
@@ -351,37 +368,85 @@ for_window [class="Anki" title="Einstellungen"] floating enable
 
 
 
+#for_window [title="zoom" class="zoom"] kill # dangerous?
+for_window [title="zoom" class="zoom"] move scratchpad
+#3for_window [title="^zoom$"] kill # dangerous?
+#for_window [class="(.*join\?action\=join.*|.*zoom.*)" title="^[^t][^i][^n][^g]$"] move scratchpad
+
+no_focus [class="slack"]
+
+for_window [title="Zoom - Licensed Account"] floating disable
+for_window [title="Breakout Rooms.*"] floating enable
+no_focus [title="Zoom - Licensed Account"]
+no_focus [title="Breakout Rooms.*"]
+for_window [window_role="pop-up"] floating enable
+for_window [window_role="task_dialog"] floating enable
+
+#for_window [class="(.*join\?action\=join.*|.*zoom.*)" title="Zoom Meeting"] floating disable no_focus
+#for_window [class="zoom"] no_focus [all]
+
+
+
+
+
+### STARTUP AND WORKSPACE ASSIGNMENT
+
+
 
 # wallpaper
 #exec --no-startup-id python3 ~/prj/dynwalls/dynwalls update
-exec --no-startup-id timewall set
-exec --no-startup-id systemctl --user start timewall
+#exec --no-startup-id timewall set
+#exec --no-startup-id systemctl --user start timewall
+exec --no-startup-id ~/.fehbg
 
 
-workspace 1 output primary
-workspace 2 output primary
-workspace 3 output DP-1
-workspace 4 output DP-1
-workspace 5 output DP-1
-workspace 6 output DP-1
-workspace 7 output DP-1
-workspace 8 output DP-1
-workspace 9 output DP-1
-workspace 10 output DP-1
+#workspace 1 output primary
+#workspace 2 output HDMI-1
+#workspace 3 output DP-1
+#workspace 4 output DP-1
+#workspace 5 output DP-1
+#workspace 6 output DP-1
+#workspace 7 output DP-1
+#workspace 8 output DP-1
+#workspace 9 output DP-1
+#workspace 10 output DP-1
+workspace 1 output eDP-1
+workspace 2 output DP-2
+workspace 3 output DP-2
+workspace 4 output DP-2
+workspace 5 output DP-2
+workspace 6 output DP-2
+workspace 7 output DP-2
+workspace 8 output DP-2
+workspace 9 output DP-2
+workspace 10 output DP-2
+# assign [class="^URxvt$"] 2
+
+exec --no-startup-id 1password --silent
+#exec zoom-start-in-tray
+exec --no-startup-id i3-msg 'workspace 2; exec firefox-developer-edition -p "Default User"'
+exec --no-startup-id i3-msg 'workspace 10; exec slack'
+# exec --no-startup-id i3-msg 'workspace 1; exec obsidian'
+exec --no-startup-id i3-msg 'workspace 2'
+
+
+
+
 #for_window [class="^element$"] floating disable # why is it floating???
 #exec --no-startup-id i3-msg 'workspace 10; exec element-desktop'
 
-# start communication apps on the right monitor
+
+
+
+# old startup stuff
 #exec --no-startup-id i3-msg 'workspace 10; exec thunderbird'
-#exec --no-startup-id i3-msg 'workspace 10; exec whatsapp-nativefier'
-#exec --no-startup-id i3-msg 'workspace 10; exec element-desktop'
-exec setsid wslaunch.sh -w 10 -e thunderbird
-exec setsid wslaunch.sh -w 10 -e whatsapp-nativefier
-#exec setsid wslaunch.sh -w 10 -e element-desktop
-
-exec setsid wslaunch.sh -w 2 -e "firefox-developer-edition -p dev-edition-default"
-#exec --no-startup-id i3-msg 'workspace 2; exec firefox-developer-edition -p dev-edition-default'
-
+#exec setsid wslaunch.sh -w 1 -e obsidian
+#exec setsid wslaunch.sh -w 9 -e slack
+#exec obsidian
+#exec slack
+##exec setsid wslaunch.sh -w 10 -e zoom-start-in-tray
+#exec --no-startup-id i3-msg 'workspace 2; exec firefox-developer-edition'
 #workspace 3 output DP-1
 #exec --no-startup-id i3-msg 'workspace 3; workspace 2'
-
+# not sure if this is necessary
+#exec --no-startup-id /usr/lib/pam_kwallet_init

@@ -1,15 +1,26 @@
+[include]
+    path = user_config
 [advice]
 	statusHints = true
-[user]
-	email = mail@fecht.cc
-	name = Jan Fecht
 [commit]
 	template = ~/.config/git/commit_template
 	verbose = true
+[init]
+        defaultBranch = main
+[branch "master"]
+        rebase = true
+[branch "main"]
+        rebase = true
+[push]
+        autoSetupRemote = true
 [status]
 	short = true
 	branch = true
 	showUntrackedFiles = all
+[rebase]
+        autoStash = true
+[core]
+        editor = vim
 [alias]
 	last = cat-file commit HEAD
 	unstage = reset HEAD --
@@ -17,6 +28,7 @@
 	# Allows you to easily pick what to rebase
 	frbi = "!f() { git rebase -i $(git log --pretty=oneline --color=always | fzf --ansi | cut -d ' ' -f1)^ ; }; f"
 	pushf = push --force-with-lease --force-if-includes
+	pushfwl = push --force-with-lease
 [blame]
 	date = format:'%d.%m.%Y %H:%M:%S'
 [log]
