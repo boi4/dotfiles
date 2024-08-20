@@ -90,6 +90,7 @@ if __name__ == "__main__":
         cleaned_text = filter_zsh_unhappy(input_text)
         if input_text != cleaned_text:
             print("filtered zsh unhappy", file=sys.stderr)
-
         # Print the cleaned text to stdout
         sys.stdout.write(cleaned_text)
+    else:
+        sys.stdout.write(input_text)
