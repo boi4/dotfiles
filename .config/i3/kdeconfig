@@ -424,7 +424,7 @@ workspace 10 output DP-2
 
 exec --no-startup-id 1password --silent
 #exec zoom-start-in-tray
-exec --no-startup-id i3-msg 'workspace 2; exec firefox-developer-edition -p "Default User"'
+exec --no-startup-id i3-msg 'workspace 2; exec firefox-developer-edition'
 exec --no-startup-id i3-msg 'workspace 10; exec slack'
 # exec --no-startup-id i3-msg 'workspace 1; exec obsidian'
 exec --no-startup-id i3-msg 'workspace 2'
