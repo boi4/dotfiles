@@ -425,7 +425,8 @@ function prompt_grml_precmd () {
     local grmltheme=grml
     local -a left_items right_items
     left_items=(rc change-root user at host path vcs percent)
-    right_items=(sad-smiley)
+    #right_items=(sad-smiley)
+    right_items=()
 
     prompt_grml_precmd_worker
 }
@@ -446,7 +447,8 @@ function prompt_grml-large_precmd () {
     local -a left_items right_items
     left_items=(rc jobs history shell-level change-root time date newline
                 user at host path vcs percent)
-    right_items=(sad-smiley)
+    #right_items=(sad-smiley)
+    right_items=()
 
     prompt_grml_precmd_worker
 }
