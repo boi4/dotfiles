@@ -263,6 +263,34 @@ function pdfterm() {
 
   convert -density 500 "$1""[0]" -resize 80% -format jpg "$temp_file" && kitty +kitten icat "$temp_file"
 }
-
 alias hermes="docker exec -it -u 1000:1000 hermes_agent /opt/hermes/.venv/bin/hermes"
 alias hsh="docker exec -it -u 1000:1000 hermes_agent /bin/bash"
+
+
+# nice colors in man
+man () {
+	env LESS_TERMCAP_mb=$(printf "\e[1;31m") LESS_TERMCAP_md=$(printf "\e[1;38;5;208m") LESS_TERMCAP_me=$(printf "\e[0m") LESS_TERMCAP_se=$(printf "\e[0m") LESS_TERMCAP_so=$(printf "\e[1;44;33m") LESS_TERMCAP_ue=$(printf "\e[0m") LESS_TERMCAP_us=$(printf "\e[04;38;5;111m") PAGER="${commands[less]:-$PAGER}" _NROFF_U=1 GROFF_NO_SGR=1 man "$@"
+}
+
+
+function header_loc () {
+	local header_name="$1"
+	echo '#include <'"$header_name"'>' | cpp -H -o /dev/null 2>&1 | head -n 1 | awk '{print $2}'
+}
+
+
+function curltime () {
+	cat <<EOF > /tmp/time-format.txt
+     time_namelookup:  %{time_namelookup}s\n
+        time_connect:  %{time_connect}s\n
+     time_appconnect:  %{time_appconnect}s\n
+    time_pretransfer:  %{time_pretransfer}s\n
+       time_redirect:  %{time_redirect}s\n
+  time_starttransfer:  %{time_starttransfer}s\n
+                     ----------\n
+          time_total:  %{time_total}s\n)
+
+EOF
+
+	curl -w "@/tmp/time-format.txt" "$@"
+}
