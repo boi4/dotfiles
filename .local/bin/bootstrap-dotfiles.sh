@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-REPO_URL="https://github.com/boi4/dotfiles"
+REPO_URL="git@github.com:boi4/dotfiles.git"
 repo_dir="$HOME/.cfg"
 BACKUP_DIR="$HOME/.dotfiles_backup"
 DOTF_CMD="git --git-dir=$repo_dir --work-tree=$HOME"
