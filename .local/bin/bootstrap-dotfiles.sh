@@ -14,6 +14,8 @@ function clone_repo() {
     rm -r $TMPDIR
     # Unstage all
     $DOTF_CMD restore --staged "$HOME"
+    # Don't show untracked files
+    $DOTF_CMD config --local status.showUntrackedFiles no
 }
 
 # Generate an incremental backup filename

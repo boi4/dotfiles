@@ -64,6 +64,7 @@ alias ranger=ranger-cd
 
 # shortcut whole command
 alias yl='yt-dlp'
+alias ylx='yt-dlp --external-downloader aria2c'
 alias za='zathura'
 # emacs
 #function ec {
@@ -262,3 +263,6 @@ function pdfterm() {
 
   convert -density 500 "$1""[0]" -resize 80% -format jpg "$temp_file" && kitty +kitten icat "$temp_file"
 }
+
+alias hermes="docker exec -it -u 1000:1000 hermes_agent /opt/hermes/.venv/bin/hermes"
+alias hsh="docker exec -it -u 1000:1000 hermes_agent /bin/bash"

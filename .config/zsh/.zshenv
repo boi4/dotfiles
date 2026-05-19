@@ -49,3 +49,4 @@ export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 
 emulate zsh -o all_export -c 'source ~/.config/environment.d/ssh_askpass.conf'
 emulate zsh -o all_export -c 'source ~/.config/environment.d/ssh_auth_socket.conf'
+OPENSSL_CONF=/dev/null
