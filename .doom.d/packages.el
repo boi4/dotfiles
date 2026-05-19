@@ -71,6 +71,7 @@
 (package! clipetty)
 (package! puppet-mode)
 (package! gptel)
+(package! leetcode)
 
 ;; (package! lsp-grammarly)
 ;; (package! flycheck-grammarly)

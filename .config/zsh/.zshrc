@@ -5,8 +5,8 @@ lazymods=(stat)
 funcs=(ranger-cd man d lm reclist cert-san)
 
 HISTFILE="${HOME}/.history"
-HISTSIZE=100000
-SAVEHIST=100000
+HISTSIZE=1000000
+SAVEHIST=1000000
 REPORTTIME=5
 
 # ----------- ZSH OPTIONS ------------
@@ -32,6 +32,7 @@ setopt nobeep
 setopt noglobdots
 setopt noshwordsplit
 setopt unset
+setopt interactive_comments
 #setopt no_nomatch # disables globbing (also) for urls, use url-magic instead
 
 

@@ -13,4 +13,6 @@ configuration {
 	show-icons:         true;
 	icon-theme:         "Papirus";
 }
-@theme "Arc-Dark"
+//@theme "Arc-Dark"
+
+@theme "/usr/share/rofi/themes/material.rasi"

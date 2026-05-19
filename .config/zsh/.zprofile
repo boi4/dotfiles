@@ -45,7 +45,9 @@ if command -v cabal > /dev/null; then
     export PATH="$HOME/.cabal/bin:$PATH"
 fi
 
-systemctl --user set-environment PATH="$PATH"
+if [[ -n "$DBUS_SESSION_BUS_ADDRESS" && -n "$XDG_RUNTIME_DIR" ]]; then
+    systemctl --user set-environment PATH="$PATH"
+fi
 
 
 
