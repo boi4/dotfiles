@@ -80,10 +80,10 @@ fi
 
 #zprof
 
-. "$HOME/.local/share/../bin/env"
+#. "$HOME/.local/share/../bin/env"
 
 # opencode
-export PATH=/home/fecht/.opencode/bin:$PATH
+#export PATH=/home/fecht/.opencode/bin:$PATH
 
 
 alias eh="cp /home/fecht/hermes-creds/*.json /opt/hermes-agent/data/"
