@@ -16,6 +16,9 @@ function clone_repo() {
     $DOTF_CMD restore --staged "$HOME"
     # Don't show untracked files
     $DOTF_CMD config --local status.showUntrackedFiles no
+    # Ignore all untracked files in the work-tree so only tracked dotfiles show up
+    mkdir -p "$repo_dir/info"
+    echo "*" >> "$repo_dir/info/exclude"
 }
 
 # Generate an incremental backup filename
