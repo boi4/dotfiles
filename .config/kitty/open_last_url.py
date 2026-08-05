@@ -13,39 +13,42 @@ def handle_result(args: list[str], answer: str, target_window_id: int, boss: Bos
         return
         
     screen_text = window.as_text()
-    
-    # 1. Hard cutoff: Never read past the bottom-left corner of the CLI box
-    if '╰' in screen_text:
-        screen_text = screen_text.split('╰')[0]
-        
     lines = screen_text.splitlines()
     urls = []
     
+    # Regex to aggressively strip combinations of spaces and box characters (\u2500-\u259F)
+    # ^ matches the start of the line, $ matches the absolute end of the line.
+    border_start = re.compile(r'^[\s\u2500-\u259F]+')
+    border_end = re.compile(r'[\s\u2500-\u259F]+$')
+    
     for i, line in enumerate(lines):
-        # 2. Strip edge borders and literal '│ ' before processing the line
-        # This removes leading/trailing box characters and whitespace
-        clean_line = re.sub(r'^[\s\u2500-\u259F]+', '', line)
-        clean_line = re.sub(r'[\s\u2500-\u259F]+$', '', clean_line)
-        # Explicitly remove '│ ' if it appears anywhere else (like right before a pattern)
+        # Clean both edges. This perfectly handles trailing "  │   " before a line break
+        clean_line = border_start.sub('', line)
+        clean_line = border_end.sub('', clean_line)
+        
+        # Strip literal '│ ' just in case it appears directly before a pattern internally
         clean_line = clean_line.replace('│ ', '')
         
         for match in re.finditer(r'https?://[^\s]+', clean_line):
             url = match.group(0)
             
-            # If the URL doesn't touch the end of this cleaned line, it didn't wrap
+            # If the URL doesn't touch the end of this stripped line, it didn't wrap
             if not clean_line.endswith(url):
                 urls.append(url)
                 continue
                 
             current_url = url
             
-            # 3. Look ahead for wrapped lines
+            # Look ahead to stitch wrapped lines
             for j in range(i + 1, len(lines)):
                 next_line = lines[j]
                 
-                # Clean the next line using the exact same logic
-                clean_next = re.sub(r'^[\s\u2500-\u259F]+', '', next_line)
-                clean_next = re.sub(r'[\s\u2500-\u259F]+$', '', clean_next)
+                # Stop stitching immediately if we hit the bottom corner of the current box
+                if '╰' in next_line:
+                    break
+                    
+                clean_next = border_start.sub('', next_line)
+                clean_next = border_end.sub('', clean_next)
                 clean_next = clean_next.replace('│ ', '')
                 
                 if not clean_next:

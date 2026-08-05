@@ -47,9 +47,18 @@ export BROWSER="$HOME/.local/bin/urlopen.py"
 # IMPORTANT: zsh needs this to find zshrc and zprofile
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 
-if [[ ! -d /google ]]; then
+if [[ ! -d /google ]] && [[ "$OSTYPE" != "darwin"* ]]; then
   emulate zsh -o all_export -c 'source ~/.config/environment.d/ssh_askpass.conf 2>/dev/null || true'
   emulate zsh -o all_export -c 'source ~/.config/environment.d/ssh_auth_socket.conf 2>/dev/null || true'
 fi
 export OPENSSL_CONF=/dev/null
 export OLLAMA_HOST=https://ollama.fecht.cc
+
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    brewprefix=/opt/homebrew
+    if [[ -d "$brewprefix" ]]; then
+        export PATH="$brewprefix/bin:$brewprefix/sbin:$PATH"
+        export MANPATH="$brewprefix/share/man:$MANPATH"
+    fi
+    unset brewprefix
+fi

@@ -7,7 +7,11 @@ COMPDUMPFILE=${COMPDUMPFILE:-${ZDOTDIR:-${HOME}}/.zcompdump}
 if autoload -U compinit ; then
     typeset -a tmp
     zstyle -a ':grml:completion:compinit' arguments tmp
-    compinit -d ${COMPDUMPFILE} "${tmp[@]}" || print 'Notice: no compinit available :('
+    if [[ -n ${COMPDUMPFILE}(#qN.m-1) ]]; then
+        compinit -C -d ${COMPDUMPFILE} "${tmp[@]}" || print 'Notice: no compinit available :('
+    else
+        compinit -d ${COMPDUMPFILE} "${tmp[@]}" || print 'Notice: no compinit available :('
+    fi
     unset tmp
 else
     print 'Notice: no compinit available :('
@@ -481,7 +485,7 @@ if [ -n "$SSH_CONNECTION" ]; then
     else
         zstyle ':prompt:grml(|-large|-chroot):*:items:user' pre '%B%F{green}'
     fi
-else if [ "$container" = "systemd-nspawn" -o "$(systemd-detect-virt)" = "systemd-nspawn" ]; then
+else if [ "$container" = "systemd-nspawn" -o "$(systemd-detect-virt 2>/dev/null)" = "systemd-nspawn" ]; then
         zstyle ':prompt:grml(|-large|-chroot):*:items:user' pre '%B%F{magenta}'
 else if [ -n "$CONDA_PROMPT_MODIFIER" ]; then
          setopt prompt_subst
@@ -492,10 +496,10 @@ else if (( EUID == 0 )); then
 fi; fi; fi; fi
 
 setopt local_options BASH_REMATCH
-pat="/nix/store/[A-Za-z0-9]{32}-([^:]*?-env)"
-if [[ $PATH =~ $pat ]];then
-        zstyle ':prompt:grml(|-large|-chroot):*:items:user' pre "[${BASH_REMATCH[2]}] "'%B%F{blue}'
-fi
+#pat="/nix/store/[A-Za-z0-9]{32}-([^:]*?-env)"
+#if [[ $PATH =~ $pat ]];then
+#        zstyle ':prompt:grml(|-large|-chroot):*:items:user' pre "[${BASH_REMATCH[2]}] "'%B%F{blue}'
+#fi
 
 
 prompt grml

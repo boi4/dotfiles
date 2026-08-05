@@ -12,10 +12,10 @@ alias python3='python3 -q'
 alias grep='grep --color=auto'
 alias wget='wget --hsts-file=~/.cache/wget-hsts'
 alias psql='PAGER="bat" psql'
-if [[ "$(uname --machine)" =~ "^x86(_64)?$" ]]; then
-	alias objdump='objdump -M intel'
-	#alias 'perf report'='perf report -M intel'
-fi
+#if [[ "$(uname --machine)" =~ "^x86(_64)?$" ]]; then # TODO: broken on mac
+#	alias objdump='objdump -M intel'
+#	#alias 'perf report'='perf report -M intel'
+#fi
 command -v pydocwrapper.py >/dev/null && alias pydoc=pydocwrapper.py
 alias rm='rm -I'
 
@@ -109,8 +109,13 @@ alias deutsch='trans -t de'
 alias polnisch='trans -t pl'
 alias französisch='trans -t fr'
 alias franz='französisch'
-#alias xs='xsel -b'
-alias xs='wl-copy'
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  alias xs='pbcopy'
+elif (( $+commands[wl-copy] )); then
+  alias xs='wl-copy'
+elif (( $+commands[xsel] )); then
+  alias xs='xsel -b'
+fi
 alias dfh='df -h -x tmpfs'
 
 alias tt='tmux a -t `tmux list-sessions | fzf --layout=reverse | cut -d: -f 1`'
@@ -135,7 +140,11 @@ alias rmcdir='cd ..; rmdir $OLDPWD || cd $OLDPWD'
 alias ...='cd ../../'
 
 # listing stuff, from grml
-alias ls="ls -v --color=auto --hyperlink=auto"
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  alias ls="ls -G"
+else
+  alias ls="ls -v --color=auto --hyperlink=auto"
+fi
 alias la="ls -la"
 alias ll="ls -l"
 alias lh="ls -hAl"
@@ -294,3 +303,5 @@ EOF
 
 	curl -w "@/tmp/time-format.txt" "$@"
 }
+
+

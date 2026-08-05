@@ -69,3 +69,5 @@
 [user]
 	email = mail@fecht.cc
 	name = Jan Fecht
+[credential]
+	helper = "!f() { test \"$(uname)\" = \"Darwin\" && git-credential-osxkeychain \"$@\"; }; f"

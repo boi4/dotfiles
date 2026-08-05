@@ -25,7 +25,6 @@ if [[ ! -d /google ]]; then
   fi
 fi
 
-
 if [ -f "$HOME/.local/bin/dmenupass" ]; then
     export SUDO_ASKPASS="$HOME/.local/bin/dmenupass"
 fi
@@ -34,7 +33,7 @@ if [ -f "$XDG_CONFIG_HOME/python/startup.py" ]; then
     export PYTHONSTARTUP="$XDG_CONFIG_HOME/python/startup.py"
 fi
 
-export GPG_TTY="$(tty)"
+export GPG_TTY="${TTY:-$(tty 2>/dev/null)}"
 
 
 if [[ ! -d /google ]] && command -v go > /dev/null 2>&1; then
@@ -54,8 +53,18 @@ fi
 
 
 # ls colors
-if command -v dircolors > /dev/null; then
-    eval $(dircolors -b)
+if whence dircolors >/dev/null; then
+  local dircolors_cache="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/dircolors.zsh"
+  if [[ ! -f "$dircolors_cache" ]]; then
+    mkdir -p "${dircolors_cache:h}"
+    dircolors -b >| "$dircolors_cache"
+  fi
+  source "$dircolors_cache"
+  zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
+  alias ls='ls --color'
+else
+  export CLICOLOR=1
+  zstyle ':completion:*:default' list-colors ''
 fi
 
 

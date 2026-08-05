@@ -412,6 +412,14 @@ bindkey '^[[H' beginning-of-line # pos1
 bindkey '^[[F' end-of-line # ende
 
 ## FZF
+if command -v fzf > /dev/null; then
+    local fzf_cache="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/fzf-init.zsh"
+    if [[ ! -f "$fzf_cache" ]]; then
+        mkdir -p "${fzf_cache:h}"
+        fzf --zsh >| "$fzf_cache" 2>/dev/null
+    fi
+    source "$fzf_cache"
+fi
 test -f /usr/share/fzf/completion.zsh && source /usr/share/fzf/completion.zsh
 test -f /usr/share/fzf/key-bindings.zsh && source /usr/share/fzf/key-bindings.zsh
 test -f /usr/share/doc/fzf/examples/completion.zsh && source /usr/share/doc/fzf/examples/completion.zsh

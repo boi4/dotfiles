@@ -45,14 +45,29 @@ handle_extension() {
         # Archive
         a|ace|alz|arc|arj|bz|bz2|cab|cpio|deb|gz|jar|lha|lz|lzh|lzma|lzo|\
         rpm|rz|t7z|tar|tbz|tbz2|tgz|tlz|txz|tZ|tzo|war|xpi|xz|Z|zip)
+            local file_size
+            file_size=$(stat --printf='%s' -- "${FILE_PATH}" 2>/dev/null || stat -c'%s' -- "${FILE_PATH}" 2>/dev/null || stat -f'%z' -- "${FILE_PATH}" 2>/dev/null || echo 0)
+            if [ "${file_size}" -gt 52428800 ]; then
+                exit 1
+            fi
             atool --list -- "${FILE_PATH}" && exit 5
             bsdtar --list --file "${FILE_PATH}" && exit 5
             exit 1;;
         rar)
+            local file_size
+            file_size=$(stat --printf='%s' -- "${FILE_PATH}" 2>/dev/null || stat -c'%s' -- "${FILE_PATH}" 2>/dev/null || stat -f'%z' -- "${FILE_PATH}" 2>/dev/null || echo 0)
+            if [ "${file_size}" -gt 52428800 ]; then
+                exit 1
+            fi
             # Avoid password prompt by providing empty password
             unrar lt -p- -- "${FILE_PATH}" && exit 5
             exit 1;;
         7z)
+            local file_size
+            file_size=$(stat --printf='%s' -- "${FILE_PATH}" 2>/dev/null || stat -c'%s' -- "${FILE_PATH}" 2>/dev/null || stat -f'%z' -- "${FILE_PATH}" 2>/dev/null || echo 0)
+            if [ "${file_size}" -gt 52428800 ]; then
+                exit 1
+            fi
             # Avoid password prompt by providing empty password
             7z l -p -- "${FILE_PATH}" && exit 5
             exit 1;;
