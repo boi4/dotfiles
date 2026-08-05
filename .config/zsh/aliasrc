@@ -274,6 +274,7 @@ function pdfterm() {
 }
 alias hermes="docker exec -it -u 1000:1000 hermes_agent /opt/hermes/.venv/bin/hermes"
 alias hsh="docker exec -it -u 1000:1000 hermes_agent /bin/bash"
+alias oc=opencode
 
 
 # nice colors in man
