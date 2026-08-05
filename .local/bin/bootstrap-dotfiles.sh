@@ -19,6 +19,8 @@ function clone_repo() {
     # Ignore all untracked files in the work-tree so only tracked dotfiles show up
     mkdir -p "$repo_dir/info"
     echo "*" >> "$repo_dir/info/exclude"
+    # Configure the repo's git identity
+    $DOTF_CMD config --local user.email "mail@fecht.cc"
 }
 
 # Generate an incremental backup filename
