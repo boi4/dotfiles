@@ -364,11 +364,61 @@
 
 
 
-;; load further scripts from additional.d
-(let ((additional-dir (expand-file-name "~/.doom.d/additional.d")))
-  ;; Check if the directory exists
-  (when (file-directory-p additional-dir)
-    ;; Iterate over each .el file in the directory
-    (dolist (file (directory-files additional-dir t "\\.el$"))
-      ;; Load the file
-      (load file))))
+;; --- Grip (GitHub Readme Instant Preview) Live Updating ---
+(after! grip-mode
+  ;; Update Chrome preview on buffer changes (as you type/edit) in addition to saves
+  (setq grip-update-after-change t))
+
+;; --- Flymd (Chrome Live Preview with Synchronous Scrolling via Local HTTP) ---
+;; Google Chrome blocks file:// URLs from making Ajax calls. To fix this without needing Firefox,
+;; we serve flymd's preview directory via a lightweight local Python HTTP server on port 6420.
+(defvar +flymd-http-server-process nil
+  "Background Python HTTP server process for flymd preview.")
+
+(defun +flymd-open-in-chrome-http (filepath)
+  "Serve project root via local HTTP on port 6420 and open FILEPATH in Google Chrome.
+Serving from the project root ensures absolute markdown links starting with '/'
+(e.g., /oc/ntp/docs/...) resolve correctly relative to the Git repository root."
+  (let* ((root (or (ignore-errors (doom-project-root (file-name-directory filepath)))
+                   (file-name-directory filepath)))
+         (relpath (file-relative-name filepath root))
+         (port 6420)
+         (url (format "http://127.0.0.1:%d/%s" port relpath)))
+    (when (and +flymd-http-server-process (process-live-p +flymd-http-server-process))
+      (delete-process +flymd-http-server-process))
+    (ignore-errors
+      (call-process "pkill" nil nil nil "-f" (format "http.server %d" port)))
+    (setq +flymd-http-server-process
+          (start-process "flymd-http-server" "*flymd-http-server*"
+                         "python3" "-m" "http.server" (number-to-string port) "--directory" root))
+    (run-at-time 0.2 nil
+                 (lambda (u)
+                   (let ((browse-url-browser-function 'browse-url-generic)
+                         (browse-url-generic-program "google-chrome"))
+                     (browse-url u)))
+                 url)))
+
+(use-package! flymd
+  :defer t
+  :config
+  (setq flymd-browser-open-function #'+flymd-open-in-chrome-http))
+
+(after! markdown-mode
+  ;; Force Emacs built-in markdown-live-preview-mode to open the preview window to the right (side-by-side)
+  (setq markdown-split-window-direction 'right)
+  ;; Keybindings:
+  ;;   SPC m p -> flymd-flyit (Chrome preview with live scrolling via local HTTP)
+  ;;   SPC m l -> markdown-live-preview-mode (built-in side-by-side preview to the right)
+  ;;   SPC m g -> grip-mode (Chrome static GitHub preview)
+  (map! :map markdown-mode-map
+        :localleader
+        "p" #'flymd-flyit
+        "l" #'markdown-live-preview-mode
+        "g" #'grip-mode))
+
+;; Load modular scripts from config.d and additional.d
+(dolist (dir '("~/.doom.d/config.d" "~/.doom.d/additional.d"))
+  (let ((expanded-dir (expand-file-name dir)))
+    (when (file-directory-p expanded-dir)
+      (dolist (file (directory-files expanded-dir t "\\.el$"))
+        (load file nil t)))))

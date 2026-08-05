@@ -47,7 +47,9 @@ export BROWSER="$HOME/.local/bin/urlopen.py"
 # IMPORTANT: zsh needs this to find zshrc and zprofile
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 
-emulate zsh -o all_export -c 'source ~/.config/environment.d/ssh_askpass.conf'
-emulate zsh -o all_export -c 'source ~/.config/environment.d/ssh_auth_socket.conf'
+if [[ ! -d /google ]]; then
+  emulate zsh -o all_export -c 'source ~/.config/environment.d/ssh_askpass.conf 2>/dev/null || true'
+  emulate zsh -o all_export -c 'source ~/.config/environment.d/ssh_auth_socket.conf 2>/dev/null || true'
+fi
 export OPENSSL_CONF=/dev/null
 export OLLAMA_HOST=https://ollama.fecht.cc

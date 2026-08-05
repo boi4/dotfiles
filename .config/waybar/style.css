@@ -79,6 +79,24 @@ button:hover {
     box-shadow: none;
 }
 #backlight-slider trough {
+    min-height: 6px;
+    min-width: 80px;
+    border-radius: 4px;
+    background-color: rgba(255, 255, 255, 0.2); /* Subtle transparent background */
+}
+#backlight-slider highlight {
+    border-radius: 4px;
+    background-color: #90b1b1; /* Matches your other modules */
+}
+/*#backlight-slider slider {
+    min-height: 0px;
+    min-width: 0px;
+    opacity: 0;
+    background-image: none;
+    border: none;
+    box-shadow: none;
+}
+#backlight-slider trough {
     min-height: 4px;
     min-width: 100px;
     border-radius: 2px;
@@ -88,7 +106,7 @@ button:hover {
     min-width: 10px;
     border-radius: 5px;
     background-color: red;
-}
+}*/
 
 /* #workspaces button.visible:not(.active) { */
 /*   /\* background-color: green; *\/ */
@@ -368,4 +386,79 @@ label:focus {
     min-width: 40px;
     color: #000000;
     background-color: #ff9900;
+}
+
+
+#custom-gcert.good {
+  padding: 0 4px;
+}
+
+#custom-gcert.good {
+  background-color: #5ab709;
+  color: #000000;
+}
+
+#custom-gcert.go_home {
+  background-color: #ede217;
+  color: #000000;
+}
+
+#custom-gcert.go_home_1 {
+  background-color: #e57e0c;
+  color: #ffffff;
+}
+
+#custom-gcert.go_home_2 {
+  background-color: #e4730a;
+  color: #ffffff;
+}
+
+#custom-gcert.go_home_3 {
+  background-color: #e36809;
+  color: #ffffff;
+}
+
+#custom-gcert.go_home_4 {
+  background-color: #e25d08;
+  color: #ffffff;
+}
+
+#custom-gcert.go_home_5 {
+  background-color: #e25207;
+  color: #ffffff;
+}
+
+#custom-gcert.go_home_6 {
+  background-color: #e14706;
+  color: #ffffff;
+}
+
+#custom-gcert.go_home_7 {
+  background-color: #e03d05;
+  color: #ffffff;
+}
+
+#custom-gcert.go_home_8 {
+  background-color: #df3204;
+  color: #ffffff;
+}
+
+#custom-gcert.go_home_9 {
+  background-color: #df2703;
+  color: #ffffff;
+}
+
+#custom-gcert.go_home_10 {
+  background-color: #de1c02;
+  color: #ffffff;
+}
+
+#custom-gcert.go_home_11 {
+  background-color: #dd1101;
+  color: #ffffff;
+}
+
+#custom-gcert.bad {
+  background-color: #dd0700;
+  color: #ffffff;
 }

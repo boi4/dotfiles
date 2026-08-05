@@ -1,0 +1,38 @@
+// ~/.config/waybar/hyprland_config.jsonc
+{
+    "include": [
+        "~/.config/waybar/config_base.jsonc"
+    ],
+    "modules-left": [
+        "hyprland/workspaces"
+    ],
+    "modules-center": [
+        "hyprland/window"
+    ],
+    "modules-right": [
+        "backlight",
+        "battery",
+        "idle_inhibitor",
+        "backlight/slider",
+        "cpu",
+        "pulseaudio",
+        "network",
+        "tray",
+        "clock",
+        "custom/notification"
+    ],
+    
+    // Hyprland specific modules
+    "hyprland/workspaces": {
+        "disable-scroll": false,
+        "all-outputs": false,
+        "warp-on-scroll": false
+    },
+    "hyprland/window": {
+        "rewrite": {
+            "(.*)\\s+(-|–|—|―|‒)\\s+Firefox Developer Edition": "🌎 $1",
+            "(.*)\\s+(-|–|—|―|‒)\\s+Doom Emacs": " $1"
+        },
+        "separate-outputs": true
+    }
+}

@@ -1,0 +1,29 @@
+// ~/.config/waybar/sway_config.jsonc (Generic Sway Waybar config for personal devices)
+{
+    "include": [
+        "~/.config/waybar/config_base.jsonc"
+    ],
+    "modules-left": [
+        "sway/workspaces"
+    ],
+    "modules-center": [
+        "sway/window"
+    ],
+    "modules-right": [
+        "idle_inhibitor",
+        "cpu",
+        "pulseaudio",
+        "network",
+        "tray",
+        "clock",
+        "custom/notification"
+    ],
+    "sway/workspaces": {
+        "disable-scroll": false,
+        "all-outputs": false,
+        "warp-on-scroll": false
+    },
+    "sway/window": {
+        "separate-outputs": true
+    }
+}

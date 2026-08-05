@@ -13,7 +13,10 @@ set $right l
 
 set $Menu1 j4-dmenu-desktop --dmenu='rofi -i -dmenu' # -font "Helvetica Neue 15" '
 set $Menu2 dmenu_path | dmenu | xargs swaymsg exec -- 
-set $Menu3 rofi -theme Arc-Dark -combi-modi window#drun -show combi -modi combi -show-icons
+#set $Menu3 rofi -theme Arc-Dark -combi-modi window#drun -show combi -modi combi -show-icons
+#set $Menu3 rofi -monitor -1 -theme Arc-Dark -combi-modi window#drun -show combi -modi combi -show-icons
+#set $Menu3 rofi -monitor $(swaymsg -t get_outputs | jq '[.[].focused] | index(true)') -theme Arc-Dark -combi-modi window#drun -show combi -modi combi -show-icons
+set $Menu3 rofi -monitor $(swaymsg -t get_outputs | jq -r '.[] | select(.focused) | .name') -theme Arc-Dark -combi-modi window#drun -show combi -modi combi -show-icons
 
 #output HDMI-A-1 scale 2
 
@@ -36,7 +39,7 @@ input * {
   xkb_layout "eu"
   xkb_options "caps:escape"
 }
-input 1739:30382:DLL0704:01_06CB:76AE_Touchpad natural_scroll enabled
+input type:touchpad natural_scroll disabled
 
 
 
@@ -48,41 +51,45 @@ smart_gaps on
 
 
 # background
-output * bg /home/fecht/.config/sway/wallpaper.jpg fill
+#output * bg ~/.config/sway/wallpaper.png fill
+#~/.config/sway/wallpaper.png
+output * bg ~/.config/sway/wallpaper.png fill
+
+
+# ---------------------------------------------------------
+# IDLE CONFIGURATION (swayidle)
+# ---------------------------------------------------------
+exec swayidle -w \
+    timeout 300 'swaylock -f -i ~/.config/sway/wallpaper.png' \
+    timeout 600 'swaymsg "output * dpms off"' \
+    resume 'swaymsg "output * dpms on"' \
+    before-sleep 'swaylock -f -i ~/.config/sway/wallpaper.png'
+    #timeout 6000 'systemctl suspend' \
+
+
 
 
 #exec --no-startup-id systemctl --user import-environment
 
 
 # startup apps
-exec --no-startup-id i3-msg 'workspace 2; exec MOZ_ENABLE_WAYLAND=1 firefox -p default; workspace 1'
+#exec --no-startup-id i3-msg 'workspace 2; exec MOZ_ENABLE_WAYLAND=1 firefox -p default; workspace 1'
 
+exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
+exec systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
+exec systemctl --user restart xdg-desktop-portal.service
 
-bar {
-    font pango:DejaVu Sans Mono, FontAwesome 10
-    position top
-    status_command i3status-wrapper.py ~/.config/i3status-rust/config.toml
-    height 23
-    colors {
-        separator #66666680
-        # background #2222280
-        # statusline $color5
-        #background #1d202110
-        background #00000000
-        #statusline #dddddd10
-        statusline #ddddddff
-        focused_workspace #0088CC #0088CC #ffffff
-        #active_workspace #333333 #333333 #ffffff
-        active_workspace #333333 #333333 #ffffff
-        inactive_workspace #333333 #333333 #888888
-        urgent_workspace #2f343a #900000 #ffffff
-    }
-}
+#bar {
+#    swaybar_command GTK_USE_PORTAL=0 waybar -c ~/.config/waybar/sway_config.jsonc
+#}
+exec "env GTK_USE_PORTAL=0 waybar -c $(test -f ~/.config/waybar/google_sway_config.jsonc && echo ~/.config/waybar/google_sway_config.jsonc || echo ~/.config/waybar/sway_config.jsonc)"
 
 
 exec --no-startup-id 'nm-applet --indicator'
 exec --no-startup-id redshift-gtk -l 51.0:2.6 
 exec --no-startup-id blueman-applet
+exec --no-startup-id swaync
+
 
 
 
@@ -93,7 +100,11 @@ exec --no-startup-id blueman-applet
 # =========================================================================================
 
 # to close dunst notifications
-bindsym Control+Space exec dunstctl close
+#bindsym Control+Space exec dunstctl close
+# TODO: find replacement
+
+#bindsym $mod+Escape seat - shortcuts_inhibitor toggle
+bindsym --inhibited $mod+Escape seat - shortcuts_inhibitor toggle
 
 # Basic Movement
 
@@ -202,7 +213,7 @@ bindsym $mod+Shift+d exec --no-startup-id $Menu2
 
 bindsym $mod+f fullscreen toggle
 #bindsym $mod+Shift+f floating toggle
-bindsym $mod+Shift+f exec --no-startup-id "display-setting-chooser.sh; /home/fecht/.fehbg"
+bindsym $mod+Shift+f exec --no-startup-id "display-setting-chooser.sh; ~/.fehbg"
 # bindsym $mod+Shift+f exec --no-startup-id display-setting-chooser.sh
 
 
@@ -218,7 +229,8 @@ bindsym $mod+Shift+g 		gaps inner current set 0; gaps outer current set 0
 # bindsym $mod+y exec --no-startup-id randbg
 #bindsym $mod+y exec --no-startup-id ffchooser.py
 # bindsym $mod+Shift+y exec --no-startup-id "pkill --signal SIGUSR1 compton"
-bindsym $mod+z bar mode toggle
+#bindsym $mod+z bar mode toggle
+bindsym $mod+z exec killall -SIGUSR1 waybar
 #bindsym $mod+Shift+z exec ~/prj/tabfs-scripts/geoguessr.py
 
 bindsym $mod+x scratchpad show
@@ -259,7 +271,11 @@ bindsym $mod+n input 1739:30382:DLL0704:01_06CB:76AE_Touchpad events toggle
 
 #bindsym $mod+period exec lock.sh
 #bindsym $mod+period exec loginctl lock-session
-bindsym $mod+Shift+period exec lock.sh
+# ---------------------------------------------------------
+# SCREEN LOCKING
+# ---------------------------------------------------------
+bindsym $mod+Shift+period exec swaylock -i ~/.config/sway/wallpaper.png
+#bindsym $mod+Shift+period exec lock.sh
 
 # bindsym $mod+Tab workspace next
 # bindsym $mod+Shift+Tab workspace prev
@@ -285,9 +301,20 @@ bindsym $mod+Shift+space move workspace to output left
 
 
 # Screenshots
-bindsym Print exec --no-startup-id sway_screenshot.sh select
-bindsym Shift+Print exec --no-startup-id sway_screenshot.sh full
-bindsym --release $mod+Print exec --no-startup-id screenshot_edit.sh
+# ---------------------------------------------------------
+# SCREENSHOTS
+# ---------------------------------------------------------
+# Print: Select area, save to Desktop, and copy to clipboard
+bindsym Print exec bash -c 'FILE="$HOME/Desktop/screenshot-$(date +%Y%m%d-%H%M%S).png"; grim -g "$(slurp)" "$FILE" && wl-copy < "$FILE"'
+
+# Shift + Print: Whole desktop, save to Desktop, and copy to clipboard
+bindsym Shift+Print exec bash -c 'FILE="$HOME/Desktop/screenshot-$(date +%Y%m%d-%H%M%S).png"; grim "$FILE" && wl-copy < "$FILE"'
+
+# Mod + Shift + Print: Active window, save to Desktop, and copy to clipboard
+bindsym --release $mod+Shift+Print exec bash -c 'FILE="$HOME/Desktop/screenshot-$(date +%Y%m%d-%H%M%S).png"; RECT=$(swaymsg -t get_tree | jq -r ".. | select(.focused?) | .rect | \"\(.x),\(.y) \(.width)x\(.height)\""); grim -g "$RECT" "$FILE" && wl-copy < "$FILE"'
+
+# Open Kooha screen recorder GUI
+bindsym $mod+Print exec --no-startup-id rofi-recorder.sh
 
 bindsym $mod+F1 layout splith
 bindsym $mod+F2 layout tabbed
@@ -298,27 +325,25 @@ bindsym $mod+F10 exec monitor_brightness.py set 0
 bindsym $mod+F11 exec monitor_brightness.py set 20
 bindsym $mod+F12 exec monitor_brightness.py set 100
 
-#bindsym --locked XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5%
-#bindsym --locked XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5%
-#bindsym --locked XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle
-bindsym XF86AudioRaiseVolume exec --no-startup-id ~/prj/i3-volume/volume -N libnotify up 10 -p -n
-bindsym XF86AudioLowerVolume exec --no-startup-id  ~/prj/i3-volume/volume -N libnotify down 10 -p -n
-bindsym XF86AudioMute exec --no-startup-id  ~/prj/i3-volume/volume -N libnotify mute -p -n
+# ---------------------------------------------------------
+# AUDIO & MEDIA CONTROLS
+# ---------------------------------------------------------
+# Volume controls using wpctl (PipeWire/WirePlumber)
+bindsym XF86AudioRaiseVolume exec wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%+
+bindsym XF86AudioLowerVolume exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-
+bindsym XF86AudioMute exec wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
 
-# Sreen brightness controls
-#bindsym --locked XF86MonBrightnessUp exec sudo /usr/bin/light -A 5
-#bindsym --locked XF86MonBrightnessDown exec sudo /usr/bin/light -U 5
-#bindsym XF86MonBrightnessDown exec bash -c 'sudo /usr/bin/light -U 5'
-exec_always light -N 1
-bindsym XF86MonBrightnessUp exec light -A 5
-bindsym XF86MonBrightnessDown exec light -U 5
+# Media player controls using playerctl
+bindsym XF86AudioPlay exec playerctl play-pause
+bindsym XF86AudioNext exec playerctl next
+bindsym XF86AudioPrev exec playerctl previous
 
-
-# Media player controls
-#bindsym XF86AudioPlay exec ~/bin/playpause.sh
-bindsym --locked XF86AudioPlay exec playerctl play-pause
-bindsym --locked XF86AudioNext exec playerctl next
-bindsym --locked XF86AudioPrev exec playerctl previous
+# ---------------------------------------------------------
+# BRIGHTNESS CONTROLS
+# ---------------------------------------------------------
+# Screen brightness controls using brightnessctl
+bindsym XF86MonBrightnessUp exec brightnessctl set +5%
+bindsym XF86MonBrightnessDown exec brightnessctl set 5%-
 
 
 
@@ -381,3 +406,41 @@ for_window [class="^custom-float-no-border$"] border pixel 0
 
 for_window [class="Anki" title="Hinzufügen"] floating enable
 for_window [class="Anki" title="Einstellungen"] floating enable
+
+
+## Float the Meet pop-up, but keep the main Chrome window tiled when on a Meet tab
+#for_window [app_id="google-chrome" title="^Meet -.*"] floating enable
+#for_window [app_id="google-chrome" title="^Meet -.*"] resize set 200 400;
+#for_window [app_id="google-chrome" title="^Meet -.* - Google Chrome$"] floating disable
+
+# other
+for_window [title="(?:Open|Save) (?:File|Folder|As)"] floating enable;
+for_window [title="(?:Open|Save) (?:File|Folder|As)"] resize set 800 600
+for_window [window_role="pop-up"] floating enable
+for_window [window_role="bubble"] floating enable
+for_window [window_role="task_dialog"] floating enable
+for_window [window_role="Preferences"] floating enable
+for_window [window_type="dialog"] floating enable
+for_window [window_type="menu"] floating enable
+
+
+# Let Google Meet PIP view popup, but not steal focus
+# retry https://gist.github.com/ackerleytng/c0885034b3db9607c87b908a47348d7b
+# https://groups.google.com/a/google.com/g/sway-users/c/jPn5qHYMdQA/m/x29mwxIcAQAJ
+# ^^ botht didn't work
+for_window [title="^Meet - (?!.* - Google Chrome$).*$" app_id="google-chrome"] {
+    floating enable
+    resize set width 20ppt height 20ppt
+    move position 80ppt 80ppt
+    sticky enable
+}
+# ---------------------------------------------------------
+# FAILSAFE: PROTECT MAIN CHROME WINDOWS
+# ---------------------------------------------------------
+# This acts as a final override. Even if an earlier rule 
+# (like the pop-up or Meet rules) accidentally targets the main 
+# browser window, this will force it back into a tiled state.
+for_window [app_id="google-chrome" title=".* - Google Chrome$"] floating disable
+
+# Include Google-specific Sway configuration (silently ignored on non-Google machines)
+include ~/.config/sway/google_config*

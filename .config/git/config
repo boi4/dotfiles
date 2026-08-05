@@ -1,5 +1,6 @@
 [include]
     path = user_config
+	path = google_config
 [advice]
 	statusHints = true
 [commit]

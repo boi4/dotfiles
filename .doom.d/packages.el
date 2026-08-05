@@ -73,6 +73,10 @@
 (package! gptel)
 (package! leetcode)
 
+;; Gerrit code review integration (gerrit.el uses REST/HTTPS for Google GitOnBorg)
+(package! gerrit)
+;; (package! magit-gerrit) ; Disable legacy SSH-based (port 29418) magit-gerrit
+
 ;; (package! lsp-grammarly)
 ;; (package! flycheck-grammarly)
 
@@ -85,4 +89,8 @@
 ;;   :recipe (:host github :repo "emacs-openai/codegpt"))
 ;; (package! chatgpt
 ;;   :recipe (:host github :repo "emacs-openai/chatgpt"))
+
+;; --- Live Markdown Preview in Chrome with Synchronous Scrolling ---
+(package! flymd)
+(package! markdown-preview-mode)
 

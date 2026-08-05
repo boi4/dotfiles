@@ -17,10 +17,12 @@ if [ -d "/snap/bin" ]; then
 	export PATH="/snap/bin:$PATH"
 fi
 
-if [ "$(hostnamectl hostname)" = torbus ]; then
-	source "${ZDOTDIR:-${HOME}/.config/zsh}"/desktop
-else
-	export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR}/ssh-agent.socket"
+if [[ ! -d /google ]]; then
+  if [ "$(hostnamectl hostname 2>/dev/null)" = "torbus" ]; then
+    source "${ZDOTDIR:-${HOME}/.config/zsh}"/desktop
+  else
+    export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR}/ssh-agent.socket"
+  fi
 fi
 
 
@@ -35,10 +37,10 @@ fi
 export GPG_TTY="$(tty)"
 
 
-if command -v go > /dev/null; then
-    export GOPATH="$HOME/.local/share/go"
-    mkdir -p "$GOPATH"
-    PATH="$(go env GOPATH)/bin:$PATH"
+if [[ ! -d /google ]] && command -v go > /dev/null 2>&1; then
+  export GOPATH="$HOME/.local/share/go"
+  mkdir -p "$GOPATH"
+  PATH="$(go env GOPATH)/bin:$PATH"
 fi
 
 if command -v cabal > /dev/null; then
