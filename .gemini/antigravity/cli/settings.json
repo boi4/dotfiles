@@ -1,0 +1,7 @@
+{
+  "statusLine": {
+    "type": "command",
+    "command": "/home/fecht/.gemini/config/kitty_tab_statusline.py",
+    "enabled": true
+  }
+}
