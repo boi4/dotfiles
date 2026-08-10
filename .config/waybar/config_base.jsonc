@@ -8,13 +8,13 @@
     // Add this inside config_base.jsonc
     "backlight/slider#DP-1": {
         "device": "ddcci7", // Change to match your actual ls output
-        "min": 0,
+        "min": 1,
         "max": 100,
         "orientation": "horizontal"
     },
     "backlight/slider#DP-2": {
         "device": "ddcci8", // Change to match your actual ls output
-        "min": 0,
+        "min": 1,
         "max": 100,
         "orientation": "horizontal"
     },
@@ -36,16 +36,16 @@
         "format": "{:%Y-%m-%d %H:%M}"
     },
     "cpu": { "format": "{usage}% ", "tooltip": false },
-//    "battery": {
-//        "bat": "BAT0",
-//        "states": { "warning": 30, "critical": 15 },
-//        "format": "{capacity}% {icon}",
-//        "format-full": "{capacity}% {icon}",
-//        "format-charging": "{capacity}% ",
-//        "format-plugged": "{capacity}% ",
-//        "format-alt": "{time} {icon}",
-//        "format-icons": ["", "", "", "", ""]
-//    },
+    "battery": {
+        "bat": "BAT0",
+        "states": { "warning": 30, "critical": 15 },
+        "format": "{capacity}% {icon}",
+        "format-full": "{capacity}% {icon}",
+        "format-charging": "{capacity}% ",
+        "format-plugged": "{capacity}% ",
+        "format-alt": "{time} {icon}",
+        "format-icons": ["", "", "", "", ""]
+    },
     "network": {
         "format-wifi": "{essid} ({signalStrength}%) ",
         "format-ethernet": "{ipaddr}/{cidr} ",
