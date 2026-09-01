@@ -425,6 +425,15 @@ test -f /usr/share/fzf/key-bindings.zsh && source /usr/share/fzf/key-bindings.zs
 test -f /usr/share/doc/fzf/examples/completion.zsh && source /usr/share/doc/fzf/examples/completion.zsh
 test -f /usr/share/doc/fzf/examples/key-bindings.zsh && source /usr/share/doc/fzf/examples/key-bindings.zsh
 
+# Sync history from other sessions before opening fzf
+if (( $+functions[fzf-history-widget] )); then
+    functions[_orig_fzf_history_widget]=$functions[fzf-history-widget]
+    fzf-history-widget() {
+        fc -RI
+        _orig_fzf_history_widget "$@"
+    }
+fi
+
 
 function fzf-git-branch {
     if [[ -d .git ]]; then
