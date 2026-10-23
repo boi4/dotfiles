@@ -305,14 +305,14 @@ bindsym $mod+Shift+space move workspace to output left
 # ---------------------------------------------------------
 # SCREENSHOTS
 # ---------------------------------------------------------
-# Print: Select area, save to Desktop, and copy to clipboard
-bindsym Print exec bash -c 'FILE="$HOME/Desktop/screenshot-$(date +%Y%m%d-%H%M%S).png"; grim -g "$(slurp)" "$FILE" && wl-copy < "$FILE"'
+# Print: Select area, save to Pictures/screenshots, and copy to clipboard
+bindsym Print exec bash -c 'FILE="$HOME/Pictures/screenshots/screenshot-$(date +%Y%m%d-%H%M%S).png"; mkdir -p "$(dirname "$FILE")"; grim -g "$(slurp)" "$FILE" && wl-copy < "$FILE"'
 
-# Shift + Print: Whole desktop, save to Desktop, and copy to clipboard
-bindsym Shift+Print exec bash -c 'FILE="$HOME/Desktop/screenshot-$(date +%Y%m%d-%H%M%S).png"; grim "$FILE" && wl-copy < "$FILE"'
+# Shift + Print: Whole desktop, save to Pictures/screenshots, and copy to clipboard
+bindsym Shift+Print exec bash -c 'FILE="$HOME/Pictures/screenshots/screenshot-$(date +%Y%m%d-%H%M%S).png"; mkdir -p "$(dirname "$FILE")"; grim "$FILE" && wl-copy < "$FILE"'
 
-# Mod + Shift + Print: Active window, save to Desktop, and copy to clipboard
-bindsym --release $mod+Shift+Print exec bash -c 'FILE="$HOME/Desktop/screenshot-$(date +%Y%m%d-%H%M%S).png"; RECT=$(swaymsg -t get_tree | jq -r ".. | select(.focused?) | .rect | \"\(.x),\(.y) \(.width)x\(.height)\""); grim -g "$RECT" "$FILE" && wl-copy < "$FILE"'
+# Mod + Shift + Print: Active window, save to Pictures/screenshots, and copy to clipboard
+bindsym --release $mod+Shift+Print exec bash -c 'FILE="$HOME/Pictures/screenshots/screenshot-$(date +%Y%m%d-%H%M%S).png"; mkdir -p "$(dirname "$FILE")"; RECT=$(swaymsg -t get_tree | jq -r ".. | select(.focused?) | .rect | \"\(.x),\(.y) \(.width)x\(.height)\""); grim -g "$RECT" "$FILE" && wl-copy < "$FILE"'
 
 # Open Kooha screen recorder GUI
 bindsym $mod+Print exec --no-startup-id rofi-recorder.sh
