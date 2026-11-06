@@ -57,7 +57,7 @@ export BROWSER="$HOME/.local/bin/urlopen.py"
 # IMPORTANT: zsh needs this to find zshrc and zprofile
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 
-if [[ ! -d /google ]] && [[ "$OSTYPE" != "darwin"* ]]; then
+if [[ "$OSTYPE" != "darwin"* ]] && [[ ! -d /google ]]; then
   emulate zsh -o all_export -c 'source ~/.config/environment.d/ssh_askpass.conf 2>/dev/null || true'
   emulate zsh -o all_export -c 'source ~/.config/environment.d/ssh_auth_socket.conf 2>/dev/null || true'
 fi

@@ -17,7 +17,7 @@ if [ -d "/snap/bin" ]; then
 	export PATH="/snap/bin:$PATH"
 fi
 
-if [[ ! -d /google ]]; then
+if [[ "$OSTYPE" != "darwin"* ]] && [[ ! -d /google ]]; then
   if [ "$(hostnamectl hostname 2>/dev/null)" = "torbus" ]; then
     source "${ZDOTDIR:-${HOME}/.config/zsh}"/desktop
   else
