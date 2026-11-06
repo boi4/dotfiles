@@ -4,8 +4,7 @@
 ;; sync' after modifying this file!
 
 
-;; TODO: check if file exists
-(load "~/.doom.d/secrets.el")
+(load "~/.doom.d/secrets.el" 'noerror 'nomessage)
 
 
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
@@ -393,9 +392,11 @@ Serving from the project root ensures absolute markdown links starting with '/'
                          "python3" "-m" "http.server" (number-to-string port) "--directory" root))
     (run-at-time 0.2 nil
                  (lambda (u)
-                   (let ((browse-url-browser-function 'browse-url-generic)
-                         (browse-url-generic-program "google-chrome"))
-                     (browse-url u)))
+                   (if (eq system-type 'darwin)
+                       (call-process "open" nil 0 nil "-a" "Google Chrome" u)
+                     (let ((browse-url-browser-function 'browse-url-generic)
+                           (browse-url-generic-program "google-chrome"))
+                       (browse-url u))))
                  url)))
 
 (use-package! flymd

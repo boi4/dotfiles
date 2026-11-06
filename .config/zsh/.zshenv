@@ -26,8 +26,14 @@ export GNUPGHOME="$XDG_DATA_HOME/gnupg"
 export GRADLE_USER_HOME="$XDG_DATA_HOME/gradle"
 export CARGO_HOME="$XDG_DATA_HOME/cargo"
 export RUSTUP_HOME="$XDG_DATA_HOME/rustup"
-export TERMINFO="$XDG_DATA_HOME/terminfo"
-export TERMINFO_DIRS="$XDG_DATA_HOME/terminfo:/usr/share/terminfo"
+if [[ "$OSTYPE" == "darwin"* ]] && [[ "$TERM" == "xterm-kitty" ]] && [[ -d "/Applications/kitty.app/Contents/Resources/kitty/terminfo" ]]; then
+  export TERMINFO="/Applications/kitty.app/Contents/Resources/kitty/terminfo"
+elif [[ -d "$XDG_DATA_HOME/terminfo" ]]; then
+  export TERMINFO="$XDG_DATA_HOME/terminfo"
+elif [[ -d "$HOME/.terminfo" ]]; then
+  export TERMINFO="$HOME/.terminfo"
+fi
+export TERMINFO_DIRS="$XDG_DATA_HOME/terminfo:$HOME/.terminfo:/opt/homebrew/share/terminfo:/usr/share/terminfo"
 export SQLITE_HISTORY="$XDG_DATA_HOME/sqlite_history"
 export LESSHISTFILE="$XDG_DATA_HOME/lesshst"
 
@@ -38,7 +44,11 @@ export LIBVIRT_DEFAULT_URI="qemu:///system"
 
 # misc
 export CALIBRE_USE_DARK_PALETTE=1
-export ARCHFLAGS="-arch x86_64"
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  export ARCHFLAGS="-arch $(uname -m)"
+else
+  export ARCHFLAGS="-arch x86_64"
+fi
 
 
 export BROWSER="$HOME/.local/bin/urlopen.py"
@@ -55,10 +65,12 @@ export OPENSSL_CONF=/dev/null
 export OLLAMA_HOST=https://ollama.fecht.cc
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
-    brewprefix=/opt/homebrew
-    if [[ -d "$brewprefix" ]]; then
-        export PATH="$brewprefix/bin:$brewprefix/sbin:$PATH"
-        export MANPATH="$brewprefix/share/man:$MANPATH"
-    fi
+    for brewprefix in /opt/homebrew /usr/local; do
+        if [[ -x "$brewprefix/bin/brew" ]]; then
+            export PATH="$brewprefix/bin:$brewprefix/sbin:$PATH"
+            export MANPATH="$brewprefix/share/man:${MANPATH:-}"
+            break
+        fi
+    done
     unset brewprefix
 fi

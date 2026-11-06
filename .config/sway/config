@@ -27,6 +27,7 @@ floating_modifier $mod normal
 default_orientation auto
 popup_during_fullscreen smart
 smart_borders on
+mouse_warping none
 
 font pango:DejaVu Sans Mono 10
 
@@ -87,7 +88,7 @@ exec "env GTK_USE_PORTAL=0 waybar -c $(test -f ~/.config/waybar/google_sway_conf
 
 exec --no-startup-id 'nm-applet --indicator'
 exec --no-startup-id redshift-gtk -l 51.0:2.6 
-exec --no-startup-id blueman-applet
+#exec --no-startup-id blueman-applet
 exec --no-startup-id swaync
 
 

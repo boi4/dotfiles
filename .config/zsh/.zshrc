@@ -86,5 +86,5 @@ fi
 #export PATH=/home/fecht/.opencode/bin:$PATH
 
 
-alias eh="cp /home/fecht/hermes-creds/*.json /opt/hermes-agent/data/"
+alias eh='cp "$HOME"/hermes-creds/*.json /opt/hermes-agent/data/'
 alias dh="rm /opt/hermes-agent/data/google_client_secret.json  /opt/hermes-agent/data/google_token.json"
