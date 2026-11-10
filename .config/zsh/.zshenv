@@ -11,6 +11,11 @@ export PYLINTHOME="$XDG_CACHE_HOME/pylint"
 export PYTHONPYCACHEPREFIX="$XDG_CACHE_HOME/python/"
 
 export ANDROID_SDK_HOME="$XDG_CONFIG_HOME/android"
+if [[ -d /opt/android-sdk ]]; then
+  export ANDROID_HOME=/opt/android-sdk
+  export ANDROID_SDK_ROOT=/opt/android-sdk
+  export PATH="$ANDROID_HOME/platform-tools:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/emulator:$PATH"
+fi
 export XCOMPOSEFILE="$XDG_CONFIG_HOME/X11/xcompose"
 export KDEHOME="$XDG_CONFIG_HOME/kde"
 export HTTPIE_CONFIG_DIR="$XDG_CONFIG_HOME/httpie"

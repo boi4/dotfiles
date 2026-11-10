@@ -5,7 +5,18 @@
     "height": 25,
     "spacing": 2,
 
-    // Add this inside config_base.jsonc
+    "backlight/slider": {
+        "device": "intel_backlight",
+        "min": 1,
+        "max": 100,
+        "orientation": "horizontal"
+    },
+    "backlight": {
+        "device": "intel_backlight",
+        "min-brightness": 1,
+        "format": "{percent}% {icon}",
+        "format-icons": ["", "", "", "", "", "", "", "", ""]
+    },
     "backlight/slider#DP-1": {
         "device": "ddcci7", // Change to match your actual ls output
         "min": 1,
@@ -18,12 +29,6 @@
         "max": 100,
         "orientation": "horizontal"
     },
-//    "backlight": {
-//        "format": "{percent}% {icon}",
-//        "format-icons": ["🌑", "🌘", "🌗", "🌖", "🌕"],
-//        "on-scroll-up": "brightnessctl set +5%", // if you want scrolling on the icon too
-//        "on-scroll-down": "brightnessctl set 5%-"
-//    },
 
     // --- Common Module Configurations ---
     "idle_inhibitor": {
@@ -87,9 +92,5 @@
         "on-click": "sleep 0.1 && swaync-client -t -sw",
         "on-click-right": "sleep 0.1 && swaync-client -d -sw",
         "escape": true
-    },
-//    "backlight": {
-//        "format": "{percent}% {icon}",
-//        "format-icons": ["", "", "", "", "", "", "", "", ""]
-//    }
+    }
 }

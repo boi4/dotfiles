@@ -78,8 +78,24 @@ print(output)
 sink = pipe_into_dmenu("\n".join(output[sys.argv[1]]))
 
 if sink:
-    sink_id = sink.split(".")[0]
-    subprocess.run(
-        f"wpctl set-default {sink_id}",
-        shell=True
-    )
+    sink_id = sink.split(".")[0].strip()
+    subprocess.run(f"wpctl set-default {sink_id}", shell=True)
+
+    group = sys.argv[1] if len(sys.argv) > 1 else "Sinks"
+    if group == "Sinks":
+        # Unmute ALSA hardware channels on ThinkPad codec
+        subprocess.run("amixer -c 0 sset Speaker unmute 100% 2>/dev/null; amixer -c 0 sset Headphone unmute 100% 2>/dev/null; amixer -c 0 sset Master unmute 2>/dev/null", shell=True)
+        # Move all currently active audio playback streams to the selected sink
+        inputs = subprocess.run("pactl list short sink-inputs", shell=True, capture_output=True, text=True)
+        for line in inputs.stdout.strip().split("\n"):
+            if line.strip():
+                stream_id = line.split()[0]
+                subprocess.run(f"pactl move-sink-input {stream_id} {sink_id}", shell=True)
+    elif group == "Sources":
+        # Move all recording streams to the selected source
+        outputs = subprocess.run("pactl list short source-outputs", shell=True, capture_output=True, text=True)
+        for line in outputs.stdout.strip().split("\n"):
+            if line.strip():
+                stream_id = line.split()[0]
+                subprocess.run(f"pactl move-source-output {stream_id} {sink_id}", shell=True)
+
