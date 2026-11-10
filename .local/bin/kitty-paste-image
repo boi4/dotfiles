@@ -1,0 +1,169 @@
+#!/usr/bin/env python3
+# Paste the clipboard image into a kitty window as a file path.
+# If the window's foreground process is ssh, the image is copied to the
+# remote host's /tmp first (reusing the ssh options), so it also works for
+# Claude Code / tmux on the remote side.
+#
+# Clipboard backends: wl-paste (Wayland), xclip (X11), osascript (macOS).
+#
+# kitty.conf (kitty's launch also finds commands in ~/.local/bin):
+#   map ctrl+alt+v launch --type=background --allow-remote-control kitty-paste-image @active-kitty-window-id
+#   map ctrl+shift+v launch --type=background --allow-remote-control kitty-paste-image --or-paste @active-kitty-window-id
+import json
+import os
+import subprocess
+import sys
+import tempfile
+import time
+
+# ssh options that take an argument
+SSH_ARG_OPTS = set("BbcDEeFIiJLlmOoPpQRSWw")
+
+
+def kitten_at(*args):
+    # kitty passes the remote control socket as KITTY_LISTEN_ON=fd:N; subprocess
+    # closes inherited fds by default, so hand it through explicitly
+    listen = os.environ.get("KITTY_LISTEN_ON", "")
+    fds = (int(listen[3:]),) if listen.startswith("fd:") else ()
+    return subprocess.run(["kitten", "@", *args], capture_output=True, text=True, pass_fds=fds)
+
+
+IS_MACOS = sys.platform == "darwin"
+TEXT_TYPES = ("UTF8_STRING", "STRING", "TEXT")
+
+
+def notify(msg):
+    if IS_MACOS:
+        subprocess.run(["osascript", "-e", "on run argv",
+                        "-e", 'display notification (item 1 of argv) with title "kitty-paste-image"',
+                        "-e", "end run", msg])
+    else:
+        subprocess.run(["notify-send", "kitty-paste-image", msg])
+
+
+def clipboard_types():
+    """Return (has_image, has_text) for the current clipboard."""
+    if IS_MACOS:
+        # e.g. "«class PNGf», 1234, «class utf8», 5, string, 5"
+        info = subprocess.run(["osascript", "-e", "clipboard info"], capture_output=True, text=True).stdout
+        return ("PNGf" in info or "TIFF" in info), ("utf8" in info or "string" in info)
+    if os.environ.get("WAYLAND_DISPLAY"):
+        cmd = ["wl-paste", "--list-types"]
+    else:
+        cmd = ["xclip", "-selection", "clipboard", "-t", "TARGETS", "-o"]
+    types = subprocess.run(cmd, capture_output=True, text=True).stdout.split()
+    has_text = any(t.startswith("text/plain") or t in TEXT_TYPES for t in types)
+    return "image/png" in types, has_text
+
+
+def clipboard_png():
+    if IS_MACOS:
+        # AppleScript coerces TIFF clipboard contents to PNG
+        with tempfile.NamedTemporaryFile(suffix=".png") as f:
+            subprocess.run(["osascript", "-e", "on run argv",
+                            "-e", "set fh to open for access (POSIX file (item 1 of argv)) with write permission",
+                            "-e", "set eof fh to 0",
+                            "-e", "write (the clipboard as «class PNGf») to fh",
+                            "-e", "close access fh",
+                            "-e", "end run", f.name], check=True, capture_output=True)
+            return f.read()
+    if os.environ.get("WAYLAND_DISPLAY"):
+        cmd = ["wl-paste", "--type", "image/png"]
+    else:
+        cmd = ["xclip", "-selection", "clipboard", "-t", "image/png", "-o"]
+    return subprocess.run(cmd, capture_output=True, check=True).stdout
+
+
+def ssh_target(window_id):
+    """Return the ssh argv up to and including the destination, or None."""
+    r = kitten_at("ls", "--match", f"id:{window_id}")
+    if r.returncode != 0:
+        raise RuntimeError(f"kitten @ ls failed: {r.stderr.strip()}")
+    out = r.stdout
+    for os_win in json.loads(out):
+        for tab in os_win["tabs"]:
+            for win in tab["windows"]:
+                for proc in win.get("foreground_processes", []):
+                    argv = proc.get("cmdline", [])
+                    prog = argv[0].rsplit("/", 1)[-1] if argv else ""
+                    # kitten ssh / kitty +kitten ssh take the same arguments as ssh
+                    if prog in ("kitten", "kitty"):
+                        if argv[1:2] == ["+kitten"]:
+                            argv = argv[1:]
+                        if argv[1:2] != ["ssh"]:
+                            continue
+                        argv, prog = ["ssh"] + argv[2:], "ssh"
+                    if prog == "ssh":
+                        return parse_ssh(argv)
+    return None
+
+
+def parse_ssh(argv):
+    i = 1
+    while i < len(argv):
+        a = argv[i]
+        if a == "--":
+            i += 1
+            break
+        if not a.startswith("-") or a == "-":
+            break
+        # option cluster like -tA or -p22; an arg option consumes the rest
+        for j, c in enumerate(a[1:], 1):
+            if c in SSH_ARG_OPTS:
+                if j == len(a) - 1:
+                    i += 1  # value is the next argv entry
+                break
+        i += 1
+    if i >= len(argv):
+        return None
+    return argv[:i + 1]
+
+
+def paste_normally(window_id):
+    r = kitten_at("action", "--match", f"id:{window_id}", "paste_from_clipboard")
+    if r.returncode != 0:
+        notify(f"kitten @ action paste_from_clipboard failed: {r.stderr.strip()}")
+
+
+def main():
+    # --or-paste: only handle image + ssh, fall back to a normal paste otherwise
+    or_paste = "--or-paste" in sys.argv[1:]
+    window_id = [a for a in sys.argv[1:] if a != "--or-paste"][0]
+    has_image, has_text = clipboard_types()
+    if not has_image or (or_paste and has_text):
+        if or_paste:
+            paste_normally(window_id)
+        else:
+            notify("No image in clipboard")
+        return
+
+    ssh = ssh_target(window_id)
+    if or_paste and not ssh:
+        paste_normally(window_id)
+        return
+    png = clipboard_png()
+
+    name = time.strftime("clip-%Y%m%d-%H%M%S.png")
+    if ssh:
+        path = f"/tmp/{name}"
+        # -T last so a -t from the interactive session can't mangle the binary stream
+        r = subprocess.run(ssh[:1] + ["-o", "BatchMode=yes"] + ssh[1:-1] + ["-T", ssh[-1], f"cat > {path}"],
+                           input=png, capture_output=True)
+        if r.returncode != 0:
+            notify(f"Upload to {ssh[-1]} failed: {r.stderr.decode(errors='replace').strip()}")
+            return
+    else:
+        with tempfile.NamedTemporaryFile(prefix="clip-", suffix=".png", delete=False) as f:
+            f.write(png)
+            path = f.name
+
+    r = kitten_at("send-text", "--bracketed-paste=auto", "--match", f"id:{window_id}", "--", path)
+    if r.returncode != 0:
+        notify(f"kitten @ send-text failed: {r.stderr.strip()}")
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except FileNotFoundError as e:
+        notify(f"Missing command: {e.filename}")
