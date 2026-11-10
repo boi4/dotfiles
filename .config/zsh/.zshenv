@@ -62,7 +62,10 @@ if [[ "$OSTYPE" != "darwin"* ]] && [[ ! -d /google ]]; then
   emulate zsh -o all_export -c 'source ~/.config/environment.d/ssh_auth_socket.conf 2>/dev/null || true'
 fi
 export OPENSSL_CONF=/dev/null
-export OLLAMA_HOST=https://ollama.fecht.cc
+# Not exported globally (2026-10-22): opencode auto-discovers Ollama from
+# OLLAMA_HOST and polls /api/tags every few seconds, which trips the
+# traefik-wol middleware on rou and keeps waking torbus. Scope it to the CLI.
+ollama() { OLLAMA_HOST=https://ollama.fecht.cc command ollama "$@" }
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
     for brewprefix in /opt/homebrew /usr/local; do
@@ -74,3 +77,14 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     done
     unset brewprefix
 fi
+
+# Agent shells (Claude Code, opencode, codex) write bash-style commands: split unquoted $vars into words and pass
+# unmatched globs through literally (grep --include=*.yml). Interactive shells keep the zsh behaviour from .zshrc.
+if [[ ! -o interactive ]] && [[ -n "${AI_AGENT}${CLAUDECODE}${OPENCODE_CONFIG_DIR}${OPENCODE_DB}${CODEX_MANAGED_BY_NPM}" ]]; then
+  setopt sh_word_split no_nomatch
+fi
+[[ -f "$CARGO_HOME/env" ]] && . "$CARGO_HOME/env"
+
+# Claude Code: suppress background-agent agent_summary side-queries (~15-20% token spend).
+# Unofficial Bun preload, fails open after CC updates. https://gist.github.com/flamerix-ai/c3905705cc4205e5de3011fa2e74efce
+[[ -f "$HOME/.local/share/no-agent-summary.js" ]] && export BUN_OPTIONS="${BUN_OPTIONS:+$BUN_OPTIONS }--preload=$HOME/.local/share/no-agent-summary.js"

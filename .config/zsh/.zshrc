@@ -83,8 +83,4 @@ fi
 #. "$HOME/.local/share/../bin/env"
 
 # opencode
-#export PATH=/home/fecht/.opencode/bin:$PATH
-
-
-alias eh='cp "$HOME"/hermes-creds/*.json /opt/hermes-agent/data/'
-alias dh="rm /opt/hermes-agent/data/google_client_secret.json  /opt/hermes-agent/data/google_token.json"
+[[ -d $HOME/.opencode/bin ]] && path=($HOME/.opencode/bin $path)

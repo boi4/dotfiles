@@ -65,6 +65,8 @@ alias ranger=ranger-cd
 # shortcut whole command
 alias yl='yt-dlp'
 alias ylx='yt-dlp --external-downloader aria2c'
+alias ylp='yt-dlp --proxy http://rou.local.fecht.cc:8888'
+alias ylxp='yt-dlp --external-downloader aria2c --proxy http://rou.local.fecht.cc:8888'
 alias za='zathura'
 # emacs
 #function ec {
